@@ -1,0 +1,335 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<faces-config version="2.3"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd">
+
+
+    <managed-bean>
+        <managed-bean-name>onlined</managed-bean-name>
+        <managed-bean-class>gov.wages.OnlineUser</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>loginBean</managed-bean-name>
+        <managed-bean-class>gov.wages.LoginBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>jasperController</managed-bean-name>
+        <managed-bean-class>gov.wages.jrctrl.JasperController</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ J.O. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>wageATM</managed-bean-name>
+        <managed-bean-class>gov.pay.entry.WageATMBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>wageCA</managed-bean-name>
+        <managed-bean-class>gov.pay.entry.WageCAPBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>addATMBean</managed-bean-name>
+        <managed-bean-class>gov.pay.entry.AddATMBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>addPAYBean</managed-bean-name>
+        <managed-bean-class>gov.pay.entry.AddCAPBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>editBean</managed-bean-name>
+        <managed-bean-class>gov.pay.entry.EditBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    <!-- ###################################################################### -->
+
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@ J.O. REPORTS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>claimsBean</managed-bean-name>
+        <managed-bean-class>gov.pay.report.ClaimsBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>reportBean</managed-bean-name>
+        <managed-bean-class>gov.pay.report.ReportBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>statusBean</managed-bean-name>
+        <managed-bean-class>gov.pay.report.StatusBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    <!-- ####################################################################### -->
+    
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ AUDIT JOs @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>bankBean</managed-bean-name>
+        <managed-bean-class>gov.audit.BankBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>auditJOBean</managed-bean-name>
+        <managed-bean-class>gov.audit.AuditJOBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>atmBean</managed-bean-name>
+        <managed-bean-class>gov.audit.ATMBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>reprnBean</managed-bean-name>
+        <managed-bean-class>gov.audit.ReprintBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    <!-- ####################################################################### -->
+
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ AUDIT BHW @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>auditBHWBean</managed-bean-name>
+        <managed-bean-class>gov.audit.AuditBHWBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    <!-- ####################################################################### -->
+
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ AUDIT ENDO @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>auditEndoBean</managed-bean-name>
+        <managed-bean-class>gov.audit.AuditEndoBean</managed-bean-class>
+            <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    <!-- ####################################################################### -->
+    
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@ ADMIN SECTION @@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>adminBean</managed-bean-name>
+        <managed-bean-class>gov.admin.AdminBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>addUserBean</managed-bean-name>
+        <managed-bean-class>gov.admin.AddUserBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>editUserBean</managed-bean-name>
+        <managed-bean-class>gov.admin.EditUserBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>eraseUserBean</managed-bean-name>
+        <managed-bean-class>gov.admin.EraseUserBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <!-- ####################################################################### -->
+    
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@ BHW SECTION @@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>bhwCAPplus</managed-bean-name>
+        <managed-bean-class>gov.bhw.BHWCAPplus</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>bhwCAP</managed-bean-name>
+        <managed-bean-class>gov.bhw.BHWCAPBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>bhwModify</managed-bean-name>
+        <managed-bean-class>gov.bhw.BHWmodifyBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    <!-- ###################################################################### -->
+    
+    <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ CONTRACTUAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+    <managed-bean>
+        <managed-bean-name>endoATM</managed-bean-name>
+        <managed-bean-class>gov.endo.EndoATMBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>endoCA</managed-bean-name>
+        <managed-bean-class>gov.endo.EndoCAPBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>plusATMBean</managed-bean-name>
+        <managed-bean-class>gov.endo.PlusATMBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>plusCAPBean</managed-bean-name>
+        <managed-bean-class>gov.endo.PlusCAPBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>editEndoBean</managed-bean-name>
+        <managed-bean-class>gov.endo.ModifyEndoBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+
+    <!-- ####################################################################### -->
+    <managed-bean>
+        <managed-bean-name>previewBean</managed-bean-name>
+        <managed-bean-class>gov.pay.report.PreviewBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+</faces-config>
+

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml" >
+
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}">
+                    <ui:include src="/WEB-INF/admenus.xhtml"/>
+                </c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <f:view>
+                        <h:form>
+                            <p:growl id="messages" showSummary="true" showDetail="true" globalOnly="true" />
+
+                            <p:panel id="basic" header="USER ERASE FORM" style="width: 550px;">
+                                <h:panelGrid columns="3" cellpadding="5" border="0">
+                                    <p:outputLabel value="User Name"/><p:outputLabel value=":"/>
+                                    <p:selectOneMenu value="#{eraseUserBean.userID}" >
+                                        <f:selectItem itemValue="." itemLabel="&lt;&lt;Select User&gt;&gt;"/>
+                                        <f:selectItems value="#{eraseUserBean.users}"/>
+                                        <p:ajax listener="#{eraseUserBean.onUserChange}" update="office named" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="User ID"/><p:outputLabel value=":"/><p:inputText id="named" value="#{eraseUserBean.userID}" readonly="true" size="15" maxlength="15"/>
+                                    <p:outputLabel value="Office"/><p:outputLabel value=":"/>
+                                    <p:inputText id="office" value="#{eraseUserBean.opesina}" readonly="true" size="50" maxlength="50"/>
+                                </h:panelGrid>
+                                <br/>
+                                <br/>
+                                <table border="0" width="100%" cellspacing="1" cellpadding="1">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                &nbsp;
+                                            </td>
+                                            <td align="right">
+                                                <p:commandButton value="Remove" actionListener="#{eraseUserBean.eraseUser}" onclick="return confirm('Are you sure you want to remove this record?');" update="messages"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </p:panel>
+                        </h:form>
+                    </f:view>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

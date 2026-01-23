@@ -1,0 +1,24 @@
+<ui:fragment
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form>
+
+        <h1>TIME BOOK and PAYROLL</h1>
+
+        <p:menubar>
+            <p:submenu label="Menu" icon="ui-icon-contact">
+                <p:menuitem value="Add User" outcome="/admin/admin_1addUser" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="Edit User" outcome="/admin/admin_2editUser" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="Erase User" outcome="/admin/admin_3eraseUser" icon="ui-icon-document" ajax="false"/>
+            </p:submenu>
+
+            <p:menuitem value="User List" outcome="/admin/admin_0adminPage" icon="ui-icon-document" ajax="false"/>
+            <p:menuitem value="Logout" url="logout.html" icon="ui-icon-extlink" ajax="false"/>
+        </p:menubar>
+    </h:form>
+
+</ui:fragment>

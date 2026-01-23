@@ -1,0 +1,32 @@
+<ui:fragment
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form>
+
+        <h1>TIME BOOK and PAYROLL</h1>
+
+        <p:menubar>
+            <p:submenu label="Payroll" icon="ui-icon-contact">
+                <p:menuitem value="ATM Entry" outcome="/pays/pay_entry_1atms" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="C/A Entry" outcome="/pays/pay_entry_1cash" icon="ui-icon-document" ajax="false"/>
+                <p:separator/>
+                <p:menuitem value="Additional ATM" outcome="/pays/pay_entry_2addatm" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="Additional C/A" outcome="/pays/pay_entry_2addpay" icon="ui-icon-document" ajax="false"/>
+                <p:separator/>
+                <p:menuitem value="Modify" outcome="/pays/pay_entry_3modify" icon="ui-icon-document" ajax="false" disabled="#{onlined.userLevel != 1 ? '' : 'false'}"/>
+            </p:submenu>
+            <p:submenu label="Report" icon="ui-icon-contact">
+                <p:menuitem value="Payroll Status" outcome="/pays/pay_rpt_status" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="Previous Payroll" outcome="/pays/pay_rpt_preview" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="J.O's Claims" outcome="/pays/pay_rpt_claims" icon="ui-icon-document" ajax="false"/>
+            </p:submenu>
+
+            <p:menuitem value="Logout" url="logout.html" icon="ui-icon-extlink" ajax="false"/>
+        </p:menubar>
+    </h:form>
+
+</ui:fragment>

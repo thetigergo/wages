@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+ 
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml" >
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}">
+                    <ui:include src="/WEB-INF/bhwmenu.xhtml"/>
+                </c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <h:form enctype="">
+                        <p:growl id="msgs" showDetail="true" />
+
+                        <p:panel id="basic" header="PAYROLL ENTRY - C/A" style="width: 1283px;">
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td width="55%">
+                                            <table border="0" cellpadding="0" cellspacing="5">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>District</td><td> : </td><td>
+                                                            <p:selectOneMenu id="district" value="#{bhwCAP.district}" disabled="#{bhwCAP.disableProject}">
+                                                                <p:ajax listener="#{bhwCAP.onDistrictChange}" update="brgys dugang1 dugang2 dugang3" />
+                                                                <f:selectItem itemValue="." itemLabel="&lt;&lt;Select District&gt;&gt;"/>
+                                                                <f:selectItems value="#{bhwCAP.districts}"/>
+                                                            </p:selectOneMenu>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Barangay</td><td> : </td>
+                                                        <td>
+                                                            <p:selectOneMenu id="brgys" value="#{bhwCAP.barangay}" >
+                                                                <p:ajax listener="#{bhwCAP.onBarangayChange}" update="district brgys worker dugang1 dugang2 dugang3" />
+                                                                <f:selectItem itemValue="." itemLabel="&lt;&lt;Select Barangay&gt;&gt;"/>
+                                                                <f:selectItems value="#{bhwCAP.barangays}"/>
+                                                            </p:selectOneMenu>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td width="30%">
+                                            <table border="0" cellpadding="5" cellspacing="0" width="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Control #</td><td> : </td><td colspan="3">#{bhwCAP.ctrlNo}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Payroll</td>
+                                                        <td> : </td>
+                                                        <td>
+                                                            <p:calendar value="#{bhwCAP.payFr}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8">
+                                                                <p:ajax event="dateSelect" listener="#{bhwCAP.onPayFrSelect}" update="msgs" />
+                                                            </p:calendar>
+                                                        </td>
+                                                        <td> TO </td>
+                                                        <td>
+                                                            <p:calendar value="#{bhwCAP.payTo}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8">
+                                                                <p:ajax event="dateSelect" listener="#{bhwCAP.onPayToSelect}" update="msgs" />
+                                                            </p:calendar>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>                                        
+                                        <td width="15%" valign="top">
+                                            <p:commandButton value="Print Payroll" action="#{jasperController.viewPayroll(bhwCAP.ctrlNo, bhwCAP.render, 'bhw/', false)}" ajax="false" icon="ui-icon-document"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <div style="width: 100%;overflow-x: auto;white-space: nowrap;">
+                                <div style="width: 1375px;">
+                                    <p:dataTable var="worker"
+                                                 value="#{bhwCAP.wages}"
+                                                 rows="4"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                                        <p:column headerText="Name" width="200" style="vertical-align: middle;">
+                                            <h:outputText value="#{worker.worker}" />
+                                        </p:column>
+                                        <p:column headerText="Occupation" width="180" style="vertical-align: middle; text-align: center;">
+                                            <h:outputText value="#{worker.jobs}" />
+                                        </p:column>
+                                        <p:column headerText="Date From" width="90" style="text-align: center;">
+                                            <h:outputText value="#{worker.dateFr}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Date To" width="90" style="text-align: center;">
+                                            <h:outputText value="#{worker.dateTo}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Rate" width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.rate}" >
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Gross" width="70" style="text-align: right;">
+                                            <h:outputText value="#{worker.gross}" >
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Deduction" width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.deduction}">
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Additional" width="70" style="text-align: right;" >
+                                            <h:outputText value="#{worker.bunos}" >
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Net Amount" width="100" style="text-align: right;">
+                                            <h:outputText value="#{worker.netAmount}">
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column style="text-align:right" footerText="" />
+                                                <p:column style="text-align:right" footerText="" />
+                                                <p:column style="text-align:right" footerText="" />
+                                                <p:column colspan="2" style="text-align:right; font-weight: bold; color: navy;" footerText="T O T A L" />
+                                                <p:column colspan="1" style="text-align:right; font-weight: bold; color: navy;" footerText="#{bhwCAP.totalGross}"/>
+                                                <p:column colspan="1" style="text-align:right; font-weight: bold; color: navy;" footerText="#{bhwCAP.totalDeduct}"/>
+                                                <p:column style="text-align:right; font-weight: bold; color: navy;" footerText="#{bhwCAP.totalBunos}"/>
+                                                <p:column style="text-align:right; font-weight: bold; color: navy;" footerText="#{bhwCAP.totalWage}"/>
+                                            </p:row>
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                </div>
+                            </div>
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td width="30%">
+                                            <h:panelGrid columns="3" cellpadding="5">
+                                                <p:outputLabel value="Name"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:selectOneMenu value="#{bhwCAP.workerID}" id="worker">
+                                                    <p:ajax listener="#{bhwCAP.onWorkerChange}" update="jobs rate" />
+                                                    <f:selectItem itemValue="." itemLabel="&lt;&lt;Select Names&gt;&gt;"/>
+                                                    <f:selectItems value="#{bhwCAP.workers}"/>
+                                                </p:selectOneMenu>
+
+                                                <p:outputLabel value="Occupation"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText value="#{bhwCAP.jobs}" id="jobs" readonly="true"/>
+
+                                                <p:outputLabel value="Days Absent"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText   value="#{bhwCAP.days}" size="10" maxlength="10" style="text-align: right;" id="days" disabled="true">
+                                                    <f:convertNumber pattern="#0.00;(#0.00)"/>
+                                                </p:inputText>
+
+                                                <p:outputLabel value="Rate"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText   value="#{bhwCAP.rate}" size="10" maxlength="10" style="text-align: right;" id="rate">
+                                                    <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                                </p:inputText>
+
+                                                <p:outputLabel value="Undertime"/>
+                                                <p:outputLabel value=" : "/>
+                                                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                    <p:inputText   value="#{bhwCAP.minutes}" size="10" maxlength="10" style="text-align: right;" id="minuta" disabled="true"/>
+                                                    <p:outputLabel value="&nbsp;&nbsp;&nbsp;mins"/>
+                                                </h:panelGrid>
+
+                                                <p:outputLabel id="dugang1" value="Additional Wages" style="color: #{bhwCAP.render ? '#555555' : 'gainsboro'}"/>
+                                                <p:outputLabel id="dugang2" value=" : " style="color: #{bhwCAP.render ? '#555555' : 'gainsboro'}"/>
+                                                <p:inputText   id="dugang3" value="#{bhwCAP.bunos}" size="10" maxlength="10" style="text-align: right;" disabled="#{!bhwCAP.render}" >
+                                                    <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                                </p:inputText>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid cellpadding="0" cellspacing="0">
+                                                <p:commandButton value="Post/Save" actionListener="#{bhwCAP.saveEntry}" ajax="false"/>
+                                            </h:panelGrid>
+                                        </td>
+                                        <td width="20">
+                                            <p:spacer />
+                                        </td>
+                                        <td width="50%">
+                                            <table border="0" width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <table border="0" width="100%">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="45%" valign="top">
+                                                                            <h:panelGrid columns="3" cellpadding="0" cellspacing="3">
+                                                                                <p:outputLabel value="CERTIFIED BY"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{bhwCAP.certify1}"/>
+                                                                                <p:outputLabel value="Designation"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{bhwCAP.rank1}"/>
+                                                                            </h:panelGrid>
+                                                                        </td>
+                                                                        <td style="text-align: justify; font-size: 11px; color: blue;">
+                                                                            <p:outputLabel value="1. HEREBY CERTIFY that each person whose name appears on this roll rendered service as indicated and for the time stated."/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                            <br/>
+                                                            <br/>
+                                                            <table border="0" width="100%">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="45%" valign="top">
+                                                                            <h:panelGrid columns="3" cellpadding="0" cellspacing="3" >
+                                                                                <p:outputLabel value="CERTIFIED BY"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{bhwCAP.certify2}"/>
+                                                                                <p:outputLabel value="Designation"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{bhwCAP.rank2}"/>
+                                                                            </h:panelGrid>                                
+                                                                        </td>
+                                                                        <td style="text-align: justify; font-size: 11px; color: blue;" valign="top">
+                                                                            <p:outputLabel value="2. I CERTIFY on my official oath that I have this day of #{bhwCAP.dateNow} paid in cash to each man whose name appears on the above roll, the amount set opposite his name, he having presented himself, established his identity, and affixed his signature or thumb mark on the space provided. Therefore unpaid services are indicating red ink through the column &quot;Amount Paid&quot;. Special Disbursing Officer, Paymaster or Municipal Treasurer ______________."/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br/>
+                                                            <br/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="bottom" align="right">
+                                                            <p:commandButton value="Update Officers" actionListener="#{bhwCAP.updateOfficer}" update="msgs" disabled="#{bhwCAP.updatable}"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </p:panel>
+
+                    </h:form>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

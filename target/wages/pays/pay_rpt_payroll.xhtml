@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" href="${resource['img/fav.png']}" type="image/x-icon"/>    
+        <title>DAILY WAGE PAYROLL</title>
+        <h:outputStylesheet name="reporting.css" library="css"/>
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+    </h:head>
+
+    <h:body>
+        <f:view>
+            <h:form>
+                <h:inputHidden value="#{reportBean.ctrlNo}"/>
+                <p:commandButton value="Export J.O." action="#{jasperController.PDF(reportBean.ctrlNo)}" ajax="false"/>
+            </h:form>
+        </f:view>
+        
+        <div id="basic" style="width: 1240px;">
+
+            <div align="center" style="font-size: 15px; font-weight: bold;">Government of Surigao<br/>Surigao City</div>
+            <br/>
+            <div align="center" style="font-size: 28px; font-weight: bold;">DAILY WAGE PAYROLL</div>
+            <br/>
+            <br/>
+
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td width="33%">
+                            <table border="0" cellpadding="0" cellspacing="5">
+                                <tbody>
+                                    <tr>
+                                        <td>Agency</td><td> : </td><td>#{reportBean.opesina}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Project</td><td> : </td>
+                                        <td>#{reportBean.project}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="33%" valign="bottom" align="center" style="padding-bottom: 10px;">
+                            <h:outputLabel value="#{reportBean.payDate}" style="font-size: 20px; font-weight: bold;"/>
+                        </td>
+                        <td width="33%" align="right">
+                            <h:form>
+                                <table border="0" cellpadding="5" cellspacing="0" width="0">
+                                    <tbody>
+                                        <tr>
+                                            <td style=" font-weight: bold; font-size: large;">Control #</td>
+                                            <td> : </td>
+                                            <td><h:inputText value="#{reportBean.ctrlNo}" size="12" maxlength="12" style="border: none; font-weight: bold; font-size: large;"/></td>
+                                            <td><h:commandButton actionListener="#{reportBean.retrieveJOs}" image="#{resource['img/retrieve.png']}" title="Retrieve"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </h:form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <h:dataTable var="worker"
+                         value="#{reportBean.wages}"
+                         class="auto-stylu"
+                         width="1217"
+                         columnClasses="column-name, column-desig, column-datefr, column-dateto, column-works, column-rates, column-gross, column-utime, column-deducts, column-deducts, column-amount, column-perma"
+                         cellpadding="0"
+                         cellspacing="0"
+                         border="0">
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                    <f:facet name="header">NAME</f:facet>
+                    #{worker.counter}&nbsp;#{worker.worker}
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                    <f:facet name="header">OCCUPATION</f:facet>
+                    <h:outputText value="#{worker.jobs}"/>
+                    <f:facet name="footer">
+                        <h:outputText value="T O T A L" style="font-weight: bold; font-size: larger; color: navy;"/>
+                    </f:facet>
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                    <f:facet name="header">DATE<br/>FROM</f:facet>
+                    <h:outputText value="#{worker.dateFr}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                    <f:facet name="header">DATE<br/>TO</f:facet>
+                    <h:outputText value="#{worker.dateTo}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                    <f:facet name="header">NUMBER<br />OF DAYS<br />WORKED</f:facet>
+                    <h:outputText value="#{worker.days}" />
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                    <f:facet name="header">RATE<br />PER<br />DAY</f:facet>
+                    <h:outputText value="#{worker.rate}" >
+                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                    <f:facet name="header">GROSS</f:facet>
+                    <h:outputText value="#{worker.gross}" >
+                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="#{reportBean.totalGross}" style="font-weight: bold; font-size: larger; color: navy;">
+                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                        </h:outputText>
+                    </f:facet>
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                    <f:facet name="header">NUMBER<br />OF MINUTES<br />UNDERTIME</f:facet>
+                    <h:outputText value="#{worker.undertime} minute/s" />
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                    <f:facet name="header">UNDERTIME<br />DEDUCTION</f:facet>
+                    <h:outputText value="#{worker.deduction}">
+                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="#{reportBean.totalDeduct}" style="font-weight: bold; font-size: larger; color: navy;">
+                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                        </h:outputText>
+                    </f:facet>
+                </h:column>
+
+                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                    <f:facet name="header">PAG-IBIG<br />PREMIUM</f:facet>
+                    <h:outputText value="#{worker.pagIbig}">
+                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="#{reportBean.totalHdmf}" style="font-weight: bold; font-size: larger; color: navy;">
+                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                        </h:outputText>
+                    </f:facet>
+                </h:column>
+                
+                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                    <f:facet name="header">NET<br />AMOUNT</f:facet>
+                    <h:outputText value="#{worker.netAmount}">
+                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                    </h:outputText>
+                    <f:facet name="footer">
+                        <h:outputText value="#{reportBean.totalWage}" style="font-weight: bold; font-size: larger; color: navy;">
+                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                        </h:outputText>
+                    </f:facet>
+                </h:column>
+
+                <h:column headerClass="auto-stylo" footerClass="auto-tiilan">
+                    <f:facet name="header">SIGNATURE</f:facet>
+                    #{worker.counter} __________________________
+                </h:column>
+
+            </h:dataTable>
+
+            <br/>
+
+            <table border="0" width="1217" cellpadding="0" cellspacing="0" rules="none">
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; text-align: center;" width="33%" height="30">CERTIFICATION<br/><br/></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: justify; padding-right: 10px; vertical-align: top; font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is to certify that the above mentioned job order employees have rendered services in the #{reportBean.opesina} on the date stated.</td>
+                        <td style="text-align: justify; vertical-align: top; padding-left: 10px; padding-right: 10px; font-size: 12px;" width="33%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. I CERTIFY that this roll is correct, every person whose name appears hereon rendered service for the time and at the rates stated under my general supervision.</td>
+                        <td style="text-align: justify; vertical-align: top; padding-left: 10px; font-size: 12px;" width="33%">3. I CERTIFY on my official oath that I have this _________________ paid in cash to each man whose appears the above roll, the amount set opposite his name, he having presented himself, established his identity, &amp; affixed his signature or thumb mark on the space provided therefore unpaid services are indicated by red ink through the column "Amount Paid".</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; vertical-align: top;"><br/><br/><b>#{reportBean.certify1}</b><br/><font size="1">#{reportBean.rank1}</font></td>
+                        <td style="text-align: center; vertical-align: top;"><br/><br/><b>#{reportBean.certify3}</b><br/><font size="1">#{reportBean.rank3}</font></td>
+                        <td style="text-align: center; vertical-align: top;"><br/><br/><b><u>_____________________________________</u></b><br/><font size="1">Special Disbursing Officer, Paymaster or City Treasurer</font></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: justify; padding-right: 10px;"><br/><br/>1. HEREBY CERTIFY that each person whose name appears on this roll rendered service as indicated and for the time stated.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; vertical-align: top;"><br/><br/><br/><b>#{reportBean.certify2}</b><br/><font size="1">#{reportBean.rank2}</font></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </h:body>
+</html>
+

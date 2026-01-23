@@ -1,0 +1,68 @@
+/* 
+    Document   : reporting
+    Created on : 05 18, 15, 2:55:25 PM
+    Author     : felix
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.auto-stylo {
+    text-align: center;
+    border-bottom: thin black solid;
+}
+.claim-style {
+    text-align: center;
+    border: thin black solid;
+    /*border-right:  thin black solid;*/
+    background-color: lightsteelblue;
+}
+
+.claim-nums {
+    text-align: center;
+    vertical-align: middle;
+    border-right:  thin black solid;
+    width: 30px;
+    padding-left: 5px;
+    height: 22px;
+}
+.claim-petsa {
+    text-align: center;
+    vertical-align: middle;
+    border-right: thin black solid;
+    width: 250px;
+}
+.claim-adlaw {
+    text-align: center;
+    vertical-align: middle;
+    border-right: thin black solid;
+    width: 50px;
+}
+
+.claim-body {
+    border-style: solid;
+    border-color: inherit;
+    border-width: thin;
+    font-size: small;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.auto-tiilan {
+    text-align: left;
+    border-top: thin black solid;
+}
+.auto-tiilbar {
+    text-align: right;
+    border-top: thin black solid;
+    border-right: thin black solid;
+    padding-right: 5px;
+}
+
+.row-colors {
+    background-color: lightgoldenrodyellow;
+}
+.row-colour {
+    background-color: lightgrey;
+}

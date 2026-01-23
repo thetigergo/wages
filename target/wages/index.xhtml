@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <meta http-equiv='refresh' content='900;url=/wages/'/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Time Book and Payroll</title>
+        <link rel="shortcut icon" href="${resource['img/fav.png']}" type="image/x-icon"/>
+    </h:head>
+
+    <h:body>
+        <h:outputStylesheet name="primes.css" library="pfo" />
+
+        <script type="text/javascript">
+            $('#loginForm:command').hover(function () {
+                $(this).css("color", "blue");
+            }, function () {
+                $(this).css("color", "black");
+            });
+
+            $("div").mousedown(function () {
+                $(this).after("Mouse button pressed down.");
+            });
+        </script>
+
+        <table style="width: 100%; height: 615px; margin: auto;">
+            <tbody>
+                <tr>
+                    <td style="vertical-align: middle">
+                        <div style="margin: auto; background-color: white; border-radius: 10px; width: 550px; padding: 5px;">
+                            <div style="margin: auto; border: 1px; height: 5px; background-repeat: no-repeat; width: 550px;">
+                                <img src="#{resource['img/login_topbar.gif']}" width="550" alt="top_bar"/>
+                            </div>
+                            <div style="margin: auto; background-color: orange; text-align: center;">
+                                <img src="#{resource['img/header.jpg']}" width="520" alt="tracer_logo"/>
+                            </div>
+                            <div style="margin: auto; text-align: center;">
+                                <img alt="login_midbar" src="#{resource['img/login_midbar.gif']}" width="550" height="33"/>
+                            </div>
+
+                            <h:form id="loginForm">
+
+                                <p:growl id="messages" showSummary="true" showDetail="true" globalOnly="true" />
+
+                                <p:panel header="System Security" style="text-align: center;">
+
+                                    <div align="center">
+                                        <table border="0" cellpadding="3" cellspacing="3">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Username</td><td> : </td><td><p:inputText value="#{loginBean.userID}" maxlength="10" required="true" style="width: 180px;" rendered="true" requiredMessage="Must supply Username."/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Password</td><td> : </td><td><p:password value="#{loginBean.gatePass}" maxlength="15" required="true" feedback="false" style="width: 180px;" rendered="true" requiredMessage="Must supply password."/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p:selectOneRadio id="customRadio" value="#{loginBean.pilion}" layout="grid" columns="3">
+                                                            <f:selectItem itemLabel="Job Order" itemValue="0" />
+                                                            <f:selectItem itemLabel="Contractual" itemValue="3" />
+                                                            <f:selectItem itemLabel="B.H.W." itemValue="4" />
+                                                            <f:selectItem itemLabel="Accounting" itemValue="1" />
+                                                            <f:selectItem itemLabel="Administrator" itemValue="2" />
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" align="center"><p:commandButton action="#{loginBean.reDirectURL}" value="Login" update="loginForm" ajax="false" style="font-size: 12px;"/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </p:panel>
+
+                            </h:form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </h:body>
+
+</html>
+

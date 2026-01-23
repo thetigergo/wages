@@ -1,0 +1,338 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+ 
+        <ui:composition template="/WEB-INF/template.xhtml" >
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}">
+                    <ui:include src="/WEB-INF/mendos.xhtml"/>
+                </c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <h:form enctype="">
+                        <p:growl id="msgs" showDetail="true" />
+
+                        <p:panel id="basic" header="PAYROLL ENTRY - ATM" style="width: 1283px;">
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td width="55%">
+                                            <table border="0" cellpadding="0" cellspacing="5">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Agency</td><td> : </td><td colspan="3">#{endoATM.opesina}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Payroll</td>
+                                                        <td> : </td>
+                                                        <td>
+                                                            <p:calendar value="#{endoATM.payFr}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8">
+                                                                <p:ajax event="dateSelect" listener="#{endoATM.onPayFrSelect}" update="msgs dugang1 dugang2 dugang3" />
+                                                            </p:calendar>
+                                                        </td>
+                                                        <td> TO </td>
+                                                        <td>
+                                                            <p:calendar value="#{endoATM.payTo}" pattern="MM/dd/yyyy" size="10" maxlength="10" id="payto" timeZone="GMT+8">
+                                                                <p:ajax event="dateSelect" listener="#{endoATM.onPayToSelect}" update="msgs dugang1 dugang2 dugang3" />
+                                                            </p:calendar>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td width="30%">
+                                            <table border="0" cellpadding="5" cellspacing="0" width="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Control #</td><td> : </td><td>#{endoATM.ctrlNo}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <p:commandButton value="Print Payroll" action="#{jasperController.viewPayroll(endoATM.ctrlNo, endoATM.render, 'endo/', true)}" ajax="false" icon="ui-icon-document"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <div style="width: 100%;overflow-x: auto;white-space: nowrap;">
+                                <div style="width: 1375px;">
+                                    <p:dataTable var="worker"
+                                                 value="#{endoATM.wages}"
+                                                 rows="4"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                                        <p:column headerText="Name" width="200" style="vertical-align: middle;">
+                                            <h:outputText value="#{worker.worker}" />
+                                        </p:column>
+                                        <p:column headerText="Occupation" width="180" style="vertical-align: middle;">
+                                            <h:outputText value="#{worker.jobs}" />
+                                        </p:column>
+                                        <p:column headerText="Date From" width="90" style="text-align: center;">
+                                            <h:outputText value="#{worker.dateFr}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Date To" width="90" style="text-align: center;">
+                                            <h:outputText value="#{worker.dateTo}">
+                                                <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Days Worked" width="50" style="text-align: center;">
+                                            <h:outputText value="#{worker.days}">
+                                                <f:convertNumber pattern="#0.00;(#0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Rate/Mo." width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.rate}" >
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Gross" width="70" style="text-align: right;">
+                                            <h:outputText value="#{worker.gross}" >
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Undertime" width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.undertime} minute/s" />
+                                        </p:column>
+                                        <p:column headerText="Deduction" width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.deduction}">
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="W/TAX" width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.taxHeld}">
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Pag-Ibig" width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.pagIbig}">
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="SSS Prem" width="50" style="text-align: right;">
+                                            <h:outputText value="#{worker.SSSPrem}">
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Additional" width="70" style="text-align: right;" >
+                                            <h:outputText value="#{worker.bunos}" >
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Net Amount" width="100" style="text-align: right;">
+                                            <h:outputText value="#{worker.netAmount}">
+                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column style="text-align:right" footerText="" />
+                                                <p:column style="text-align:right" footerText="" />
+                                                <p:column style="text-align:right" footerText="" />
+                                                <p:column colspan="2" style="text-align:right; font-weight: bold; color: navy;" footerText="T O T A L" />
+                                                <p:column colspan="2" style="text-align:right; font-weight: bold; color: navy;" footerText="#{endoATM.totalGross}"/>
+                                                <p:column colspan="2" style="text-align:right; font-weight: bold; color: navy;" footerText="#{endoATM.totalDeduct}"/>
+                                                <p:column style="text-align:right; font-weight: bold; color: navy;" footerText="#{endoATM.totalTAX}"/>
+                                                <p:column style="text-align:right; font-weight: bold; color: navy;" footerText="#{endoATM.totalHDMF}"/>
+                                                <p:column style="text-align:right; font-weight: bold; color: navy;" footerText="#{endoATM.totalSSS}"/>
+                                                <p:column style="text-align:right; font-weight: bold; color: navy;" footerText="#{endoATM.totalBunos}"/>
+                                                <p:column style="text-align:right; font-weight: bold; color: navy;" footerText="#{endoATM.totalWage}"/>
+                                            </p:row>
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                </div>
+                            </div>
+                            
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td width="30%">
+                                            <h:panelGrid columns="3" cellpadding="5">
+                                                <p:outputLabel value="Name"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:selectOneMenu value="#{endoATM.workerID}" id="worker">
+                                                    <p:ajax listener="#{endoATM.onWorkerChange}" update="jobs rate" />
+                                                    <f:selectItem itemValue="." itemLabel="&lt;&lt;Select Names&gt;&gt;"/>
+                                                    <f:selectItems value="#{endoATM.workers}"/>
+                                                </p:selectOneMenu>
+
+                                                <p:outputLabel value="Occupation"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText value="#{endoATM.jobs}" id="jobs" readonly="true"/>
+
+                                                <p:outputLabel value="Date Cover"/>
+                                                <p:outputLabel value=" : "/>
+                                                <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
+                                                    <p:calendar value="#{endoATM.dateFr}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8"/>
+                                                    <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                    <p:calendar value="#{endoATM.dateTo}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8"/>
+                                                </h:panelGrid>
+
+                                                <p:outputLabel value="Days Absent"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText   value="#{endoATM.days}" size="10" maxlength="10" style="text-align: right;" id="days">
+                                                    <f:convertNumber pattern="#0.00;(#0.00)"/>
+                                                </p:inputText>
+
+                                                <p:outputLabel value="Rate"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText   value="#{endoATM.rate}" size="10" maxlength="10" style="text-align: right;" id="rate">
+                                                    <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                                </p:inputText>
+
+                                                <p:outputLabel value="Undertime"/>
+                                                <p:outputLabel value=" : "/>
+                                                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                    <p:inputText   value="#{endoATM.minutes}" size="10" maxlength="10" style="text-align: right;" id="minuta"/>
+                                                    <p:outputLabel value="&nbsp;&nbsp;&nbsp;mins"/>
+                                                </h:panelGrid>
+
+                                                <p:outputLabel value="PAG-IBIG"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText   value="#{endoATM.pagIbig}" size="10" maxlength="10" style="text-align: right;" id="pagibig" disabled="#{endoATM.isSenior}">
+                                                    <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                                </p:inputText>
+
+                                                <p:outputLabel value="SSS Prem."/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText   value="#{endoATM.SSSPrem}" size="10" maxlength="10" style="text-align: right;" id="sssprem" disabled="#{endoATM.isSenior}">
+                                                    <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                                </p:inputText>
+
+                                                <p:outputLabel value="W/TAX"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:inputText   value="#{endoATM.taxHeld}" size="10" maxlength="10" style="text-align: right;" id="wtax">
+                                                    <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                                </p:inputText>
+
+                                                <p:outputLabel id="dugang1" value="Additional Compensation" style="color: #{endoATM.render ? '#555555' : 'gainsboro'}"/>
+                                                <p:outputLabel id="dugang2" value=" : " style="color: #{endoATM.render ? '#555555' : 'gainsboro'}"/>
+                                                <p:inputText   id="dugang3" value="#{endoATM.bunos}" size="10" maxlength="10" style="text-align: right;" disabled="#{!endoATM.render}" >
+                                                    <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                                </p:inputText>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid cellpadding="0" cellspacing="0">
+                                                <p:commandButton value="Post/Save" actionListener="#{endoATM.saveEntry}" ajax="false"/>
+                                            </h:panelGrid>
+                                        </td>
+                                        <td width="20">
+                                            <p:spacer />
+                                        </td>
+                                        <td width="50%">
+                                            <table border="0" width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <table border="0" width="100%">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="45%" valign="top">
+                                                                            <h:panelGrid columns="3" cellpadding="0" cellspacing="3">
+                                                                                <p:outputLabel value="CERTIFIED BY"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{endoATM.certify1}"/>
+                                                                                <p:outputLabel value="Designation"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{endoATM.rank1}"/>
+                                                                            </h:panelGrid>
+                                                                        </td>
+                                                                        <td style="text-align: justify; font-size: 11px; color: blue;">
+                                                                            <!--p:outputLabel value="CERTIFICATION - This is to certify that the above mentioned job order employees have rendered services in the #endoATM.opesina} on the date stated."/-->
+                                                                            <p:inputTextarea value="#{endoATM.certification}" rows="2" style="width: 100%; height: 50px;"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                            <br/>
+                                                            <br/>
+                                                            <table border="0" width="100%">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="45%">
+                                                                            <h:panelGrid columns="3" cellpadding="0" cellspacing="3">
+                                                                                <p:outputLabel value="CERTIFIED BY"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{endoATM.certify2}"/>
+                                                                                <p:outputLabel value="Designation"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{endoATM.rank2}"/>
+                                                                            </h:panelGrid>                                
+                                                                        </td>
+                                                                        <td style="text-align: justify; font-size: 11px; color: blue;" valign="top">
+                                                                            <p:outputLabel value="1. HEREBY CERTIFY that each person whose name appears on this roll rendered service as indicated and for the time stated."/>
+                                                                            <br/>
+                                                                            <p:outputLabel id="labeled" value="#{endoATM.render ? '&nbsp;&nbsp;&nbsp;This is to certify further that they are entitled to received additional wages.' : ''}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br/>
+                                                            <br/>
+                                                            <table border="0" width="100%">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="45%">
+                                                                            <h:panelGrid columns="3" cellpadding="0" cellspacing="3">
+                                                                                <p:outputLabel value="CERTIFIED BY"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{endoATM.certify3}"/>
+                                                                                <p:outputLabel value="Designation"/>
+                                                                                <p:outputLabel value="&nbsp;:&nbsp;"/>
+                                                                                <p:inputText   value="#{endoATM.rank3}"/>
+                                                                            </h:panelGrid>                                
+                                                                        </td>
+                                                                        <td style="text-align: justify; font-size: 11px; color: blue;" valign="top">
+                                                                            <p:outputLabel value="2. I CERTIFY that is correct, every person whose name appears hereon rendered service for the time and at the rates stated."/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                        <td valign="bottom">
+                                                            <p:commandButton value="Update Officers" actionListener="#{endoATM.updateOfficer}" update="msgs" disabled="#{endoATM.updatable}"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </p:panel>
+
+                    </h:form>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

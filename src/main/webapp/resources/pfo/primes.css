@@ -1,0 +1,36 @@
+/* 
+    Document   : default
+    Created on : 03 11, 13, 10:54:13 AM
+    Author     : felix
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.ui-widget,
+.ui-widget .ui-widget {
+    font-size: 12px !important;
+}
+
+.title { 
+    height: 30px;
+    /*margin-left: 10px;*/
+    padding: 8px 0px 0px 20px;
+    font-size: 19px;
+}
+
+body {
+    background-image: url("#{resource['img/background.png']}");
+}
+
+.ui-hubot-icon {
+    background-image: url("#{resource['img/retrieve.png']}") !important;
+    height: 16px; width: 16px;
+}
+
+.plastar-taas {
+    vertical-align: top;
+}

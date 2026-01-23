@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+ 
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}"><ui:include src="/WEB-INF/jobmenu.xhtml"/></c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <h:form>
+                        <p:panel id="basic" header="PREVIOUS PAYROLL" style="width: 1153px;">
+                            <p:growl id="messages" showSummary="true" showDetail="true" globalOnly="true" />
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td width="33%">
+                                            <table border="0" cellpadding="0" cellspacing="5">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Agency</td><td> : </td><td><p:outputLabel value="#{previewBean.opesina}" id="office"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">Project</td><td valign="top"> : </td>
+                                                        <td><p:outputLabel value="#{previewBean.project}" id="project"/></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td width="33%" valign="bottom" align="center" style="padding-bottom: 10px;">
+                                            <h:outputLabel value="#{previewBean.payDate}" style="font-size: 20px;" id="paydate"/>
+                                        </td>
+                                        <td width="33%" align="right">
+                                            <table border="0" cellpadding="5" cellspacing="0" width="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="font-size: large;">Control #</td>
+                                                        <td> : </td>
+                                                        <td>
+                                                            <p:selectOneMenu value="#{previewBean.ctrlNo}" >
+                                                                <p:ajax listener="#{previewBean.onCtrlChange}" update="basic"/>
+                                                                <f:selectItem itemValue="." itemLabel="&lt;&lt;Select Ctrl #&gt;&gt;"/>
+                                                                <f:selectItems value="#{previewBean.controls}"/>
+                                                            </p:selectOneMenu>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h:dataTable id="paylist" var="worker"
+                                         value="#{previewBean.wages}"
+                                         class="auto-stylu"
+                                         width="100%"
+                                         columnClasses="column-name, column-desig, column-datefr, column-dateto, column-works, column-rates, column-gross, column-utime, column-deducts, column-deducts, column-deducts, column-amount"
+                                         rowClasses="row-colours, row-colourz"
+                                         cellpadding="0"
+                                         cellspacing="0"
+                                         border="0">
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                                    <f:facet name="header">NAME</f:facet>
+                                    #{worker.counter}&nbsp;#{worker.worker}
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                                    <f:facet name="header">OCCUPATION</f:facet>
+                                    <h:outputText value="#{worker.jobs}"/>
+                                    <f:facet name="footer">
+                                        <h:outputText value="T O T A L" style="font-weight: bold; font-size: larger; color: navy;"/>
+                                    </f:facet>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                                    <f:facet name="header">DATE<br/>FROM</f:facet>
+                                    <h:outputText value="#{worker.dateFr}">
+                                        <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                    </h:outputText>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                                    <f:facet name="header">DATE<br/>TO</f:facet>
+                                    <h:outputText value="#{worker.dateTo}">
+                                        <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                    </h:outputText>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">NUMBER<br />OF DAYS<br />WORKED</f:facet>
+                                    <h:outputText value="#{worker.days}" />
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">RATE<br />PER<br />DAY</f:facet>
+                                    <h:outputText value="#{worker.rate}" >
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">GROSS</f:facet>
+                                    <h:outputText value="#{worker.gross}" >
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{previewBean.totalGross}" style="font-weight: bold; font-size: larger; color: navy;">
+                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilan">
+                                    <f:facet name="header">NUMBER<br />OF MINUTES<br />UNDERTIME</f:facet>
+                                    <h:outputText value="#{worker.undertime} minute/s" />
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">UNDERTIME<br />DEDUCTION</f:facet>
+                                    <h:outputText value="#{worker.deduction}">
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{previewBean.totalDeduct}" style="font-weight: bold; font-size: larger; color: navy;">
+                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">PAG-IBIG<br />PREMIUM</f:facet>
+                                    <h:outputText value="#{worker.pagIbig}">
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{previewBean.totalHdmf}" style="font-weight: bold; font-size: larger; color: navy;">
+                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">SSS<br />PREMIUM</f:facet>
+                                    <h:outputText value="#{worker.SSSPrem}">
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{previewBean.totalSSS}" style="font-weight: bold; font-size: larger; color: navy;">
+                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">ADDITIONAL</f:facet>
+                                    <h:outputText value="#{worker.bunos}" >
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{previewBean.totalBunos}" style="font-weight: bold; font-size: larger; color: navy;">
+                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </h:column>
+
+                                <h:column headerClass="auto-styla" footerClass="auto-tiilbar">
+                                    <f:facet name="header">NET<br />AMOUNT</f:facet>
+                                    <h:outputText value="#{worker.netAmount}">
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{previewBean.totalWage}" style="font-weight: bold; font-size: larger; color: navy;">
+                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </h:column>
+
+                            </h:dataTable>
+
+                            <br/>
+
+                            <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <table style="width: 628px; font-family: Arial, Helvetica, sans-serif; font-size: small;">
+                                                <thead style="background-color: orange; font-family: Verdana, Geneva, Tahoma, sans-serif;">
+                                                    <tr>
+                                                        <th>T I T L E</th>
+                                                        <th>Status</th>
+                                                        <th>Date/Time</th>
+                                                    </tr>
+                                                </thead>
+                                                <tr bgcolor="lightgrey">
+                                                    <td style="width: 190px; padding-left:10px;">Prepare Payroll</td>
+                                                    <td style="width: 190px" align="center"><h:outputText id="preparel" value="#{previewBean.payrollOut}"/></td>
+                                                    <td style="width: 244px" align="center"><h:outputText id="preparer" value="#{previewBean.bayadDate}"><f:convertDateTime pattern="MM/dd/yyyy hh:mm:ss a" timeZone="GMT+8"/></h:outputText></td>
+                                                </tr>
+                                                <tr bgcolor="lightsteelblue">
+                                                    <td style="width: 190px; padding-left:10px;">Budget Office</td>
+                                                    <td style="width: 190px" align="center"><h:outputText id="budgetl" value="#{previewBean.budgetOut}"/></td>
+                                                    <td style="width: 244px" align="center"><h:outputText id="budgetr" value="#{previewBean.budgetDate}"><f:convertDateTime pattern="MM/dd/yyyy hh:mm:ss a" timeZone="GMT+8"/></h:outputText></td>
+                                                </tr>
+                                                <tr bgcolor="lightgrey">
+                                                    <td style="width: 190px; padding-left:10px;">Acctg - Receiving</td>
+                                                    <td style="width: 190px" align="center"><h:outputText id="receivel" value="#{previewBean.receiving}"/></td>
+                                                    <td style="width: 244px" align="center"><h:outputText id="receiver" value="#{previewBean.dawatDate}"><f:convertDateTime pattern="MM/dd/yyyy hh:mm:ss a" timeZone="GMT+8"/></h:outputText></td>
+                                                </tr>
+                                                <tr bgcolor="lightsteelblue">
+                                                    <td style="width: 190px; padding-left:55px;">Carding</td>
+                                                    <td style="width: 190px" align="center"><h:outputText id="cardl" value="#{previewBean.carding}"/></td>
+                                                    <td style="width: 244px" align="center"><h:outputText id="cardr" value="#{previewBean.cardDate}"><f:convertDateTime pattern="MM/dd/yyyy hh:mm:ss a" timeZone="GMT+8"/></h:outputText></td>
+                                                </tr>
+                                                <tr bgcolor="lightgrey">
+                                                    <td style="width: 190px; padding-left:55px;">Pre-Audit</td>
+                                                    <td style="width: 190px" align="center"><h:outputText id="auditl" value="#{previewBean.auditing}"/></td>
+                                                    <td style="width: 244px" align="center"><h:outputText id="auditr" value="#{previewBean.auditDate}"><f:convertDateTime pattern="MM/dd/yyyy hh:mm:ss a" timeZone="GMT+8"/></h:outputText></td>
+                                                </tr>
+                                                <tr bgcolor="lightsteelblue">
+                                                    <td style="width: 190px; padding-left:55px;">Accountant</td>
+                                                    <td style="width: 190px" align="center"><h:outputText id="accntl" value="#{previewBean.accountant}"/></td>
+                                                    <td style="width: 244px" align="center"><h:outputText id="accntr" value="#{previewBean.accntDate}"><f:convertDateTime pattern="MM/dd/yyyy hh:mm:ss a" timeZone="GMT+8"/></h:outputText></td>
+                                                </tr>
+                                                <tr bgcolor="lightgrey">
+                                                    <td style="width: 190px; padding-left:55px;">Release</td>
+                                                    <td style="width: 190px" align="center"><h:outputText id="outsl" value="#{previewBean.releasing}"/></td>
+                                                    <td style="width: 244px" align="center"><h:outputText id="outsr" value="#{previewBean.relesDate}"><f:convertDateTime pattern="MM/dd/yyyy hh:mm:ss a" timeZone="GMT+8"/></h:outputText></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <td valign="bottom" align="right">
+                                                <h:inputHidden value="#{previewBean.hasATM}" />
+                                                <!--p:button value="Print Payroll" outcome="/pay/report/payroll.xhtml?action=#previewBean.ctrlNo}&amp;pwidi=true" disabled="#previewBean.ctrlNo == '.' or previewBean.ctrlNo == null}" icon="ui-icon-document" id="printer"/-->
+                                                <p:commandButton value="Print Payroll" action="#{jasperController.viewPayroll(previewBean.ctrlNo, previewBean.render, 'pays/', previewBean.hasATM)}" ajax="false" icon="ui-icon-document"/>
+                                            </td>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </p:panel>
+                    </h:form>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

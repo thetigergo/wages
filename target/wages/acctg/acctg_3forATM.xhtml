@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml" >
+
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}"><ui:include src="/WEB-INF/auditmenu.xhtml"/></c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <p:panel id="basic" header="FOR ATM ACCOUNT" style="width: 784px;">
+                        <f:view>
+                            <h:form id="form">
+                                <p:growl id="messages" showSummary="true" showDetail="true" globalOnly="true" />
+
+                                <h:panelGrid columns="3" cellpadding="0" cellspacing="0" border="0">
+                                    <p:outputLabel value="Selection" />
+                                    <p:outputLabel value=" : " />
+                                    <p:selectOneRadio id="console" value="#{atmBean.whichOf}">
+                                        <p:ajax listener="#{atmBean.onWhichOf}" update="dataTable" />
+                                        <f:selectItem itemLabel="Executive"   itemValue="0"/>
+                                        <f:selectItem itemLabel="Legislative" itemValue="1"/>
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+                                <p:dataTable id="dataTable" var="lista" value="#{atmBean.ctrlNos}" paginator="true" rows="10"
+                                             selection="#{atmBean.selectedPayrolls}" rowKey="#{lista.ctrlNo}">
+
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                                    <p:column headerText="Acctg #" style="width: 75px; text-align: center;">
+                                        <h:outputText value="#{lista.acctgNo}" />
+                                    </p:column>  
+
+                                    <p:column headerText="Payee" style="width: 250px; text-align: left;">
+                                        <h:outputText value="#{lista.mgaEtAl}" />  
+                                    </p:column>  
+
+                                    <p:column headerText="Ctrl #" style="width: 75px; text-align: center;">
+                                        <h:outputText value="#{lista.ctrlNo}" />  
+                                    </p:column>  
+
+                                    <p:column headerText="Counts" style="width: 50px; text-align: center;">
+                                        <h:outputText value="#{lista.ehap}" />  
+                                    </p:column>  
+
+                                    <p:column headerText="Amount" style="width: 80px; text-align: right;">
+                                        <h:outputText value="#{lista.netPay}">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </h:outputText>
+                                    </p:column>  
+
+                                </p:dataTable>
+
+                                <div align="center">
+                                    <table border="0" cellspacing="3" cellpadding="3">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <h:panelGrid columns="3" cellpadding="1" cellspacing="1">
+                                                        <p:outputLabel value="Accnt #"/><p:outputLabel value=":"/><p:inputMask id="accnt" value="#{atmBean.accntNo}" mask="9999-999999-999" size="15" maxlength="15" readonly="true"/>
+                                                        <p:outputLabel value="Fund"/><p:outputLabel value=":"/>
+                                                        <p:selectOneMenu value="#{atmBean.fundID}" style="width: 128px;">
+                                                            <p:ajax  update="accnt refno" />
+                                                            <f:selectItem itemLabel="&lt;&lt;Select Funds&gt;&gt;" itemValue="0" />
+                                                            <f:selectItems value="#{atmBean.funding}"/>
+                                                        </p:selectOneMenu>
+                                                        <p:outputLabel value="Date"/><p:outputLabel value=":"/><p:calendar value="#{atmBean.dateATM}" pattern="MM/dd/yyyy" size="15" maxlength="10" timeZone="GMT+8"/>
+                                                        <p:outputLabel value="Ref #"/><p:outputLabel value=":"/><p:inputMask id="refno" value="#{atmBean.refNo}" mask="9999-999999" size="15" maxlength="11" readonly="true"/>
+                                                    </h:panelGrid>
+                                                </td>
+                                                <td>
+                                                    <p:commandButton action="#{atmBean.nextPage}" value="Prepare for ATM" update="messages" ajax="false" style="font-size: 12px;">
+                                                        <f:param name="petsa" value="#{atmBean.dateATM}"/>
+                                                        <f:param name="asaman" value="#{atmBean.whichOf}"/>
+                                                    </p:commandButton>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </h:form>
+                        </f:view>
+
+                    </p:panel>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

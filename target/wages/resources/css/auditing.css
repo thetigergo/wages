@@ -1,0 +1,117 @@
+/* 
+    Document   : reporting
+    Created on : 05 18, 15, 2:55:25 PM
+    Author     : felix
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.auto-stylo {
+    text-align: center;
+    border-bottom: thin black solid;
+}
+.auto-styla {
+    text-align: center;
+    border-bottom: thin black solid;
+    border-right:  thin black solid;
+    background-color: lightsteelblue;
+}
+.column-name {
+    text-align: left;
+    vertical-align: middle;
+    border-right:  thin black solid;
+    width: 210px;
+    padding-left: 5px;
+    height: 22px;
+}
+.column-desig {
+    text-align: center;
+    vertical-align: middle;
+    border-right:  thin black solid;
+    width: 200px;
+}
+.column-datefr {
+    text-align: center;
+    vertical-align: middle;
+    border-right: thin black solid;
+    width: 60px;
+}
+.column-dateto {
+    text-align: center;
+    vertical-align: middle;
+    border-right: thin black solid;
+    width: 60px;
+}
+.column-works {
+    text-align: center;
+    vertical-align: middle;
+    border-right: thin black solid;
+    width: 60px;
+}
+.column-rates {
+    text-align: right;
+    vertical-align: middle;
+    border-right:  thin black solid;
+    width: 40px;
+    padding-right: 5px;
+}
+.column-gross {
+    text-align: right;
+    vertical-align: middle;
+    border-right:  thin black solid;
+    width: 100px;
+    padding-right: 5px;
+}
+.column-utime {
+    text-align: center;
+    vertical-align: middle;
+    border-right: thin black solid;
+    width: 90px;
+}
+.column-deducts {
+    text-align: right;
+    vertical-align: middle;
+    border-right:  thin black solid;
+    width: 80px;
+    padding-right: 5px;
+}
+.column-amount {
+    text-align: right;
+    vertical-align: middle;
+    border-right:  thin black solid;
+    width: 100px;
+    padding-right: 5px;
+}
+.column-perma {
+    text-align: left;
+    vertical-align: middle;
+    width: 193px;
+    padding-left: 5px;
+}
+.auto-stylu {
+    border-style: solid;
+    border-color: inherit;
+    border-width: thin;
+    font-size: x-small;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.auto-tiilan {
+    text-align: left;
+    border-top: thin black solid;
+}
+.auto-tiilbar {
+    text-align: right;
+    border-top: thin black solid;
+    border-right: thin black solid;
+    padding-right: 5px;
+}
+.row-colours {
+    background-color: lightgoldenrodyellow;
+}
+.row-colourz {
+    background-color: lightgrey;
+}

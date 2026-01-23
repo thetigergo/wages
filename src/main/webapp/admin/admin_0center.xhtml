@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+ 
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}">
+                    <ui:include src="/WEB-INF/admenus.xhtml"/>
+                </c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <f:view>
+                        <h:form>
+                            <p:growl id="messages" showSummary="true" showDetail="true" globalOnly="true" />
+
+                            <p:panel id="basic" header="ADMINISTRATIVE CONSOLE" style="width: 850px;">
+                                <p:dataTable id="dataTable" var="mogamit" value="#{adminBean.selected}"
+                                             paginator="true" rows="15"  
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                             rowsPerPageTemplate="10,15,20"
+                                             style="width: 827px;">
+
+                                    <p:column headerText="UserID" style="width: 100px;">
+                                        <h:outputText value="#{mogamit.userID}" />  
+                                    </p:column>
+
+                                    <p:column headerText="User Name" style="width: 200px;">
+                                        <h:outputText value="#{mogamit.userName}" />  
+                                    </p:column>  
+
+                                    <p:column headerText="Office" style="width: 300px;">
+                                        <h:outputText value="#{mogamit.opesina}" />  
+                                    </p:column>  
+
+                                </p:dataTable>
+
+                            </p:panel>
+                        </h:form>
+                    </f:view>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+
+        </ui:composition>
+
+    </body>
+</html>

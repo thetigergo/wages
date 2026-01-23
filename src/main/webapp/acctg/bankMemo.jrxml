@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.0.final using JasperReports Library version 6.21.0-4f56c4f36cd19e17675219a9ac4692d5f0f13b06  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="72" bottomMargin="72" scriptletClass="jrscript.InWords" uuid="ccf1b086-ec90-4fe4-bfc4-49abaaca52b2">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="joborders"/>
+	<parameter name="RefKey" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2024-000155"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="whichof" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+   advicepay.refkey,
+   advicepay.entered,
+   advicepay.refdate,
+   advicepay.inputby,
+   advicepay.totamt,
+   advicepay.acctno,
+   advicepay.funds,
+   signatures.mayorvice,
+   signatures.designate4,
+   signatures.teniente,
+   signatures.posicion
+FROM
+   pay.advicepay CROSS JOIN public.signatures
+WHERE
+   (refkey = $P{RefKey})]]>
+	</queryString>
+	<field name="refkey" class="java.lang.String"/>
+	<field name="entered" class="java.sql.Timestamp"/>
+	<field name="refdate" class="java.sql.Date"/>
+	<field name="inputby" class="java.lang.String"/>
+	<field name="totamt" class="java.lang.Double"/>
+	<field name="acctno" class="java.lang.String"/>
+	<field name="funds" class="java.lang.String"/>
+	<field name="mayorvice" class="java.lang.String"/>
+	<field name="designate4" class="java.lang.String"/>
+	<field name="teniente" class="java.lang.String"/>
+	<field name="posicion" class="java.lang.String"/>
+	<title>
+		<band height="150" splitType="Stretch">
+			<staticText>
+				<reportElement x="179" y="26" width="164" height="14" uuid="3f091fe7-453d-4288-b1c4-3979eb72e47a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CITY OF SURIGAO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="13" width="164" height="13" uuid="3f091fe7-453d-4288-b1c4-3979eb72e47a"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Republic of the Philippines]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="380" y="70" width="143" height="20" uuid="7a75fb19-3796-448d-8510-33cf6d65ef89"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="130" y="0" width="65" height="50" uuid="2c428404-6a52-4b4c-a7c0-b0672fd21ec6"/>
+				<imageExpression><![CDATA[getClass().getResource("/jrscript/logo.jpg")]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="66" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="50" height="16" uuid="091979fc-4acd-4bc0-a7b9-089fae498cee"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[TO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="0" width="264" height="30" uuid="3bb8b538-63c7-4785-93c2-401dde578101"/>
+				<textElement>
+					<font size="10" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[DEVELOPMENT BANK OF THE PHILIPPINES
+SURIGAO BRANCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="79" height="16" uuid="3bb8b538-63c7-4785-93c2-401dde578101"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[SUBJECT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="50" width="264" height="16" uuid="3bb8b538-63c7-4785-93c2-401dde578101"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AUTHORITY TO DEBIT/CREDIT ACCOUNT]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="100" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="523" height="100" uuid="27277a7e-0ea4-4a5a-9f3b-dafd44a029e0"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Please debit our Account <b><u>City Government of Surigao</u></b> Account No. <b><u>" + $F{acctno} + " / " + $F{funds} + "</u></b> the amount of <b>" + $P{REPORT_SCRIPTLET}.AmountInWord( new java.text.DecimalFormat("#,##0.00").format($F{totamt}).toString(), 02, "" ) + " (P" + new java.text.DecimalFormat("#,##0.00").format($F{totamt}) + ")</b> Account No. <b><u>See Attached Sheets</u></b> Representing: <b><u>Payroll of Job Order Employees.</u></b>" +
+"<br/><br/>" +
+"I/We declare under penalty of perjury that our co-depositor/s is/are still living. This also authorizes you to debit our account for the corresponding service charge."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="250" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="51" width="140" height="16" uuid="74d8849e-3b1f-4ba7-9c10-3ee56b775fed"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[NELSON S. ALCALA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="67" width="140" height="14" uuid="03b44c52-b82b-476d-bb71-95daf98b5195"/>
+				<textElement textAlignment="Center">
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[City Treasurer]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="90" width="523" height="1" uuid="1e7d264f-ecfb-4106-a03f-c86f0be9d6e8"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="91" width="140" height="20" uuid="cea1901d-9f65-4709-8440-5c91b08ebebf"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FOR BANK USE ONLY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="135" width="289" height="20" uuid="13dfa1d2-1934-47ad-9e53-7c67562e1ddc"/>
+				<text><![CDATA[We have debit/credited above account as instructed.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="170" width="114" height="20" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Signature Verified by:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="190" width="114" height="60" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="170" width="114" height="20" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Posted by:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="190" width="114" height="60" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="170" width="114" height="20" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Checked by:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="190" width="114" height="60" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="409" y="170" width="114" height="20" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Approved by:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="409" y="190" width="114" height="60" uuid="d99a6046-f620-40a9-89bb-499b8269f3b0"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="361" y="51" width="162" height="16" uuid="1c8a5875-48bb-43a2-a5a3-9fdbc479b5f0"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{whichof} ? $F{teniente} : $F{mayorvice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="361" y="67" width="162" height="16" uuid="ffeb62d8-ec6a-481e-b136-f5045310032c"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{whichof} ? $F{posicion} : $F{designate4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

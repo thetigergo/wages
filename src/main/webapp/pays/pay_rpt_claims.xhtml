@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+ 
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}"><ui:include src="/WEB-INF/jobmenu.xhtml"/></c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <p:panel id="basic" header="J.O.'s CLAIMS" style="width: 1153px;">
+                        <h:form>
+                            <p:growl id="messages" showSummary="true" showDetail="true" globalOnly="true" />
+
+                            <h:panelGrid columns="3" border="0" cellpadding="3" cellspacing="3" id="xiong">
+                                <p:outputLabel value="J.O. Name" style="font-weight: bold;"/>
+                                <p:outputLabel value=" : "/>
+                                <p:selectOneMenu value="#{claimsBean.empID}" >
+                                    <p:ajax listener="#{claimsBean.onNameChange}" update="jonum"/>
+                                    <f:selectItem itemValue="." itemLabel="&lt;&lt;Select Name&gt;&gt;"/>
+                                    <f:selectItems value="#{claimsBean.workers}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="J. O. No." style="font-weight: bold;"/>
+                                <p:outputLabel value=" : "/>
+                                <p:selectOneMenu value="#{claimsBean.JONumber}" id="jonum">
+                                    <p:ajax listener="#{claimsBean.onJOChange}" update="basic"/>
+                                    <f:selectItem itemValue="." itemLabel="&lt;&lt;Select J.O. #&gt;&gt;"/>
+                                    <f:selectItems value="#{claimsBean.JONoList}"/>
+                                </p:selectOneMenu>
+
+                            </h:panelGrid>
+
+                            <h:dataTable id="paylist" var="claimed"
+                                         value="#{claimsBean.claims}"
+                                         class="claim-body"
+                                         columnClasses="claim-nums, claim-petsa, claim-petsa, claim-adlaw"
+                                         rowClasses="row-colors, row-colour"
+                                         cellpadding="0"
+                                         cellspacing="0"
+                                         border="0">
+
+                                <h:column headerClass="claim-style">
+                                    <f:facet name="header">#</f:facet>
+                                    <p:outputLabel value="#{claimed.counter}"/>
+                                </h:column>
+
+                                <h:column headerClass="claim-style">
+                                    <f:facet name="header">DATE<br/>FROM</f:facet>
+                                    <h:outputText value="#{claimed.dateFr}">
+                                        <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                    </h:outputText>
+                                </h:column>
+
+                                <h:column headerClass="claim-style" >
+                                    <f:facet name="header">DATE<br/>TO</f:facet>
+                                    <h:outputText value="#{claimed.dateTo}">
+                                        <f:convertDateTime pattern="MM/dd/yyyy" timeZone="GMT+8"/>
+                                    </h:outputText>
+                                </h:column>
+
+                                <h:column headerClass="claim-style" >
+                                    <f:facet name="header">NUMBER<br />OF DAYS<br />WORKED</f:facet>
+                                    <h:outputText value="#{claimed.days}" >
+                                        <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                    </h:outputText>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{claimsBean.totalDays}" style="font-weight: bold; font-size: larger; color: navy; text-align: right;">
+                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </h:column>
+
+                            </h:dataTable>
+
+                        </h:form>
+                    </p:panel>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml" >
+
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}"><ui:include src="/WEB-INF/auditmenu.xhtml"/></c:if>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <c:if test="#{onlined.userOnline != null}">
+
+                    <p:panel id="basic" header="FOR ATM ACCOUNT" style="width: 350px;">
+                        <f:view>
+                            <h:form id="form">
+                                <p:growl id="messages" showDetail="false"/>
+
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <p:panel id="basic" header="REPORTS" footer="Banking Reports" style="margin-bottom:20px">
+                                                    <h:panelGrid columns="1" cellpadding="0" cellspacing="0">
+                                                        <input type="button" value="SUMMARY for ACCTG" onclick="showList('summary.jasper');" style="width: 200px;" title="View"/>
+                                                        <br/>
+                                                        <br/>
+                                                        <input type="button" value="LISTING for BANK" onclick="showList('bankrep.jasper');" style="width: 200px;" title="View"/>
+                                                        <br/>
+                                                        <br/>
+                                                        <input type="button" value="BANK MEMO" onclick="showList('bankMemo.jasper');" style="width: 200px;" title="View"/>
+                                                        <br/>
+                                                        <br/>
+                                                        <input type="button" value="DOWNLOAD" onclick="showExport();" style="width: 200px;" title="View"/>
+                                                    </h:panelGrid>
+                                                </p:panel>                                                
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <script type="text/javascript">
+                                    function showList(report) {
+                                        var winObjRef = null;
+                                        try {
+                                            if(winObjRef === null || winObjRef.closed) {
+                                                winObjRef = window.open('rptatm.html?report=' + report, 'Report Viewer', 'width=760,height=600', 'menubar=0,toolbar=0,scrollbars=no,location=0,resizable=no');
+                                            } else {
+                                                winObjRef.focus();
+                                            }
+                                        } catch(ex) {
+                                            alert(ex);
+                                        }
+                                    }
+                                </script>
+                                <script type="text/javascript">
+                                    function showExport() {
+                                        var winObjRef = null;
+                                        try {
+                                            if(winObjRef === null || winObjRef.closed) {
+                                                winObjRef = window.open('fileatm.html', 'Report Viewer', 'width=760,height=600', 'menubar=0,toolbar=0,scrollbars=no,location=0,resizable=no');
+                                            } else {
+                                                winObjRef.focus();
+                                            }
+                                        } catch(ex) {
+                                            alert(ex);
+                                        }
+                                    }
+                                </script>
+                            </h:form>
+                        </f:view>
+
+                    </p:panel>
+
+                </c:if>
+
+                <c:if test="#{onlined.userOnline == null}">
+                    <div align="center" style="margin-top: 150px;">
+                        <h1 style="font-size: 75px; color: white;">You are not LOG-ON!</h1>
+                    </div>
+                </c:if>
+
+            </ui:define>
+
+
+        </ui:composition>
+
+    </body>
+</html>

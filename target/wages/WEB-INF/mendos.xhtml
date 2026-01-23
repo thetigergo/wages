@@ -1,0 +1,27 @@
+<ui:fragment
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form>
+
+        <h1>CONTRACTUAL TIME BOOK &amp; PAYROLL</h1>
+
+        <p:menubar>
+            <p:submenu label="Payroll" icon="ui-icon-contact">
+                <p:menuitem value="ATM Entry" outcome="/endo/entry_atms" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="C/A Entry" outcome="/endo/entry_cash" icon="ui-icon-document" ajax="false"/>
+                <p:separator/>
+                <p:menuitem value="Additional ATM" outcome="/endo/add_atms" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="Additional C/A" outcome="/endo/add_cash" icon="ui-icon-document" ajax="false"/>
+                <p:separator/>
+                <p:menuitem value="Modify" outcome="/endo/modify_endo" icon="ui-icon-document" ajax="false" disabled="#{onlined.userLevel != 1 ? '' : 'false'}"/>
+            </p:submenu>
+            
+            <p:menuitem value="Logout" url="logout.html" icon="ui-icon-extlink" ajax="false"/>
+        </p:menubar>
+    </h:form>
+
+</ui:fragment>

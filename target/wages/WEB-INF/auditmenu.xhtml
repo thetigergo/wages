@@ -1,0 +1,28 @@
+<ui:fragment
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+    <h:form>
+
+        <p:menubar>
+            <p:submenu label="Audit/Carding" icon="ui-icon-contact">
+                <p:menuitem value="Job Order"   outcome="/acctg/acctg_2audit" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="Contractual" outcome="/acctg/endo_audit"   icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="B.H.W."      outcome="/acctg/bhw_audit"    icon="ui-icon-document" ajax="false"/>
+            </p:submenu>
+            <p:submenu label="Banking" icon="ui-icon-contact">
+                <p:menuitem value="Bank Account" outcome="/acctg/acctg_1bank" icon="ui-icon-document" ajax="false"/>
+                <p:menuitem value="For ATM" outcome="/acctg/acctg_3forATM" disabled="false" icon="ui-icon-document" ajax="false"/>
+            </p:submenu>
+
+            <p:submenu label="Report" icon="ui-icon-contact">
+                <p:menuitem value="Bank Reports" outcome="/acctg/acctg_5Report" icon="ui-icon-document" ajax="false"/>
+            </p:submenu>
+
+            <p:menuitem value="Logout" url="logout.html" icon="ui-icon-extlink" ajax="false"/>
+        </p:menubar>
+    </h:form>
+
+</ui:fragment>

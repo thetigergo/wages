@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Payroll Detail" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="72" bottomMargin="72" uuid="ba4e4870-e8d6-4f05-9004-78bde1f55b95">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="joborder"/>
+	<property name="com.jaspersoft.studio.report.description" value="From summary of Payroll TO Detail of Payroll na. Correction from COA"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="RefKey" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2024-000155"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+  foradvice.pangalan,
+  foradvice.acctref,
+  foradvice.netpay,
+  foradvice.adviced,
+  foradvice.refdate,
+  foradvice.userdesc,
+  foradvice.workers,
+  signatures.accountant,
+  signatures.designate2,
+  signatures.reviewby,
+  signatures.reviewas
+FROM 
+  pay.foradvice($P{RefKey}) CROSS JOIN public.signatures
+ORDER BY
+  foradvice.acctref,
+  foradvice.workers]]>
+	</queryString>
+	<field name="pangalan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pangalan"/>
+		<property name="com.jaspersoft.studio.field.label" value="pangalan"/>
+	</field>
+	<field name="acctref" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="acctref"/>
+		<property name="com.jaspersoft.studio.field.label" value="acctref"/>
+	</field>
+	<field name="netpay" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="netpay"/>
+		<property name="com.jaspersoft.studio.field.label" value="netpay"/>
+	</field>
+	<field name="adviced" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="adviced"/>
+		<property name="com.jaspersoft.studio.field.label" value="adviced"/>
+	</field>
+	<field name="refdate" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="refdate"/>
+		<property name="com.jaspersoft.studio.field.label" value="refdate"/>
+	</field>
+	<field name="userdesc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="userdesc"/>
+		<property name="com.jaspersoft.studio.field.label" value="userdesc"/>
+	</field>
+	<field name="workers" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="workers"/>
+		<property name="com.jaspersoft.studio.field.label" value="workers"/>
+	</field>
+	<field name="accountant" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="accountant"/>
+		<property name="com.jaspersoft.studio.field.label" value="accountant"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="signatures"/>
+	</field>
+	<field name="designate2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="designate2"/>
+		<property name="com.jaspersoft.studio.field.label" value="designate2"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="signatures"/>
+	</field>
+	<field name="reviewby" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="reviewby"/>
+		<property name="com.jaspersoft.studio.field.label" value="reviewby"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="signatures"/>
+	</field>
+	<field name="reviewas" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="reviewas"/>
+		<property name="com.jaspersoft.studio.field.label" value="reviewas"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="signatures"/>
+	</field>
+	<variable name="TotalAmt" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{netpay}]]></variableExpression>
+	</variable>
+	<variable name="SubAmt" class="java.lang.Double" resetType="Group" resetGroup="Et_al" calculation="Sum">
+		<variableExpression><![CDATA[$F{netpay}]]></variableExpression>
+	</variable>
+	<group name="AcctRef">
+		<groupExpression><![CDATA[$F{acctref}]]></groupExpression>
+	</group>
+	<group name="Et_al">
+		<groupExpression><![CDATA[$F{pangalan}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20" forecolor="#0000FF" uuid="99dd52a1-0aa4-46a8-999a-7effa07a70ff"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{acctref}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="0" width="273" height="20" forecolor="#0000FF" uuid="1dae790b-7280-4cf6-88ae-ab3ee9d46fe0"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pangalan}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="Et_al" pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="373" y="0" width="150" height="20" forecolor="#0000FF" uuid="7dbd2377-45e5-4feb-a9b2-02dcdd1a41a4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SubAmt}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20"/>
+		</groupFooter>
+	</group>
+	<pageHeader>
+		<band height="110" splitType="Stretch">
+			<staticText>
+				<reportElement x="139" y="46" width="244" height="20" uuid="3f091fe7-453d-4288-b1c4-3979eb72e47a"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETAIL OF PAYROLL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="69" width="54" height="16" uuid="72762735-33a5-47a6-92f9-d96e05cc2187"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Ref. #]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="423" y="69" width="100" height="16" uuid="9c2b5fca-0af2-4270-a4ea-7970ecff6539"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adviced}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="369" y="85" width="54" height="16" uuid="72762735-33a5-47a6-92f9-d96e05cc2187"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="423" y="85" width="100" height="16" uuid="c515bdec-3bfa-4b6a-a510-c9750ea93b8a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{refdate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="179" y="11" width="164" height="13" uuid="3f091fe7-453d-4288-b1c4-3979eb72e47a"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Republic of the Philippines]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="24" width="164" height="14" uuid="3f091fe7-453d-4288-b1c4-3979eb72e47a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CITY OF SURIGAO]]></text>
+			</staticText>
+			<image>
+				<reportElement x="136" y="0" width="65" height="50" uuid="2c428404-6a52-4b4c-a7c0-b0672fd21ec6"/>
+				<imageExpression><![CDATA[getClass().getResource("/jrscript/logo.jpg")]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="14" uuid="809ffe67-5b33-493e-a3e8-0a2d371c2bef"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Acctg Ref #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="273" height="14" uuid="5b08f490-8b2c-4d24-9f3f-ff451af7f4a8"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[<b>Payee</b>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="373" y="0" width="150" height="14" uuid="80193fc6-821f-4bec-ad09-a42d20e97080"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="373" y="0" width="150" height="20" uuid="13255818-5a7f-4d63-b423-f020fda074dc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{netpay}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="273" height="20" uuid="2f202438-58b0-49c7-bace-e9e20bbbf5c4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{workers}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="158">
+			<staticText>
+				<reportElement x="0" y="83" width="100" height="20" uuid="bb2eaad7-eaad-4d38-9181-6d9193c3e8c3"/>
+				<text><![CDATA[Certified by:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="bb2eaad7-eaad-4d38-9181-6d9193c3e8c3"/>
+				<text><![CDATA[Prepared by:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="40" width="180" height="20" uuid="5a5402f3-0257-4e3c-9e61-b687301f96c1"/>
+				<box>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{userdesc}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="306" y="0" width="217" height="20" uuid="bb2eaad7-eaad-4d38-9181-6d9193c3e8c3"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[Reviewed by:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="320" y="20" width="202" height="40" uuid="c6520926-7cb8-4830-b984-02c57f32ee91"/>
+				<box>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reviewby}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="60" width="202" height="11" uuid="91314dbd-3c9c-4270-aea4-db7a0abd6615"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reviewas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="117" width="250" height="14" uuid="840259bb-3c72-4387-97d4-d3208499084e"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountant}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="131" width="250" height="27" uuid="841d6f02-f785-4ffd-b99d-f8cae1021f63"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{designate2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="20">
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="373" y="0" width="150" height="20" uuid="055588cf-aa71-4a07-b04e-8fbb8adda63c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="2.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TotalAmt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="373" height="20" uuid="01283be8-d6f9-4f8b-a0e5-c10a026158c6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="2.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[T O T A L]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
