@@ -160,7 +160,8 @@ public class EndoATMBean implements java.io.Serializable {
                     "psnl.jobworker " +
                 "WHERE " +
                     "(bank_acct IS NOT NULL) AND " +
-                    "(offcloc = '" + OpesinaID + "') " +
+                    "(offcloc = '" + OpesinaID + "') AND " +
+                    "(phaseout IS FALSE) " +
                 "ORDER BY " +
                     "lastname, firstname, midname";
             try (java.sql.ResultSet tbl = _smt.executeQuery(query)) {

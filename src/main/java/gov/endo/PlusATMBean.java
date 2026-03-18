@@ -176,7 +176,8 @@ public class PlusATMBean implements java.io.Serializable {
                     "psnl.jobworker " +
                 "WHERE " +
                     "(offcloc = '" + OpesinaID + "') AND " +
-                    "(bank_acct IS NOT NULL) " +
+                    "(bank_acct IS NOT NULL) AND " +
+                    "(phaseout IS FALSE) " +
                 "ORDER BY " +
                     "lastname, firstname, midname";
             try (java.sql.ResultSet rst = _smt.executeQuery(query)) {

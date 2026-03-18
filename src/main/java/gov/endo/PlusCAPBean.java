@@ -174,7 +174,8 @@ public class PlusCAPBean implements java.io.Serializable {
                     "psnl.jobworker " +
                 "WHERE " +
                     "(offcloc = '" + OpesinaID + "') AND " +
-                    "(bank_acct IS NULL) " +
+                    "(bank_acct IS NULL) AND " +
+                    "(phaseout IS FALSE) " +
                 "ORDER BY " +
                     "lastname, firstname, midname";
             try (java.sql.ResultSet rst = _smt.executeQuery(query)) {
