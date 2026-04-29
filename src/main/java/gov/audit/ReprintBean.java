@@ -12,7 +12,7 @@ public class ReprintBean implements java.io.Serializable {
     
     private java.util.Date DateATM;
     private java.lang.String RefNo;
-    private java.lang.Short  WhichOf;
+    private java.lang.Short  WhichOf, Anios = (short)2000;
     
 
     private gov.wages.OnlineUser onlineUser;
@@ -26,6 +26,9 @@ public class ReprintBean implements java.io.Serializable {
 
     public Short getWhichOf() {return WhichOf;}
     public void setWhichOf(Short value) {this.WhichOf = value;}
+
+    public Short getAnios() {return Anios;}
+    public void setAnios(Short value) {Anios = value;}
     
     
     
@@ -48,16 +51,21 @@ public class ReprintBean implements java.io.Serializable {
                     "refdate";
         try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm);
-                java.sql.ResultSet rst = psmt.executeQuery()) {
-            arRefNos.clear();
-            while (rst.next())
-                arRefNos.add(new javax.faces.model.SelectItem(rst.getString(1)));
+                java.sql.PreparedStatement pzmt = jdbc.prepareStatement("SELECT DATE_PART('YEAR', NOW());")) {
+                
+            try (java.sql.ResultSet rst = psmt.executeQuery()) {
+                arRefNos.clear();
+                while (rst.next()) arRefNos.add(new javax.faces.model.SelectItem(rst.getString(1)));
+            }
+            try (java.sql.ResultSet rst = pzmt.executeQuery()) {
+                rst.next(); Anios = rst.getShort(1);
+            }
 
             RefNo   = onlineUser.getTemporary();
             DateATM = onlineUser.getMgaPetsa();
             WhichOf = onlineUser.getWhichOf();
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -90,4 +98,32 @@ public class ReprintBean implements java.io.Serializable {
     }
     
     public void onWhichOf() {onlineUser.setWhichOf(WhichOf);}
+    
+    // The method called by <p:ajax listener="#{reprnBean.aniosChanged}" />
+    public void aniosChanged() {
+        javax.faces.application.FacesMessage msg = null;
+        String sqlComm = 
+                "SELECT " +
+                    "refkey " +
+                "FROM " +
+                    "pay.advicepay " +
+                "WHERE " +
+                    "(DATE_PART('YEAR', refdate) = ?) " +
+                "ORDER BY " +
+                    "refdate";
+        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+                java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm)) {
+                
+            psmt.setShort(1, Anios);
+            try (java.sql.ResultSet rst = psmt.executeQuery()) {
+                arRefNos.clear();
+                while (rst.next()) arRefNos.add(new javax.faces.model.SelectItem(rst.getString(1)));
+            }
+
+        } catch (Exception sex) {
+            msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
+        } finally {
+            if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
 }

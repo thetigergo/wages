@@ -25,13 +25,15 @@
                                 <p:growl id="messages" showDetail="false"/>
 
                                 <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
-                                    <h:outputLabel value="Reference #" />
-                                    <h:outputLabel value=":" />
-                                    <p:selectOneMenu id="proyekto" value="#{reprnBean.refNo}">
+                                    <h:outputLabel value="Reference #:" />
+                                    <p:selectOneMenu id="proyekto" value="#{reprnBean.refNo}" style="width: 125px;">
                                         <p:ajax listener="#{reprnBean.onChanging}" update="basic" />
                                         <f:selectItem itemValue="." itemLabel="&lt;&lt;Select Ref. No.&gt;&gt;"/>
                                         <f:selectItems value="#{reprnBean.refNos}"/>
-                                    </p:selectOneMenu>                                                        
+                                    </p:selectOneMenu>
+                                    <p:spinner value="#{reprnBean.anios}" onchange="" min="2000" max="3000" maxlength="4" decimalPlaces="0" decimalSeparator="" thousandSeparator="" size="4" >
+                                        <p:ajax event="change" listener="#{reprnBean.aniosChanged}" update="proyekto" />
+                                    </p:spinner>
                                 </h:panelGrid>
                                 <br/>
                                 <h:panelGrid columns="3" cellpadding="0" cellspacing="0" border="0">
@@ -61,12 +63,12 @@
                                     function showList(report) {
                                         var winObjRef = null;
                                         try {
-                                            if(winObjRef === null || winObjRef.closed) {
+                                            if (winObjRef === null || winObjRef.closed) {
                                                 winObjRef = window.open('rptatm.html?report=' + report, 'Report Viewer', 'width=760,height=600', 'menubar=0,toolbar=0,scrollbars=no,location=0,resizable=no');
                                             } else {
                                                 winObjRef.focus();
                                             }
-                                        } catch(ex) {
+                                        } catch (ex) {
                                             alert(ex);
                                         }
                                     }
@@ -75,12 +77,12 @@
                                     function showExport() {
                                         var winObjRef = null;
                                         try {
-                                            if(winObjRef === null || winObjRef.closed) {
+                                            if (winObjRef === null || winObjRef.closed) {
                                                 winObjRef = window.open('fileatm.html', 'Report Viewer', 'width=760,height=600', 'menubar=0,toolbar=0,scrollbars=no,location=0,resizable=no');
                                             } else {
                                                 winObjRef.focus();
                                             }
-                                        } catch(ex) {
+                                        } catch (ex) {
                                             alert(ex);
                                         }
                                     }
