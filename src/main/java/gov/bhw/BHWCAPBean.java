@@ -137,7 +137,7 @@ public class BHWCAPBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             try (java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -154,7 +154,7 @@ public class BHWCAPBean implements java.io.Serializable {
 
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -163,7 +163,7 @@ public class BHWCAPBean implements java.io.Serializable {
     
     public void onDistrictChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String query =
                 "SELECT " +
@@ -181,7 +181,7 @@ public class BHWCAPBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -190,7 +190,7 @@ public class BHWCAPBean implements java.io.Serializable {
     
     public void onBarangayChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String query =
                 "SELECT " +
@@ -212,7 +212,7 @@ public class BHWCAPBean implements java.io.Serializable {
             disableProject = true;
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -221,7 +221,7 @@ public class BHWCAPBean implements java.io.Serializable {
     
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT " +
@@ -237,7 +237,7 @@ public class BHWCAPBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -253,7 +253,7 @@ public class BHWCAPBean implements java.io.Serializable {
 
     private void ReLoad() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -315,7 +315,7 @@ public class BHWCAPBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -325,7 +325,7 @@ public class BHWCAPBean implements java.io.Serializable {
     public void saveEntry(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
 
             java.util.Calendar calfr = java.util.Calendar.getInstance(),
@@ -381,7 +381,7 @@ public class BHWCAPBean implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.bhwwages");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
@@ -395,7 +395,7 @@ public class BHWCAPBean implements java.io.Serializable {
 
             if (event != null) msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_INFO, "INFO", "Officers updated successfully");
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);

@@ -41,7 +41,7 @@ public class ClaimsBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -59,7 +59,7 @@ public class ClaimsBean implements java.io.Serializable {
                 arWorker.add(new javax.faces.model.SelectItem(rst.getString(1), rst.getString(2)));
 
             
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -68,7 +68,7 @@ public class ClaimsBean implements java.io.Serializable {
 
     public void onNameChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -94,7 +94,7 @@ public class ClaimsBean implements java.io.Serializable {
     
     public void onJOChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +

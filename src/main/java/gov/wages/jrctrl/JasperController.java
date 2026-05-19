@@ -16,7 +16,7 @@ public class JasperController implements java.io.Serializable {
 //        retrieveJOs(null);*/
 //    }
 
-    public void PDF(String value) throws java.io.IOException, net.sf.jasperreports.engine.JRException, java.sql.SQLException {
+    public void PDF(String value) throws Exception {
         javax.servlet.http.HttpServletResponse response = (javax.servlet.http.HttpServletResponse)javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getResponse();
         //java.io.InputStream reportSource = getClass().getResourceAsStream("/jrfuels/dailytrans.jasper");
         String reportPath = javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getRealPath("wages.jasper");
@@ -32,7 +32,7 @@ public class JasperController implements java.io.Serializable {
         response.addHeader("Content-disposition", "attachment; filename-report.pdf");
         javax.servlet.ServletOutputStream outputStream = response.getOutputStream();
 
-        net.sf.jasperreports.engine.JasperPrint jasperPrint = net.sf.jasperreports.engine.JasperFillManager.fillReport(reportPath, params, new gov.dbase.PgSQLConn());
+        net.sf.jasperreports.engine.JasperPrint jasperPrint = net.sf.jasperreports.engine.JasperFillManager.fillReport(reportPath, params, gov.dbase.PgSQLink.dbLink());
         net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
         //net.sf.jasperreports.view.JasperViewer.viewReport(jasperPrint, false);
         javax.faces.context.FacesContext.getCurrentInstance().responseComplete();
@@ -48,7 +48,7 @@ public class JasperController implements java.io.Serializable {
 //        params.put("CtrlNo", value);
         
         java.io.File jasper = new java.io.File(javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getRealPath(report + ".jasper"));
-        byte[] bytes = net.sf.jasperreports.engine.JasperRunManager.runReportToPdf(jasper.getPath(), params, new gov.dbase.PgSQLConn());
+        byte[] bytes = net.sf.jasperreports.engine.JasperRunManager.runReportToPdf(jasper.getPath(), params, gov.dbase.PgSQLink.dbLink());
         javax.servlet.http.HttpServletResponse httpServletResponse=(javax.servlet.http.HttpServletResponse)javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getResponse();  
         httpServletResponse.setContentType("application/pdf");
         httpServletResponse.setContentLength(bytes.length);

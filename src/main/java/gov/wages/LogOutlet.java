@@ -30,7 +30,7 @@ public class LogOutlet extends javax.servlet.http.HttpServlet {
     protected void processRequest(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (java.io.PrintWriter docout = response.getWriter()) {
-            try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+            try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                     java.sql.Statement _smt = jdbc.createStatement()) {
                 gov.wages.OnlineUser onlineUser = (gov.wages.OnlineUser) request.getSession().getAttribute("onlined");
                 /*
@@ -56,7 +56,7 @@ public class LogOutlet extends javax.servlet.http.HttpServlet {
 
                 _smt.executeUpdate("UPDATE userlogon SET lastout = NOW() WHERE (userid = '" + onlineUser.getUserOnline() + "')");
 
-            } catch (java.sql.SQLException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace(docout);
             }
         } finally {            

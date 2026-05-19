@@ -8,7 +8,7 @@ public class ATMBean implements java.io.Serializable {
 
     private static final long serialVersionUID = -1325334139286629372L;
     
-    private final boolean NUMERIC = true; //, CONDITION = true;
+    //private final boolean NUMERIC = true; //, CONDITION = true;
     
     private java.util.Date DateATM = new java.util.Date();
     private String RefNo, AccntNo, Fund;
@@ -62,7 +62,7 @@ public class ATMBean implements java.io.Serializable {
         FundID = value;
         
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement("SELECT acctno, fundname FROM pay.fundings WHERE (numbers = ?);")) {
             
             psmt.setShort(1, FundID);
@@ -73,7 +73,7 @@ public class ATMBean implements java.io.Serializable {
                 }
             }
             
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -86,7 +86,7 @@ public class ATMBean implements java.io.Serializable {
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement asmt = jdbc.prepareStatement("SELECT 0 FROM pg_catalog.pg_class WHERE (relname = ?);")) {
             
             try (java.sql.PreparedStatement pzmt = jdbc.prepareStatement("SELECT numbers, fundname FROM pay.fundings ORDER BY fundname;");
@@ -147,7 +147,7 @@ public class ATMBean implements java.io.Serializable {
     public void onWhichOf() {
         javax.faces.application.FacesMessage msg = null;
         String sqlComm = "SELECT ref_no, named, ctrlno, count, netpay FROM pay.foradvice WHERE (whichof = ?) ORDER BY ref_no, ctrlno;";
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm)) {
             
             psmt.setShort(1, WhichOf);
@@ -184,9 +184,7 @@ public class ATMBean implements java.io.Serializable {
 
         javax.faces.application.FacesMessage msg = null;
         String sqlComm = "";
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
-                java.sql.Statement _smt = jdbc.createStatement();
-                
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement asmt = jdbc.prepareStatement("SELECT NOW(), next_ref FROM pay.next_ref(DATE_PART('YEAR', NOW)::INTEGER);");) {
             
             try (java.sql.ResultSet rst = asmt.executeQuery()) {

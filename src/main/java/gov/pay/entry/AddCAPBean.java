@@ -143,7 +143,7 @@ public class AddCAPBean implements java.io.Serializable {
     protected void init() {
         OpesinaID = onlineUser.getOpesina();
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             try (java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -187,7 +187,7 @@ public class AddCAPBean implements java.io.Serializable {
 
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -209,7 +209,7 @@ public class AddCAPBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -218,7 +218,7 @@ public class AddCAPBean implements java.io.Serializable {
 
     private void onProjectChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             String dateFr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayFr),
                    dateTo   = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayTo);
@@ -280,7 +280,7 @@ public class AddCAPBean implements java.io.Serializable {
                 "ORDER BY " +
                     "humane";
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(query)) {
             arWorkers.clear(); mapWorker.clear();
@@ -290,7 +290,7 @@ public class AddCAPBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -362,7 +362,7 @@ public class AddCAPBean implements java.io.Serializable {
     
     public void onCtrlChangeReload() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -457,7 +457,7 @@ public class AddCAPBean implements java.io.Serializable {
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             
             Float avail = 0F; Double allotment = 0D;
@@ -530,7 +530,7 @@ public class AddCAPBean implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.timebook");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);

@@ -154,7 +154,7 @@ public class WageATMBean implements java.io.Serializable {
     protected void init() {
         OpesinaID = onlineUser.getOpesina();
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -198,7 +198,7 @@ public class WageATMBean implements java.io.Serializable {
             }
             //projectOnChange();
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -220,7 +220,7 @@ public class WageATMBean implements java.io.Serializable {
     
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT " +
@@ -242,7 +242,7 @@ public class WageATMBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -251,7 +251,7 @@ public class WageATMBean implements java.io.Serializable {
     
     public void onProjectChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String dateFrom = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayFr),
                    dateTo   = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayTo);
@@ -285,7 +285,7 @@ public class WageATMBean implements java.io.Serializable {
             disableProject = true;
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -318,7 +318,7 @@ public class WageATMBean implements java.io.Serializable {
                 "ORDER BY " +
                     "humane";
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(query)) {
             arWorkers.clear(); mapWorker.clear();
@@ -328,7 +328,7 @@ public class WageATMBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -373,7 +373,7 @@ public class WageATMBean implements java.io.Serializable {
 
     private void ReLoad() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -431,7 +431,7 @@ public class WageATMBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -444,7 +444,7 @@ public class WageATMBean implements java.io.Serializable {
         //System.out.println(buttonId);
         javax.faces.application.FacesMessage msg = null;
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
 
             
@@ -563,7 +563,7 @@ public class WageATMBean implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.timebook");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
@@ -578,7 +578,7 @@ public class WageATMBean implements java.io.Serializable {
 
             if (event != null) msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_INFO, "INFO", "Officers updated successfully");
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);

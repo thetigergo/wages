@@ -152,7 +152,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     protected void init() {
         OpesinaID = onlineUser.getOpesina();
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             try (java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -179,7 +179,7 @@ public class ModifyEndoBean implements java.io.Serializable {
             }
 
             
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -188,7 +188,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     
     public void retrieveJOs() {    //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -263,7 +263,7 @@ public class ModifyEndoBean implements java.io.Serializable {
 
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -280,7 +280,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     public String onEditJOs(String value) {
         WorkerID = value;
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -326,7 +326,7 @@ public class ModifyEndoBean implements java.io.Serializable {
             }
 
 
-        } catch (NumberFormatException | java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -339,7 +339,7 @@ public class ModifyEndoBean implements java.io.Serializable {
         javax.faces.application.FacesMessage msg = null;
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
-        try (java.sql.Connection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement smt = jdbc.createStatement()) {
             
             java.util.Calendar calfr = java.util.Calendar.getInstance(),
@@ -385,7 +385,7 @@ public class ModifyEndoBean implements java.io.Serializable {
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.laborpaid");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
@@ -409,7 +409,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     
     public String onEraseJOs(String value) {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.laborpaid");
             saver.FieldName("ctrlno",  !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
@@ -430,7 +430,7 @@ public class ModifyEndoBean implements java.io.Serializable {
             
             
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);

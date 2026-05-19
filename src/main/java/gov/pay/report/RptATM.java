@@ -24,7 +24,7 @@ public class RptATM extends javax.servlet.http.HttpServlet {
         //java.io.PrintWriter out = response.getWriter();
         String refkey, realPath = request.getParameter("report");
         Short WhichOf;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn()) {
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink()) {
             gov.wages.OnlineUser onlineUser = (gov.wages.OnlineUser) request.getSession().getAttribute("onlined");
             refkey = onlineUser.getTemporary();
             WhichOf = onlineUser.getWhichOf();
@@ -48,7 +48,7 @@ public class RptATM extends javax.servlet.http.HttpServlet {
             }
 
             
-        } catch (net.sf.jasperreports.engine.JRException | java.io.IOException | java.sql.SQLException ex) {
+        } catch (Exception ex) {
             //ex.printStackTrace(out);
             // display stack trace in the browser
             java.io.StringWriter stringWriter = new java.io.StringWriter();

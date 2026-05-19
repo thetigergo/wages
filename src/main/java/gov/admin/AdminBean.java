@@ -15,7 +15,7 @@ public class AdminBean implements java.io.Serializable {
 
     @javax.annotation.PostConstruct
     protected void init() {
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " + //DISTINCT

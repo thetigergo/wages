@@ -65,10 +65,10 @@ public class AuditBHWBean implements java.io.Serializable {
     
     public void kuhaaALOBS(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection adbc = new gov.dbase.PgSQLConn("accounting");
-                org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
+                java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _zmt = jdbc.createStatement();
-                java.sql.Statement _smt = adbc.createStatement()) {
+                java.sql.Statement _smt = gdbc.createStatement()) {
             String[] acctref = Reference.split("-"); String cboNo = "", alobsNo = "";
             try (java.sql.ResultSet rst = _smt.executeQuery("SELECT budget_no FROM doc.main_data WHERE (ref_no_year = " + acctref[0] + ") AND (ref_no = " + acctref[1] + ");")) {
                 if (rst.next()) cboNo = rst.getString(1);
@@ -82,7 +82,7 @@ public class AuditBHWBean implements java.io.Serializable {
             }
 
 
-        } catch (java.sql.SQLException ex) {
+        } catch (Exception ex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", ex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -92,7 +92,7 @@ public class AuditBHWBean implements java.io.Serializable {
 
     public void accessWorker() {//javax.faces.event.ActionEvent event
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -189,7 +189,7 @@ public class AuditBHWBean implements java.io.Serializable {
             SwitchOff = false;
 
 
-        } catch (java.sql.SQLException ex) {
+        } catch (Exception ex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", ex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -226,8 +226,8 @@ public class AuditBHWBean implements java.io.Serializable {
     public void approveRecord(javax.faces.event.ActionEvent ae) {
         javax.faces.application.FacesMessage msg = null;
         boolean already = false;
-        try (org.postgresql.core.BaseConnection zdbc = new gov.dbase.PgSQLConn("accounting");
-                java.sql.Statement smt = zdbc.createStatement()) {
+        try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
+                java.sql.Statement smt = gdbc.createStatement()) {
 
             String anios = Reference.split("-")[0],
                    refno = Reference.split("-")[1],
@@ -287,7 +287,7 @@ public class AuditBHWBean implements java.io.Serializable {
     IMO #: +63995-149-5674
 */
 /******************************* CODING PARA SA PAG POST SA CARDING *******************************/
-            try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+            try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                     java.sql.Statement jsmt = jdbc.createStatement()) {
                 for (gov.pay.WageField bhwwages : arFields) {
                     gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("bhw.carding");
@@ -332,7 +332,7 @@ public class AuditBHWBean implements java.io.Serializable {
     }
 
     public void returnRecord(javax.faces.event.ActionEvent ae) {
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn("accounting");
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink("accounting");
                 java.sql.Statement smt = jdbc.createStatement()) {
 
             String anios = Reference.split("-")[0],

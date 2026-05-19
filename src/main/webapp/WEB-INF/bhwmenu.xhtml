@@ -16,8 +16,8 @@
                 <p:separator/>
                 <p:menuitem value="Modify" outcome="/bhw/modify_bhw" icon="ui-icon-document" ajax="false" disabled="#{onlined.userLevel != 1 ? '' : 'false'}"/>
             </p:submenu>
-            <p:submenu label="Report" icon="ui-icon-contact">
-                <p:menuitem value="Previous Payroll" icon="ui-icon-document" ajax="false"/>
+            <p:submenu label="Entry" icon="ui-icon-contact">
+                <p:menuitem value="BHW Names" outcome="/bhw/entryName" icon="ui-icon-document" ajax="false"/>
             </p:submenu>
 
             <p:menuitem value="Logout" url="logout.html" icon="ui-icon-extlink" ajax="false"/>

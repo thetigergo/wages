@@ -262,6 +262,29 @@
             <property-name>onlineBean</property-name>
         </managed-property>
     </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>bhwNames</managed-bean-name>
+        <managed-bean-class>gov.bhw.InputBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{onlined}</value>
+            <property-class>gov.wages.OnlineUser</property-class>
+            <property-name>onlineBean</property-name>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>finding</managed-bean-name>
+        <managed-bean-class>gov.bhw.SearchBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{bhwNames}</value>
+            <property-class>gov.bhw.InputBean</property-class>
+            <property-name>passKey</property-name>
+        </managed-property>
+    </managed-bean>
+    
     <!-- ###################################################################### -->
     
     <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ CONTRACTUAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->

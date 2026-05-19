@@ -4,7 +4,7 @@ package gov.dbase;
  *
  * @author felix
  */
-public class MsSQLConn implements java.sql.Connection {
+public class MsSQLCom implements java.sql.Connection {
 
     private final java.sql.Connection mJDBC;
     private final String SERVER = "172.16.0.13";
@@ -13,7 +13,7 @@ public class MsSQLConn implements java.sql.Connection {
         System.out.println("initializing...");
     }
     
-    public MsSQLConn() throws java.sql.SQLException {
+    public MsSQLCom() throws java.sql.SQLException {
         com.microsoft.sqlserver.jdbc.SQLServerDataSource ds = new com.microsoft.sqlserver.jdbc.SQLServerDataSource();
         ds.setServerName(SERVER);
         ds.setPortNumber(1433);

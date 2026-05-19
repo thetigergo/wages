@@ -21,7 +21,7 @@ public class AddUserBean implements java.io.Serializable {
 
     @javax.annotation.PostConstruct
     protected void init() {
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -35,7 +35,7 @@ public class AddUserBean implements java.io.Serializable {
                 arOffice.add(new javax.faces.model.SelectItem(rst.getString(1), rst.getString(2)));
             
             
-        } catch (java.sql.SQLException ex) {
+        } catch (Exception ex) {
             javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", ex.getMessage()));
         } finally {
 
@@ -64,7 +64,7 @@ public class AddUserBean implements java.io.Serializable {
         //String buttonId = event.getComponent().getClientId();
         //System.out.println(buttonId);
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             
             StringBuilder level = new StringBuilder();
@@ -81,7 +81,7 @@ public class AddUserBean implements java.io.Serializable {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_INFO, "INFO", "Added successfully");
 
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);

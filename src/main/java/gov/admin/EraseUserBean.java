@@ -50,7 +50,7 @@ public class EraseUserBean implements java.io.Serializable {
 
     @javax.annotation.PostConstruct
     protected void init() {
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -66,7 +66,7 @@ public class EraseUserBean implements java.io.Serializable {
                 arUsers.add(new javax.faces.model.SelectItem(rst.getString(1), rst.getString(2)));
 
             
-        } catch (java.sql.SQLException ex) {
+        } catch (Exception ex) {
             javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", ex.getMessage()));
         } finally {
 
@@ -84,7 +84,7 @@ public class EraseUserBean implements java.io.Serializable {
     public void setOpesina(String value) {mOpesina = value;}
     
     public void onUserChange() {
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " + //DISTINCT
@@ -105,7 +105,7 @@ public class EraseUserBean implements java.io.Serializable {
             }
             
             
-        } catch (java.sql.SQLException ex) {
+        } catch (Exception ex) {
             javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", ex.getMessage()));
         } finally {
 
@@ -117,7 +117,7 @@ public class EraseUserBean implements java.io.Serializable {
         //String buttonId = event.getComponent().getClientId();
         //System.out.println(buttonId);
 
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
 
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("public.userlogon");

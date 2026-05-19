@@ -45,7 +45,7 @@ public class FileATM extends javax.servlet.http.HttpServlet {
                         "pay.advicepay " +
                     "WHERE " +
                         "(refkey = ?)";
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.PreparedStatement psmt1 = jdbc.prepareStatement(sqlCmd1);
             java.sql.PreparedStatement psmt2 = jdbc.prepareStatement(sqlCmd2)) {
 

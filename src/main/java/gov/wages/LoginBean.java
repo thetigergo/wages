@@ -32,7 +32,7 @@ public class LoginBean implements java.io.Serializable {
         javax.faces.application.FacesMessage msg = null;
         String retval = null;
         
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT " +
                             "accessctrl, " +

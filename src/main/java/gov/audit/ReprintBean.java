@@ -49,7 +49,7 @@ public class ReprintBean implements java.io.Serializable {
                     "(refdate >= (NOW()::DATE - 92)) " +
                 "ORDER BY " +
                     "refdate";
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm);
                 java.sql.PreparedStatement pzmt = jdbc.prepareStatement("SELECT DATE_PART('YEAR', NOW());")) {
                 
@@ -82,7 +82,7 @@ public class ReprintBean implements java.io.Serializable {
                     "pay.advicepay " +
                 "WHERE " +
                     "(refkey = ?)";
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm)) {
             
             psmt.setString(1, RefNo);
@@ -90,7 +90,7 @@ public class ReprintBean implements java.io.Serializable {
                 if (rst.next()) onlineUser.setMgaPetsa(rst.getDate(1));
             }
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -111,7 +111,7 @@ public class ReprintBean implements java.io.Serializable {
                     "(DATE_PART('YEAR', refdate) = ?) " +
                 "ORDER BY " +
                     "refdate";
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm)) {
                 
             psmt.setShort(1, Anios);

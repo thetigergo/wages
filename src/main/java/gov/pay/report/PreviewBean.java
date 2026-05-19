@@ -98,7 +98,7 @@ public class PreviewBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -124,7 +124,7 @@ public class PreviewBean implements java.io.Serializable {
     public void onCtrlChange() {
     //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (org.postgresql.core.BaseConnection jdbc = new gov.dbase.PgSQLConn();
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -227,8 +227,8 @@ public class PreviewBean implements java.io.Serializable {
 
             if (acctg_ref != null && !acctg_ref.isEmpty()) {
                 String[] acctgNos = acctg_ref.split("-"); short pilian = 0;
-                try (org.postgresql.core.BaseConnection zdbc = new gov.dbase.PgSQLConn("accounting");
-                        java.sql.Statement _zmt = zdbc.createStatement();
+                try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
+                        java.sql.Statement _zmt = gdbc.createStatement();
                         java.sql.ResultSet tbl = _zmt.executeQuery(
                         "SELECT aprob, petsa, amount, geuli, tempo FROM doc.statuses(" + acctgNos[0] + "::SMALLINT, " + acctgNos[1] + ", 'receiving') " +
                         "UNION ALL " +
@@ -291,7 +291,7 @@ public class PreviewBean implements java.io.Serializable {
                 }
             }
 
-        } catch (java.sql.SQLException sex) {
+        } catch (Exception sex) {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);

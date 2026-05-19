@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="top">
+                <c:if test="#{onlined.userOnline != null}">
+                    <ui:include src="/WEB-INF/bhwmenu.xhtml"/>
+                </c:if>
+            </ui:define>
+
+            <ui:define name="content">
+                <p:tabView style="width: 30rem;" activeIndex="#{bhwNames.activeTabIndex}" id="myTabView">
+                    <p:tab title="Entry Form">
+                        <f:facet name="actions">
+                            Name's Entry Form
+                        </f:facet>
+                        <style type="text/css">
+                            .align-left {
+                                text-align: left;
+                            }
+                            .align-right {
+                                text-align: right;
+                            }
+                        </style>
+                        <div class="card">
+                            <h:form id="porma">
+                                <p:panel id="entry">
+                                    <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3 entry-grid-target">
+                                        <p:outputLabel for="suffix" value="Suffix:"/>
+                                        <p:selectOneMenu id="suffix" value="#{bhwNames.suffix}" label="Suffix">
+                                            <f:selectItem itemLabel=" " itemValue=""/>
+                                            <f:selectItem itemLabel="JR" itemValue="JR"/>
+                                            <f:selectItem itemLabel="JR II" itemValue="JR II"/>
+                                            <f:selectItem itemLabel="SR" itemValue="SR"/>
+                                            <f:selectItem itemLabel="I" itemValue="I"/>
+                                            <f:selectItem itemLabel="II" itemValue="II"/>
+                                            <f:selectItem itemLabel="III" itemValue="III"/>
+                                            <f:selectItem itemLabel="IV" itemValue="IV"/>
+                                            <f:selectItem itemLabel="V" itemValue="V"/>
+                                            <f:selectItem itemLabel="VI" itemValue="VI"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel for="surname" value="Surname:"/>
+                                        <p:inputText id="surname" value="#{bhwNames.lastName}" size="30" maxlength="30" required="true"
+                                                     requiredMessage="Surname is required"/>
+
+                                        <p:outputLabel for="firstname" value="Firstname:"/>
+                                        <p:inputText id="firstname" value="#{bhwNames.firstName}" size="30" maxlength="30" required="true"
+                                                     requiredMessage="Firstname is required"/>
+
+                                        <p:outputLabel for="midinit" value="Middle:"/>
+                                        <p:inputText id="midinit" value="#{bhwNames.middle}" size="30" maxlength="30"/>
+
+                                        <p:outputLabel for="address" value="Address:"/>
+                                        <p:inputTextarea id="address" value="#{bhwNames.address}" maxlength="50" rows="5" cols="50" required="true"
+                                                         requiredMessage="Address is required"/>
+
+                                        <p:outputLabel for="district" value="District:"/>
+                                        <p:selectOneMenu id="district" value="#{bhwNames.district}" required="true" label="District">
+                                            <p:ajax listener="#{bhwNames.onDistrictChange}" update="brgy" />
+                                            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{bhwNames.districts}"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel for="brgy" value="Barangay:"/>
+                                        <p:selectOneMenu id="brgy" value="#{bhwNames.barrangay}" required="true" label="Barangay">
+                                            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{bhwNames.barangays}"/>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel for="status" value="Status:"/>
+                                        <p:selectOneRadio id="status" value="#{bhwNames.isActive}" layout="lineDirection">
+                                            <f:selectItem itemLabel="Active" itemValue="true"/>
+                                            <f:selectItem itemLabel="Inactive" itemValue="false"/>
+                                        </p:selectOneRadio>
+
+                                        <p:outputLabel for="trabaho" value="Designation:"/>
+                                        <p:inputText id="trabaho" value="#{bhwNames.trabaho}" size="30" maxlength="30" required="true"
+                                                     requiredMessage="Designation is required"/>
+                                    </h:panelGrid>
+                                    <br/>
+                                    <p:panelGrid id="crud" columns="2" columnClasses="align-left, align-right">
+                                        <p:commandButton value="Post/Update" />
+
+                                        <p:commandButton value="New/Clear" 
+                                                         actionListener="#{bhwNames.clearForm}" 
+                                                         update="grid msgs" 
+                                                         process="@this" />
+                                    </p:panelGrid>
+                                </p:panel>
+                            </h:form>
+                        </div>
+                    </p:tab>
+                    <p:tab title="Search">
+                        <f:facet name="actions">
+                            Search/Find Names
+                        </f:facet>
+                        <h:form id="forma">
+                            <div class="card">
+                                <h:panelGrid id="find" columns="3">
+                                    <p:outputLabel for="ugkat" value="Search Name:"/>
+                                    <p:inputText id="ugkat" value="#{finding.pangita}" style="width: 300px;" required="true"
+                                                 requiredMessage="Designation is required"/>
+                                    <p:commandButton icon="pi pi-search" actionListener="#{finding.findNames}" update="@(.search-table-target) msgs"/>
+                                </h:panelGrid>
+                                <p:panel >
+                                    <div class="card">
+                                        <p:dataTable id="tablet" var="mgabhw" value="#{finding.people}" paginator="true" rows="15" styleClass="search-table-target"
+                                                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                                     reflow="true" selectionMode="single" selection="#{finding.napiliPerson}" rowKey="#{mgabhw.uniqKey}">
+
+                                            <p:ajax event="rowSelect" listener="#{finding.onRowSelect}" update="@(.entry-grid-target) :myTabView msgs"/>
+
+                                            <p:column headerText="Suffix">
+                                                <h:outputText value="#{mgabhw.suffix}"/>
+                                            </p:column>
+                                            <p:column headerText="Lastname" >
+                                                <h:outputText value="#{mgabhw.lastname}"/>
+                                            </p:column>
+                                            <p:column headerText="Firstname">
+                                                <h:outputText value="#{mgabhw.firstname}"/>
+                                            </p:column>
+                                            <p:column headerText="Middle">
+                                                <h:outputText value="#{mgabhw.midname}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+                                </p:panel>
+                            </div>
+                        </h:form>
+                    </p:tab>
+                </p:tabView>
+                <p:messages id="msgs" showDetail="true" closable="true" />
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
