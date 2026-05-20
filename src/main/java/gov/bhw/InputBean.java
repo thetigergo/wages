@@ -9,19 +9,19 @@ public class InputBean implements java.io.Serializable {
     private final java.util.List<javax.faces.model.SelectItem> arBarangay   = new java.util.ArrayList<>(),
                                                                arDistrict  = new java.util.ArrayList<>();
     
-    private String Suffix = "", LastName, FirstName, Middle, Address, Trabaho = "BHW";
-    private Double BaseRate;
+    private String Suffix = "", LastName, FirstName, Middle, Address, Trabaho = "BHW", uuidkey;
+    private Double BaseRate = 0D;
     private Boolean IsActive = true;
-    private Short District, Barrangay;
-    
-    // 0 = First tab (Entry Form), 1 = Second tab (Search)
-    private Short activeTabIndex = 1;
+    private Short District, Barrangay, activeTabIndex = 0;
     
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
     
     public java.util.List<javax.faces.model.SelectItem> getDistricts() {return arDistrict;}
     public java.util.List<javax.faces.model.SelectItem> getBarangays() {return arBarangay;}
+
+    public String getUuidkey() {return uuidkey;}
+    public void setUuidkey(String value) {uuidkey = value;}
 
     public String getSuffix() {return Suffix;}
     public void setSuffix(String value) {Suffix = value;}
@@ -53,7 +53,9 @@ public class InputBean implements java.io.Serializable {
     public String getTrabaho() {return Trabaho;}
     public void setTrabaho(String value) {Trabaho = value;}
 
-    public int getActiveTabIndex() {return activeTabIndex;}
+    public Short getActiveTabIndex() {return activeTabIndex;}
+    
+    public Boolean getHasNoKey() {return uuidkey == null || uuidkey.isEmpty() || uuidkey.isBlank();}
     
     
     
@@ -122,6 +124,8 @@ public class InputBean implements java.io.Serializable {
         BaseRate = 0D;
         IsActive = true;
         Barrangay = 0;
+        
+        uuidkey = "";
     }
     
     public void loadRecord(String recordId) {
@@ -162,6 +166,7 @@ public class InputBean implements java.io.Serializable {
                     IsActive = rst.getBoolean(10);
                     
                     activeTabIndex = 0;
+                    uuidkey = recordId;
                 } else
                     msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARNING", "No record found!");
             }
@@ -171,6 +176,164 @@ public class InputBean implements java.io.Serializable {
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
-        }        
+        }
+    }
+    
+    public java.util.List<String> completeSurname(String query) {
+        javax.faces.application.FacesMessage msg = null;
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+                java.sql.PreparedStatement psmt = jdbc.prepareStatement(
+                        "SELECT DISTINCT " +
+                            "lastname " +
+                        "FROM " +
+                            "bhw.workers " +
+                        "WHERE " +
+                            "(LOWER(lastname) LIKE ?) " +
+                        "ORDER BY " +
+                            "lastname;")) {
+            java.util.List<String> namesList = new java.util.ArrayList<>();
+            psmt.setString(1, "%" + query.toLowerCase() + "%");
+            try (java.sql.ResultSet rst = psmt.executeQuery()) {
+                while (rst.next()) 
+                    namesList.add(rst.getString(1));
+            }
+            return namesList;
+
+        } catch (Exception sex) {
+            msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
+        } finally {
+            if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        return null;
+    }
+    
+    public java.util.List<String> completeNgalan(String query) {
+        javax.faces.application.FacesMessage msg = null;
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+                java.sql.PreparedStatement psmt = jdbc.prepareStatement(
+                        "SELECT DISTINCT " +
+                            "firstname " +       
+                        "FROM " +
+                            "bhw.workers " +
+                        "WHERE " +
+                            "(LOWER(firstname) LIKE ?) " +
+                        "ORDER BY " +
+                            "firstname;")) {
+            java.util.List<String> namesList = new java.util.ArrayList<>();
+            psmt.setString(1, "%" + query.toLowerCase() + "%");
+            try (java.sql.ResultSet rst = psmt.executeQuery()) {
+                while (rst.next()) 
+                    namesList.add(rst.getString(1));
+            }
+            return namesList;
+
+        } catch (Exception sex) {
+            msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
+        } finally {
+            if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        return null;
+    }
+    
+    public java.util.List<String> completeMiddle(String query) {
+        javax.faces.application.FacesMessage msg = null;
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+                java.sql.PreparedStatement psmt = jdbc.prepareStatement(
+                        "SELECT DISTINCT " +
+                            "midname " +       
+                        "FROM " +
+                            "bhw.workers " +
+                        "WHERE " +
+                            "(LOWER(midname) LIKE ?) " +
+                        "ORDER BY " +
+                            "midname;")) {
+            java.util.List<String> namesList = new java.util.ArrayList<>();
+            psmt.setString(1, "%" + query.toLowerCase() + "%");
+            try (java.sql.ResultSet rst = psmt.executeQuery()) {
+                while (rst.next()) 
+                    namesList.add(rst.getString(1));
+            }
+            return namesList;
+
+        } catch (Exception sex) {
+            msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
+        } finally {
+            if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        return null;
+    }
+    
+    public void postSaveForm() {
+        javax.faces.application.FacesMessage msg = null;
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+                java.sql.PreparedStatement psmt = jdbc.prepareStatement(
+                        "INSERT INTO " +
+                            "bhw.workers( " +
+                                "suffix, " +        // 1
+                                "lastname, " +      // 2
+                                "firstname, " +     // 3
+                                "midname, " +       // 4
+                                "address, " +       // 5
+                                "jobdesc, " +       // 6
+                                "inputby, " +       // 7
+                                "payrate, " +       // 8
+                                "brgyid, " +        // 9
+                                "district " +       //10
+                            ") " +       
+                        "VALUES " +
+                            "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                        "ON CONFLICT (lastname, firstname, midname) " +
+                        "DO UPDATE SET " +
+                            "suffix = EXCLUDED.suffix, " +
+                            "lastname = EXCLUDED.lastname, " +
+                            "firstname = EXCLUDED.firstname, " +
+                            "midname = EXCLUDED.midname, " +
+                            "address = EXCLUDED.address, " +
+                            "jobdesc = EXCLUDED.jobdesc, " +
+                            "payrate = EXCLUDED.payrate, " +
+                            "brgyid = EXCLUDED.brgyid, " +
+                            "district = EXCLUDED.district " +
+                        "RETURNING uniqkey;")) {
+            
+            psmt.setString( 1, Suffix == null ? "" : Suffix);
+            psmt.setString( 2, LastName.toUpperCase());
+            psmt.setString( 3, FirstName.toUpperCase());
+            psmt.setString( 4, Middle.toUpperCase());
+            psmt.setString( 5, Address);
+            psmt.setString( 6, Trabaho);
+            psmt.setString( 7, onlineUser.getUserOnline());
+            psmt.setDouble( 8, BaseRate);
+            psmt.setShort ( 9, Barrangay);
+            psmt.setShort (10, District);
+            try (java.sql.ResultSet rst = psmt.executeQuery()) {
+                if (rst.next()) {
+                    uuidkey = rst.getString(1);
+                    msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_INFO, "INFO", "Record save successfully!");
+                }
+            }
+
+        } catch (Exception sex) {
+            msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
+        } finally {
+            if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
+    public void eraseInfo() {
+        javax.faces.application.FacesMessage msg = null;
+        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+                java.sql.PreparedStatement psmt = jdbc.prepareStatement("DELETE FROM bhw.workers WHERE (uniqkey = ?)")) {
+            psmt.setString(1, uuidkey);
+            psmt.executeUpdate();
+            
+            msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_INFO, "INFO", "Record deleted successfully!");
+            clearForm();
+            
+
+        } catch (Exception sex) {
+            msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_ERROR, "ERROR", sex.getMessage());
+        } finally {
+            if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 }

@@ -27,13 +27,23 @@
                             .align-left {
                                 text-align: left;
                             }
+                            .align-centre {
+                                text-align: center;
+                            }
                             .align-right {
                                 text-align: right;
                             }
                         </style>
+                        <script>
+                            function checkConfirmation() {
+                                console.log('ConfirmDialog BeforeShow!');
+                                return true; // return false to not bring up the dialog
+                            }
+                        </script>                        
                         <div class="card">
                             <h:form id="porma">
                                 <p:panel id="entry">
+                                    <h:inputHidden value="#{bhwNames.uuidkey}"/>
                                     <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3 entry-grid-target">
                                         <p:outputLabel for="suffix" value="Suffix:"/>
                                         <p:selectOneMenu id="suffix" value="#{bhwNames.suffix}" label="Suffix">
@@ -50,15 +60,43 @@
                                         </p:selectOneMenu>
 
                                         <p:outputLabel for="surname" value="Surname:"/>
-                                        <p:inputText id="surname" value="#{bhwNames.lastName}" size="30" maxlength="30" required="true"
-                                                     requiredMessage="Surname is required"/>
+                                        <p:autoComplete id="surname" 
+                                                        value="#{bhwNames.lastName}" 
+                                                        completeMethod="#{bhwNames.completeSurname}"
+                                                        size="45"
+                                                        maxlength="30"
+                                                        maxResults="10" 
+                                                        queryDelay="300"
+                                                        minQueryLength="3"
+                                                        required="true" 
+                                                        requiredMessage="Surname is required"
+                                                        placeholder="Type to search..."/>
 
                                         <p:outputLabel for="firstname" value="Firstname:"/>
-                                        <p:inputText id="firstname" value="#{bhwNames.firstName}" size="30" maxlength="30" required="true"
-                                                     requiredMessage="Firstname is required"/>
+                                        <p:autoComplete id="firstname" 
+                                                        value="#{bhwNames.firstName}" 
+                                                        completeMethod="#{bhwNames.completeNgalan}"
+                                                        size="45"
+                                                        maxlength="30"
+                                                        maxResults="10" 
+                                                        queryDelay="300"
+                                                        minQueryLength="3"
+                                                        required="true" 
+                                                        requiredMessage="Firstname is required"
+                                                        placeholder="Type to search..."/>
 
-                                        <p:outputLabel for="midinit" value="Middle:"/>
-                                        <p:inputText id="midinit" value="#{bhwNames.middle}" size="30" maxlength="30"/>
+                                        <p:outputLabel for="midinit" value="Middle Name:" style="white-space: nowrap;"/>
+                                        <p:autoComplete id="midinit"
+                                                        value="#{bhwNames.middle}" 
+                                                        completeMethod="#{bhwNames.completeMiddle}"
+                                                        size="45"
+                                                        maxlength="30"
+                                                        maxResults="10"
+                                                        queryDelay="300"
+                                                        minQueryLength="3"
+                                                        required="true"
+                                                        requiredMessage="Middle Name is required"
+                                                        placeholder="Type to search..."/>
 
                                         <p:outputLabel for="address" value="Address:"/>
                                         <p:inputTextarea id="address" value="#{bhwNames.address}" maxlength="50" rows="5" cols="50" required="true"
@@ -86,17 +124,27 @@
                                         <p:outputLabel for="trabaho" value="Designation:"/>
                                         <p:inputText id="trabaho" value="#{bhwNames.trabaho}" size="30" maxlength="30" required="true"
                                                      requiredMessage="Designation is required"/>
+
+                                        <p:outputLabel for="rates" value="Monthly Rate:" style="white-space: nowrap;"/>
+                                        <p:inputNumber id="rates" value="#{bhwNames.baseRate}" symbolPosition="s" decimalSeparator="." thousandSeparator=","
+                                                       required="true" dir="RTL"
+                                                       requiredMessage="Monthly Rate is required"/>
                                     </h:panelGrid>
                                     <br/>
-                                    <p:panelGrid id="crud" columns="2" columnClasses="align-left, align-right">
-                                        <p:commandButton value="Post/Update" />
 
-                                        <p:commandButton value="New/Clear" 
-                                                         actionListener="#{bhwNames.clearForm}" 
-                                                         update="grid msgs" 
-                                                         process="@this" />
+                                    <p:panelGrid id="crud" columns="3" columnClasses="align-left, align-centre, align-right">
+                                        <p:commandButton value="Post/Update" actionListener="#{bhwNames.postSaveForm}" update="msgs kill"/>
+                                        <p:commandButton id="kill" value="Remove/Erase" actionListener="#{bhwNames.eraseInfo}" update="msgs" disabled="#{bhwNames.hasNoKey}" >
+                                            <p:confirm header="Confirmation" message="Are you sure you want to delete this record?" icon="pi pi-info-circle"/>
+                                        </p:commandButton>
+                                        <p:commandButton value="New/Clear" actionListener="#{bhwNames.clearForm}" update="grid msgs" process="@this" />
                                     </p:panelGrid>
                                 </p:panel>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                                    <p:commandButton value="Keep this!" type="button" styleClass="ui-confirmdialog-no ui-button-flat"
+                                                     icon="pi pi-heart"/>
+                                    <p:commandButton value="Erase Me!" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-trash"/>
+                                </p:confirmDialog>
                             </h:form>
                         </div>
                     </p:tab>
@@ -140,6 +188,44 @@
                     </p:tab>
                 </p:tabView>
                 <p:messages id="msgs" showDetail="true" closable="true" />
+                <h:form>
+                    <p:dialog header="Names Entry" widgetVar="namesDialog" modal="true" showEffect="fade"
+                              hideEffect="fade" resizable="false">
+                        <p:outputPanel id="productDetail" style="text-align:center;">
+                            <p:column rendered="#{not empty dtSelectionView.selectedProduct}">
+                                <div class="product">
+                                    <div class="product-grid-item card" style="margin-bottom: 0">
+                                        <div class="product-grid-item-top">
+                                            <div>
+                                                <i class="pi pi-tag product-category-icon"/>
+                                                <span class="product-category">#{dtSelectionView.selectedProduct.category}</span>
+                                            </div>
+                                            <span class="product-badge status-#{dtSelectionView.selectedProduct.inventoryStatus.name().toLowerCase()}">#{dtSelectionView.selectedProduct.inventoryStatus.text}</span>
+                                        </div>
+                                        <div class="product-grid-item-content">
+                                            <p:graphicImage
+                                                name="demo/images/product/#{dtSelectionView.selectedProduct.image}"/>
+                                            <div class="product-name">#{dtSelectionView.selectedProduct.name}</div>
+                                            <div class="product-description">#{dtSelectionView.selectedProduct.description}</div>
+                                            <p:rating readonly="true" value="#{dtSelectionView.selectedProduct.rating}"/>
+                                        </div>
+                                        <div class="product-grid-item-bottom">
+                                            <h:outputText value="#{dtSelectionView.selectedProduct.price}"
+                                                          styleClass="product-price">
+                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                            </h:outputText>
+                                            <p:commandButton value="Add To Cart" icon="pi pi-shopping-cart"
+                                                             disabled="#{dtSelectionView.selectedProduct.inventoryStatus == 'OUTOFSTOCK'}">
+                                                <f:setPropertyActionListener value="#{dtSelectionView.selectedProduct}"
+                                                                             target="#{dtSelectionView.selectedProduct}"/>
+                                            </p:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:column>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
             </ui:define>
 
         </ui:composition>
