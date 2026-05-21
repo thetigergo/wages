@@ -309,6 +309,7 @@ public class InputBean implements java.io.Serializable {
                 if (rst.next()) {
                     uuidkey = rst.getString(1);
                     msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_INFO, "INFO", "Record save successfully!");
+                    clearForm();
                 }
             }
 
