@@ -130,6 +130,9 @@ public class InputBean implements java.io.Serializable {
     
     public void loadRecord(String recordId) {
         javax.faces.application.FacesMessage msg = null;
+        boolean triggerDistrictChange = false; // Flag to defer the call
+        
+        // 1. Open and completely CLOSE the connection for loading the worker
         try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT " +
@@ -157,7 +160,7 @@ public class InputBean implements java.io.Serializable {
                     Address = rst.getString(5);
                     District = rst.getShort(9);
                     
-                    onDistrictChange();
+                    //onDistrictChange();
                     
                     Barrangay = rst.getShort(6);
                             
@@ -167,6 +170,9 @@ public class InputBean implements java.io.Serializable {
                     
                     activeTabIndex = 0;
                     uuidkey = recordId;
+                    
+                    // Set flag to true instead of calling the method inside the try block
+                    triggerDistrictChange = true;
                 } else
                     msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARNING", "No record found!");
             }
@@ -177,6 +183,9 @@ public class InputBean implements java.io.Serializable {
         } finally {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+        
+        // 2. Safely trigger the dependent dropdown query AFTER connection #1 is released back to Hikari
+        if (triggerDistrictChange) onDistrictChange(); 
     }
     
     public java.util.List<String> completeSurname(String query) {

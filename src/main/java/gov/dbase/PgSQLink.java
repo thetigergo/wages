@@ -25,10 +25,10 @@ public class PgSQLink {
             config.setDriverClassName("com.edb.Driver"); // Changed class name
             config.setUsername(Gate.PGSQL.salt());
             config.setPassword(Gate.PGPWD.salt());
-            
+
             // Allow at least 2 connections if you plan to open them at once
             config.setMaximumPoolSize(5);
-            
+
             pools.put(dbName, new HikariDataSource(config));
         }
         return pools.get(dbName).getConnection();
