@@ -7,7 +7,8 @@ import java.sql.Connection;
 public class PgSQLink {
     // Map to keep track of a separate pool for each database
     private static final java.util.Map<String, HikariDataSource> pools = new java.util.HashMap<>();
-    private static final String SERVER = "172.16.0.14";
+    private static final String SERVER = "172.16.0.14"; 
+    //private static final String SERVER = "27.110.189.51";
 
     // 1. PLACE THE STATIC BLOCK HERE
     static {
@@ -20,14 +21,14 @@ public class PgSQLink {
     public static synchronized Connection dbLink(String dbName) throws Exception {
         if (!pools.containsKey(dbName) || pools.get(dbName).isClosed()) {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:edb://" + SERVER + ":5432/" + dbName);
+            config.setJdbcUrl("jdbc:edb://" + SERVER + ":5432/" + dbName);  // 54321
             //config.setDriverClassName("org.postgresql.Driver"); // Standard Postgres Driver
             config.setDriverClassName("com.edb.Driver"); // Changed class name
             config.setUsername(Gate.PGSQL.salt());
             config.setPassword(Gate.PGPWD.salt());
 
             // Allow at least 2 connections if you plan to open them at once
-            config.setMaximumPoolSize(5);
+            config.setMaximumPoolSize(99);
 
             pools.put(dbName, new HikariDataSource(config));
         }

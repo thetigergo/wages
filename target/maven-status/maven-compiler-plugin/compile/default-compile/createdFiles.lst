@@ -22,8 +22,8 @@ gov\admin\EraseUserBean.class
 gov\bhw\SearchField.class
 gov\dbase\MsSQLCom.class
 gov\NewClass.class
-gov\pay\report\RptATM.class
 gov\pay\entry\WageCAPBean$WorkerAttrib.class
+gov\pay\report\RptATM.class
 gov\dbase\SQLExecute.class
 gov\audit\AuditBHWBean.class
 gov\wages\jrctrl\JasperController.class
@@ -39,10 +39,10 @@ gov\endo\EndoNames.class
 gov\enums\Take.class
 gov\pay\entry\WageCAPBean.class
 gov\pay\entry\AddCAPBean.class
-gov\pay\entry\WageATMBean.class
 gov\admin\ManageUser.class
-gov\pay\WageField.class
+gov\pay\entry\WageATMBean.class
 gov\enums\Fire.class
+gov\pay\WageField.class
 gov\audit\AuditJOBean.class
 gov\pay\report\PreviewBean.class
 gov\audit\AuditEndoBean.class

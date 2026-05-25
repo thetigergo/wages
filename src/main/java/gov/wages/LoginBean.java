@@ -44,44 +44,22 @@ public class LoginBean implements java.io.Serializable {
                         "WHERE " +
                             "(userid = ?) AND " +
                             "(passwrd = MD5(?))")) {
+            boolean isSuccess = false;
             psmt.setString(1, mUserID);
             psmt.setString(2, mGatePass);
             try (java.sql.ResultSet rst = psmt.executeQuery()) {
                 if (rst.next()) {
                     if (rst.getString(3).contains(String.valueOf(Pilion))) {
-                        switch (Pilion) {
-                            case 0:
-                                retval = "/pays/pay_central.xhtml";
-                                break;
-
-                            case 1:
-                                retval = "/acctg/acctg_0central.xhtml";
-                                break;
-
-                            case 2:
-                            case 32767:
-                                retval = "/admin/admin_0center.xhtml";
-                                break;
-
-                            case 3:
-                                retval = "/endo/endo_centre.xhtml";
-                                break;
-
-                            case 4:
-                                retval = "/bhw/bhw_centre.xhtml";
-                                break;
-
-                            case 5:
-                                retval = "/dcw/endo_centre.xhtml";
-                                break;
-                                
-                            case 7:
-                                retval = "/sch/sch_centre.xhtml";
-                                break;
-                                
-                            default:
-                                retval = "";
-                        }
+                        retval = switch (Pilion) {
+                            case 0 -> "/pays/pay_central.xhtml";
+                            case 1 -> "/acctg/acctg_0central.xhtml";
+                            case 2, 32767 -> "/admin/admin_0center.xhtml";
+                            case 3 -> "/endo/endo_centre.xhtml";
+                            case 4 -> "/bhw/bhw_centre.xhtml";
+                            case 5 -> "/dcw/endo_centre.xhtml";
+                            case 7 -> "/sch/sch_centre.xhtml";
+                            default -> "";
+                        };
 
                         onlineUser.setUserOnline(mUserID);
                         //onlineUser.setCurrentPage("content.xhtml");
@@ -89,7 +67,9 @@ public class LoginBean implements java.io.Serializable {
                         onlineUser.setOpesina(rst.getString(2));
                         onlineUser.setMgaPetsa(rst.getDate(4));
 
-                        psmt.executeUpdate("UPDATE userlogon SET lastinn = NOW() WHERE (userid = '" + mUserID + "')");
+                        //psmt.executeUpdate("UPDATE userlogon SET lastinn = NOW() WHERE (userid = '" + mUserID + "')");
+                        isSuccess = true;
+                        
 
                     } else {
                         msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARNING", "INVALID PASSWORD");
@@ -99,6 +79,12 @@ public class LoginBean implements java.io.Serializable {
                 } else {
                     msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARNING", "INVALID PASSWORD");
                     retval = null;
+                }
+            }
+            if (isSuccess) {
+                try (java.sql.PreparedStatement pzmt = jdbc.prepareStatement("UPDATE userlogon SET lastinn = NOW() WHERE (userid = ?)")) {
+                    pzmt.setString(1, mUserID);
+                    pzmt.executeUpdate();
                 }
             }
 
