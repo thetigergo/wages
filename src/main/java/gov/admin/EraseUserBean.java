@@ -14,9 +14,6 @@ public class EraseUserBean implements java.io.Serializable {
 
     private final java.util.ArrayList<javax.faces.model.SelectItem> arUsers = new java.util.ArrayList<>();
     
-//    private wages.OnlineUser onlineUser;
-//    public void setOnlineBean(wages.OnlineUser activeUser) {onlineUser = activeUser;}
-
     public java.util.List<javax.faces.model.SelectItem> getUsers() {return arUsers;}
 
     /*public EraseUserBean() {

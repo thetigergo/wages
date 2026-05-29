@@ -22,13 +22,12 @@ public class PgSQLink {
         if (!pools.containsKey(dbName) || pools.get(dbName).isClosed()) {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl("jdbc:edb://" + SERVER + ":5432/" + dbName);  // 54321
-            //config.setDriverClassName("org.postgresql.Driver"); // Standard Postgres Driver
             config.setDriverClassName("com.edb.Driver"); // Changed class name
             config.setUsername(Gate.PGSQL.salt());
             config.setPassword(Gate.PGPWD.salt());
 
             // Allow at least 2 connections if you plan to open them at once
-            config.setMaximumPoolSize(9);
+            config.setMaximumPoolSize(2);
 
             pools.put(dbName, new HikariDataSource(config));
         }
