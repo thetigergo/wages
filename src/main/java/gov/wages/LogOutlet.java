@@ -29,8 +29,9 @@ public class LogOutlet extends javax.servlet.http.HttpServlet {
      */
     protected void processRequest(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
         response.setContentType("text/html;charset=UTF-8");
+        gov.dbase.PgDBbind pgDBlink = (gov.dbase.PgDBbind) request.getServletContext().getAttribute("pgDBbind");
         try (java.io.PrintWriter docout = response.getWriter()) {
-            try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+            try (java.sql.Connection jdbc = pgDBlink.dbLink();
                     java.sql.Statement _smt = jdbc.createStatement()) {
                 gov.wages.OnlineUser onlineUser = (gov.wages.OnlineUser) request.getSession().getAttribute("onlined");
                 /*

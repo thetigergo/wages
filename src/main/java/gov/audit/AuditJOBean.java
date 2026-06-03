@@ -21,8 +21,10 @@ public class AuditJOBean implements java.io.Serializable {
     private final String /*SECTIONED = "receiving", */NEXTSECTION = "carding";
 
 
+    private gov.dbase.PgDBbind pgDBlink;
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     
     
 //    public String getProjectID() {return ProjectID;}
@@ -67,8 +69,8 @@ public class AuditJOBean implements java.io.Serializable {
     
     public void kuhaaALOBS(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
-                java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
+                java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _zmt = jdbc.createStatement();
                 java.sql.Statement _smt = gdbc.createStatement()) {
             String[] acctref = Reference.split("-"); String cboNo = "", alobsNo = "";
@@ -94,7 +96,7 @@ public class AuditJOBean implements java.io.Serializable {
     
     public void retrieveJOs() {//javax.faces.event.ActionEvent event
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -294,7 +296,7 @@ public class AuditJOBean implements java.io.Serializable {
     public void approveRecord(javax.faces.event.ActionEvent ae) {
         javax.faces.application.FacesMessage msg = null;
         boolean opened = false;
-        try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
+        try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
                 java.sql.Statement smt = gdbc.createStatement()) {
 
             String anios = Reference.split("-")[0],
@@ -353,7 +355,7 @@ public class AuditJOBean implements java.io.Serializable {
 
 
 /******************************* CODING PARA SA PAG POST SA CARDING *******************************/
-            try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+            try (java.sql.Connection jdbc = pgDBlink.dbLink();
                     java.sql.Statement jsmt = jdbc.createStatement()) {
                 for (gov.pay.WageField wages : arFields) {
                     gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("cao.jobcarding");
@@ -398,7 +400,7 @@ public class AuditJOBean implements java.io.Serializable {
     }
 
     public void returnRecord(javax.faces.event.ActionEvent ae) {
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink("accounting");
+        try (java.sql.Connection jdbc = pgDBlink.dbLink("accounting");
                 java.sql.Statement smt = jdbc.createStatement()) {
             
             String anios = Reference.split("-")[0],

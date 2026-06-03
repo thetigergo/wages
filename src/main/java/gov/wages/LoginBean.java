@@ -11,8 +11,10 @@ public class LoginBean implements java.io.Serializable {
     private String mUserID, mGatePass;
     private Short  Pilion = 0;
 
+    private gov.dbase.PgDBbind pgDBlink;
     private OnlineUser onlineUser;
     public void setOnlineBean(OnlineUser activeUser) {onlineUser = activeUser;}
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
 
     public void setUserID(String value) {mUserID = value;}
     public String getUserID() {return mUserID;}
@@ -32,7 +34,7 @@ public class LoginBean implements java.io.Serializable {
         javax.faces.application.FacesMessage msg = null;
         String retval = null;
         
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT " +
                             "accessctrl, " +

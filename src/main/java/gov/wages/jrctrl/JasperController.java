@@ -7,7 +7,10 @@ package gov.wages.jrctrl;
 public class JasperController implements java.io.Serializable {
 
     private static final long serialVersionUID = -4292420913022900494L;
-
+    
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
 //    @javax.annotation.PostConstruct
 //    protected void init() throws java.io.IOException {
 //        java.util.Map<String, String> params = javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -32,7 +35,7 @@ public class JasperController implements java.io.Serializable {
         response.addHeader("Content-disposition", "attachment; filename-report.pdf");
         javax.servlet.ServletOutputStream outputStream = response.getOutputStream();
 
-        net.sf.jasperreports.engine.JasperPrint jasperPrint = net.sf.jasperreports.engine.JasperFillManager.fillReport(reportPath, params, gov.dbase.PgSQLink.dbLink());
+        net.sf.jasperreports.engine.JasperPrint jasperPrint = net.sf.jasperreports.engine.JasperFillManager.fillReport(reportPath, params, pgDBlink.dbLink());
         net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
         //net.sf.jasperreports.view.JasperViewer.viewReport(jasperPrint, false);
         javax.faces.context.FacesContext.getCurrentInstance().responseComplete();
@@ -48,7 +51,7 @@ public class JasperController implements java.io.Serializable {
 //        params.put("CtrlNo", value);
         
         java.io.File jasper = new java.io.File(javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getRealPath(report + ".jasper"));
-        byte[] bytes = net.sf.jasperreports.engine.JasperRunManager.runReportToPdf(jasper.getPath(), params, gov.dbase.PgSQLink.dbLink());
+        byte[] bytes = net.sf.jasperreports.engine.JasperRunManager.runReportToPdf(jasper.getPath(), params, pgDBlink.dbLink());
         javax.servlet.http.HttpServletResponse httpServletResponse=(javax.servlet.http.HttpServletResponse)javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getResponse();  
         httpServletResponse.setContentType("application/pdf");
         httpServletResponse.setContentLength(bytes.length);

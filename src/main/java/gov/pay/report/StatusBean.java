@@ -22,7 +22,9 @@ public class StatusBean implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
     public String getProjectID() {return ProjectID;}
     public String getProject() {return ProjectTitle;}
     public String getOpesina() {return Opesina;}
@@ -72,7 +74,7 @@ public class StatusBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -101,7 +103,7 @@ public class StatusBean implements java.io.Serializable {
     public void onCtrlChange() {
     //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT " +
@@ -204,7 +206,7 @@ public class StatusBean implements java.io.Serializable {
 
             if (acctg_ref != null && !acctg_ref.isEmpty()) {
                 String[] acctgNos = acctg_ref.split("-"); short pilian = 0;
-                try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
+                try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
                         java.sql.Statement _smt = gdbc.createStatement();
                         java.sql.ResultSet tbl = _smt.executeQuery(
                         "SELECT aprob, petsa, amount, geuli, tempo FROM doc.statuses(" + acctgNos[0] + "::SMALLINT, " + acctgNos[1] + ", 'receiving') " +
@@ -219,7 +221,7 @@ public class StatusBean implements java.io.Serializable {
                     while (tbl.next()) {
                         pilian++;
                         switch (pilian) {
-                            case 1:
+                            case 1 -> {
                                 if (tbl.getObject(1) != null) {
                                     Receiving = tbl.getString(1);
                                     DawatDate = tbl.getTimestamp(2);
@@ -227,8 +229,8 @@ public class StatusBean implements java.io.Serializable {
                                     Receiving = tbl.getString(4);
                                     DawatDate = tbl.getTimestamp(5);
                                 }
-                                break;
-                            case 2:
+                            }
+                            case 2 -> {
                                 if (tbl.getObject(1) != null) {
                                     Carding  = tbl.getString(1);
                                     CardDate = tbl.getTimestamp(2);
@@ -236,8 +238,8 @@ public class StatusBean implements java.io.Serializable {
                                     Carding  = tbl.getString(4);
                                     CardDate = tbl.getTimestamp(5);
                                 }
-                                break;
-                            case 3:
+                            }
+                            case 3 -> {
                                 if (tbl.getObject(1) != null) {
                                     Auditing  = tbl.getString(1);
                                     AuditDate = tbl.getTimestamp(2);
@@ -245,8 +247,8 @@ public class StatusBean implements java.io.Serializable {
                                     Auditing  = tbl.getString(4);
                                     AuditDate = tbl.getTimestamp(5);
                                 }
-                                break;
-                            case 4:
+                            }
+                            case 4 -> {
                                 if (tbl.getObject(1) != null) {
                                     Accountant = tbl.getString(1);
                                     AccntDate  = tbl.getTimestamp(2);
@@ -254,8 +256,8 @@ public class StatusBean implements java.io.Serializable {
                                     Accountant = tbl.getString(4);
                                     AccntDate  = tbl.getTimestamp(5);
                                 }
-                                break;
-                            default:
+                            }
+                            default -> {
                                 if (tbl.getObject(1) != null) {
                                     Releasing = tbl.getString(1);
                                     RelesDate  = tbl.getTimestamp(2);
@@ -263,6 +265,7 @@ public class StatusBean implements java.io.Serializable {
                                     Releasing = tbl.getString(4);
                                     RelesDate  = tbl.getTimestamp(5);
                                 }
+                            }
                         }
                     }
                 }

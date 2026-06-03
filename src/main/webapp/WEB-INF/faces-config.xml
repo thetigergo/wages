@@ -26,6 +26,12 @@
 
 
     <managed-bean>
+        <managed-bean-name>pgDBbind</managed-bean-name>
+        <managed-bean-class>gov.dbase.PgDBbind</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
         <managed-bean-name>onlined</managed-bean-name>
         <managed-bean-class>gov.wages.OnlineUser</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -40,12 +46,22 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
-    
+
     <managed-bean>
         <managed-bean-name>jasperController</managed-bean-name>
         <managed-bean-class>gov.wages.jrctrl.JasperController</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
 
@@ -59,6 +75,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -69,6 +90,11 @@
             <value>#{onlined}</value>
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
+        </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
         </managed-property>
     </managed-bean>
 
@@ -81,6 +107,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -92,6 +123,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -102,6 +138,11 @@
             <value>#{onlined}</value>
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
+        </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
         </managed-property>
     </managed-bean>
     <!-- ###################################################################### -->
@@ -116,12 +157,22 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
     
     <managed-bean>
         <managed-bean-name>reportBean</managed-bean-name>
         <managed-bean-class>gov.pay.report.ReportBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -133,6 +184,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
     <!-- ####################################################################### -->
     
@@ -141,6 +197,11 @@
         <managed-bean-name>bankBean</managed-bean-name>
         <managed-bean-class>gov.audit.BankBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -152,12 +213,22 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
         <managed-bean-name>atmBean</managed-bean-name>
         <managed-bean-class>gov.audit.ATMBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
         <managed-property>
             <value>#{onlined}</value>
             <property-class>gov.wages.OnlineUser</property-class>
@@ -174,6 +245,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
     <!-- ####################################################################### -->
 
@@ -186,6 +262,11 @@
             <value>#{onlined}</value>
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
+        </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
         </managed-property>
     </managed-bean>
     <!-- ####################################################################### -->
@@ -208,12 +289,22 @@
         <managed-bean-name>adminBean</managed-bean-name>
         <managed-bean-class>gov.admin.AdminBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
         <managed-bean-name>addUserBean</managed-bean-name>
         <managed-bean-class>gov.admin.AddUserBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -226,6 +317,11 @@
         <managed-bean-name>eraseUserBean</managed-bean-name>
         <managed-bean-class>gov.admin.EraseUserBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
     <!-- ####################################################################### -->
     
@@ -239,6 +335,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -250,6 +351,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -260,6 +366,11 @@
             <value>#{onlined}</value>
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
+        </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
         </managed-property>
     </managed-bean>
     
@@ -283,6 +394,11 @@
             <property-class>gov.bhw.InputBean</property-class>
             <property-name>passKey</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
     
     <!-- ###################################################################### -->
@@ -297,6 +413,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -307,6 +428,11 @@
             <value>#{onlined}</value>
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
+        </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
         </managed-property>
     </managed-bean>
 
@@ -319,6 +445,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -330,6 +461,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -340,6 +476,11 @@
             <value>#{onlined}</value>
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
+        </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
         </managed-property>
     </managed-bean>
 

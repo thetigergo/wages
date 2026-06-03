@@ -21,44 +21,53 @@ public class RptATM extends javax.servlet.http.HttpServlet {
      */
     protected void processRequest(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
         //response.setContentType("text/html;charset=UTF-8");
-        //java.io.PrintWriter out = response.getWriter();
+//        try (java.io.PrintWriter out = response.getWriter()) {
+        gov.dbase.PgDBbind pgDBlink = (gov.dbase.PgDBbind) request.getServletContext().getAttribute("pgDBbind");
         String refkey, realPath = request.getParameter("report");
         Short WhichOf;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink()) {
+        try (java.sql.Connection jdbc = pgDBlink.dbLink()) {
             gov.wages.OnlineUser onlineUser = (gov.wages.OnlineUser) request.getSession().getAttribute("onlined");
             refkey = onlineUser.getTemporary();
             WhichOf = onlineUser.getWhichOf();
-            
+
             java.util.Map<String, Object> params = new java.util.HashMap<>();
             params.put("RefKey" , refkey);
             params.put("whichof", (WhichOf != 0));
-            
+
              /* TODO output your page here. You may use following sample code. */
             try (javax.servlet.ServletOutputStream servletOutputStream = response.getOutputStream()) {
                 java.io.File reportFile = new java.io.File(getServletConfig().getServletContext().getRealPath(realPath/*"/wages.jasper"*/));
                 byte[] bytes;
-                
+
                 bytes = net.sf.jasperreports.engine.JasperRunManager.runReportToPdf(reportFile.getPath(), params, jdbc);
-                
+
                 response.setContentType("application/pdf");
                 response.setContentLength(bytes.length);
-                
+
                 servletOutputStream.write(bytes, 0, bytes.length);
                 servletOutputStream.flush();
             }
 
-            
+
         } catch (Exception ex) {
             //ex.printStackTrace(out);
             // display stack trace in the browser
             java.io.StringWriter stringWriter = new java.io.StringWriter();
-            java.io.PrintWriter printWriter = new java.io.PrintWriter(stringWriter);
+            /*java.io.PrintWriter printWriter = new java.io.PrintWriter(stringWriter);
             ex.printStackTrace(printWriter);
             response.setContentType("text/plain");
-            response.getOutputStream().print(stringWriter.toString());            
+            response.getOutputStream().print(stringWriter.toString());*/
+            try (java.io.PrintWriter printWriter = new java.io.PrintWriter(stringWriter)) {
+                ex.printStackTrace(printWriter);
+                response.setContentType("text/plain");
+                response.getOutputStream().print(stringWriter.toString());
+            }
         } finally {            
             //out.close();
         }
+//        } catch (Exception ez) {
+//            ez.printStackTrace(response.getWriter());
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -19,8 +19,9 @@ public class ATMBean implements java.io.Serializable {
     
 
     private gov.wages.OnlineUser onlineUser;
+    private gov.dbase.PgDBbind pgDBlink;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     
     
     private final java.util.List<ForATMList> arCtrls = new java.util.ArrayList<>();
@@ -62,7 +63,7 @@ public class ATMBean implements java.io.Serializable {
         FundID = value;
         
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement("SELECT acctno, fundname FROM pay.fundings WHERE (numbers = ?);")) {
             
             psmt.setShort(1, FundID);
@@ -86,7 +87,7 @@ public class ATMBean implements java.io.Serializable {
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
 
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.PreparedStatement asmt = jdbc.prepareStatement("SELECT 0 FROM pg_catalog.pg_class WHERE (relname = ?);")) {
             
             try (java.sql.PreparedStatement pzmt = jdbc.prepareStatement("SELECT numbers, fundname FROM pay.fundings ORDER BY fundname;");
@@ -147,7 +148,7 @@ public class ATMBean implements java.io.Serializable {
     public void onWhichOf() {
         javax.faces.application.FacesMessage msg = null;
         String sqlComm = "SELECT ref_no, named, ctrlno, count, netpay FROM pay.foradvice WHERE (whichof = ?) ORDER BY ref_no, ctrlno;";
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm)) {
             
             psmt.setShort(1, WhichOf);
@@ -184,7 +185,7 @@ public class ATMBean implements java.io.Serializable {
 
         javax.faces.application.FacesMessage msg = null;
         String sqlComm = "";
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.PreparedStatement asmt = jdbc.prepareStatement("SELECT NOW(), next_ref FROM pay.next_ref(DATE_PART('YEAR', NOW)::INTEGER);");) {
             
             try (java.sql.ResultSet rst = asmt.executeQuery()) {

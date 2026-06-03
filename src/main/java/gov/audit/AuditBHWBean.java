@@ -17,7 +17,7 @@ public class AuditBHWBean implements java.io.Serializable {
     private Short Counter = 0;
     private Boolean SwitchOff = false;
     private java.util.Date PayFr, PayTo;
-    private Short Barangay, District;
+    private Short /*Barangay,*/ District;
 
 
     private final boolean NUMERIC = true; //, CONDITION = true;
@@ -25,8 +25,9 @@ public class AuditBHWBean implements java.io.Serializable {
 
 
     private gov.wages.OnlineUser onlineUser;
+    private gov.dbase.PgDBbind pgDBlink;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}    
     
     public String getCertify1() {return Certify1;}
     public String getCertify2() {return Certify2;}
@@ -65,8 +66,8 @@ public class AuditBHWBean implements java.io.Serializable {
     
     public void kuhaaALOBS(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
-                java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
+                java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _zmt = jdbc.createStatement();
                 java.sql.Statement _smt = gdbc.createStatement()) {
             String[] acctref = Reference.split("-"); String cboNo = "", alobsNo = "";
@@ -92,7 +93,7 @@ public class AuditBHWBean implements java.io.Serializable {
 
     public void accessWorker() {//javax.faces.event.ActionEvent event
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -173,17 +174,11 @@ public class AuditBHWBean implements java.io.Serializable {
             }
             if (Counter != null)
                 switch (Counter) {
-                case -1:
-                    msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Not yet approved from the Budget.");
-                    break;
-                case -2:
-                    msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Already posted on Carding.");
-                    break;
-                case 0:
-                    msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Control Number does not Exist.");
-                    break;
-                default:
-                    break;
+                case -1 -> msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Not yet approved from the Budget.");
+                case -2 -> msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Already posted on Carding.");
+                case 0 -> msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Control Number does not Exist.");
+                default -> {
+                }
             }
 
             SwitchOff = false;
@@ -226,7 +221,7 @@ public class AuditBHWBean implements java.io.Serializable {
     public void approveRecord(javax.faces.event.ActionEvent ae) {
         javax.faces.application.FacesMessage msg = null;
         boolean already = false;
-        try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
+        try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
                 java.sql.Statement smt = gdbc.createStatement()) {
 
             String anios = Reference.split("-")[0],
@@ -287,7 +282,7 @@ public class AuditBHWBean implements java.io.Serializable {
     IMO #: +63995-149-5674
 */
 /******************************* CODING PARA SA PAG POST SA CARDING *******************************/
-            try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+            try (java.sql.Connection jdbc = pgDBlink.dbLink();
                     java.sql.Statement jsmt = jdbc.createStatement()) {
                 for (gov.pay.WageField bhwwages : arFields) {
                     gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("bhw.carding");
@@ -332,7 +327,7 @@ public class AuditBHWBean implements java.io.Serializable {
     }
 
     public void returnRecord(javax.faces.event.ActionEvent ae) {
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink("accounting");
+        try (java.sql.Connection jdbc = pgDBlink.dbLink("accounting");
                 java.sql.Statement smt = jdbc.createStatement()) {
 
             String anios = Reference.split("-")[0],

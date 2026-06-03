@@ -13,6 +13,8 @@ public class PreviewBean implements java.io.Serializable {
     private final java.util.List<gov.pay.WageField> arFields = new java.util.ArrayList<>();
     private final java.util.List<javax.faces.model.SelectItem> arCtrls = new java.util.ArrayList<>();
     
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     
     
     private String ProjectID, ProjectTitle, Opesina, /*Certify1, Certify2, Certify3, Rank1, Rank2, Rank3, */CtrlNo, PayDate, Remark, Reference;
@@ -27,7 +29,7 @@ public class PreviewBean implements java.io.Serializable {
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
 
     
-    
+
     
     
     /**/
@@ -98,7 +100,7 @@ public class PreviewBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -124,7 +126,7 @@ public class PreviewBean implements java.io.Serializable {
     public void onCtrlChange() {
     //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -227,7 +229,7 @@ public class PreviewBean implements java.io.Serializable {
 
             if (acctg_ref != null && !acctg_ref.isEmpty()) {
                 String[] acctgNos = acctg_ref.split("-"); short pilian = 0;
-                try (java.sql.Connection gdbc = gov.dbase.PgSQLink.dbLink("accounting");
+                try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
                         java.sql.Statement _zmt = gdbc.createStatement();
                         java.sql.ResultSet tbl = _zmt.executeQuery(
                         "SELECT aprob, petsa, amount, geuli, tempo FROM doc.statuses(" + acctgNos[0] + "::SMALLINT, " + acctgNos[1] + ", 'receiving') " +
@@ -242,7 +244,7 @@ public class PreviewBean implements java.io.Serializable {
                     while (tbl.next()) {
                         pilian++;
                         switch (pilian) {
-                            case 1:
+                            case 1 -> {
                                 if (tbl.getObject(4) != null) {
                                     Receiving = tbl.getString(4);
                                     DawatDate = tbl.getTimestamp(5);
@@ -250,8 +252,8 @@ public class PreviewBean implements java.io.Serializable {
                                     Receiving = tbl.getString(1);
                                     DawatDate = tbl.getTimestamp(2);
                                 }
-                                break;
-                            case 2:
+                            }
+                            case 2 -> {
                                 if (tbl.getObject(4) != null) {
                                     Carding  = tbl.getString(4);
                                     CardDate = tbl.getTimestamp(5);
@@ -259,8 +261,8 @@ public class PreviewBean implements java.io.Serializable {
                                     Carding  = tbl.getString(1);
                                     CardDate = tbl.getTimestamp(2);
                                 }
-                                break;
-                            case 3:
+                            }
+                            case 3 -> {
                                 if (tbl.getObject(4) != null) {
                                     Auditing  = tbl.getString(4);
                                     AuditDate = tbl.getTimestamp(5);
@@ -268,8 +270,8 @@ public class PreviewBean implements java.io.Serializable {
                                     Auditing  = tbl.getString(1);
                                     AuditDate = tbl.getTimestamp(2);
                                 }
-                                break;
-                            case 4:
+                            }
+                            case 4 -> {
                                 if (tbl.getObject(4) != null) {
                                     Accountant = tbl.getString(4);
                                     AccntDate  = tbl.getTimestamp(5);
@@ -277,8 +279,8 @@ public class PreviewBean implements java.io.Serializable {
                                     Accountant = tbl.getString(1);
                                     AccntDate  = tbl.getTimestamp(2);
                                 }
-                                break;
-                            default:
+                            }
+                            default -> {
                                 if (tbl.getObject(4) != null) {
                                     Releasing = tbl.getString(4);
                                     RelesDate  = tbl.getTimestamp(5);
@@ -286,6 +288,7 @@ public class PreviewBean implements java.io.Serializable {
                                     Releasing = tbl.getString(1);
                                     RelesDate  = tbl.getTimestamp(2);
                                 }
+                            }
                         }
                     }
                 }

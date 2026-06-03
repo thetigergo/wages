@@ -14,6 +14,9 @@ public class EraseUserBean implements java.io.Serializable {
 
     private final java.util.ArrayList<javax.faces.model.SelectItem> arUsers = new java.util.ArrayList<>();
     
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
     public java.util.List<javax.faces.model.SelectItem> getUsers() {return arUsers;}
 
     /*public EraseUserBean() {
@@ -47,7 +50,7 @@ public class EraseUserBean implements java.io.Serializable {
 
     @javax.annotation.PostConstruct
     protected void init() {
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -81,7 +84,7 @@ public class EraseUserBean implements java.io.Serializable {
     public void setOpesina(String value) {mOpesina = value;}
     
     public void onUserChange() {
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " + //DISTINCT
@@ -114,7 +117,7 @@ public class EraseUserBean implements java.io.Serializable {
         //String buttonId = event.getComponent().getClientId();
         //System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
 
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("public.userlogon");

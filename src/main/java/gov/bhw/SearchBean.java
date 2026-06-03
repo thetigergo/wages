@@ -16,6 +16,8 @@ public class SearchBean implements java.io.Serializable {
     
     private InputBean inputBean;
     public void setPassKey(InputBean searcher) {inputBean = searcher;}
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     
     public java.util.List<SearchField> getPeople() {return arFields;}
 
@@ -37,7 +39,7 @@ public class SearchBean implements java.io.Serializable {
     
     public void findNames() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                 "SELECT " +
                     "uniqkey, " +

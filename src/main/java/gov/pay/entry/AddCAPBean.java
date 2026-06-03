@@ -34,7 +34,8 @@ public class AddCAPBean implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}    
     
     public String getWorkerID() {return WorkerID;}
     public void setWorkerID(String values) {WorkerID = values;}
@@ -143,7 +144,7 @@ public class AddCAPBean implements java.io.Serializable {
     protected void init() {
         OpesinaID = onlineUser.getOpesina();
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             try (java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -187,7 +188,7 @@ public class AddCAPBean implements java.io.Serializable {
 
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -218,7 +219,7 @@ public class AddCAPBean implements java.io.Serializable {
 
     private void onProjectChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             String dateFr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayFr),
                    dateTo   = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayTo);
@@ -280,7 +281,7 @@ public class AddCAPBean implements java.io.Serializable {
                 "ORDER BY " +
                     "humane";
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(query)) {
             arWorkers.clear(); mapWorker.clear();
@@ -362,7 +363,7 @@ public class AddCAPBean implements java.io.Serializable {
     
     public void onCtrlChangeReload() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -457,7 +458,7 @@ public class AddCAPBean implements java.io.Serializable {
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             
             Float avail = 0F; Double allotment = 0D;
@@ -530,7 +531,7 @@ public class AddCAPBean implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.timebook");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);

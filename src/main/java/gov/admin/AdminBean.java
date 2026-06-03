@@ -12,10 +12,12 @@ public class AdminBean implements java.io.Serializable {
 
     private final java.util.ArrayList<ManageUser> arUsers = new java.util.ArrayList<>();
 
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
 
     @javax.annotation.PostConstruct
     protected void init() {
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " + //DISTINCT

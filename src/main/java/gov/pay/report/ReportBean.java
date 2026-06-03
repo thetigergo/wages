@@ -14,7 +14,9 @@ public class ReportBean implements java.io.Serializable {
     private Double  TotalWage = 0D, TotalGross = 0D, TotalDeduct = 0D, TotalHdmf = 0D;
     private Short   Counter = 0;
     private Boolean pwidi = false;
-
+    
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     
     
     public String getProjectID() {return ProjectID;}
@@ -53,7 +55,7 @@ public class ReportBean implements java.io.Serializable {
 
     public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +

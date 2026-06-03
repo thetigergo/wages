@@ -31,7 +31,8 @@ public class BHWCAPplus implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    
+    private gov.dbase.PgDBbind pgDBlink;
+    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     
     public String getWorkerID() {return WorkerID;}
     public void setWorkerID(String values) {WorkerID = values;}
@@ -124,7 +125,7 @@ public class BHWCAPplus implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
 
             try (java.sql.ResultSet rst = _smt.executeQuery(
@@ -160,7 +161,7 @@ public class BHWCAPplus implements java.io.Serializable {
 
     public void onDistrictChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String query =
                 "SELECT " +
@@ -192,7 +193,7 @@ public class BHWCAPplus implements java.io.Serializable {
     
     public void onBarangayChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String query =
                 "SELECT " +
@@ -223,7 +224,7 @@ public class BHWCAPplus implements java.io.Serializable {
     
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -250,7 +251,7 @@ public class BHWCAPplus implements java.io.Serializable {
 
     public void onCtrlChangeReload() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -335,7 +336,7 @@ public class BHWCAPplus implements java.io.Serializable {
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             
             java.util.Calendar calfr = java.util.Calendar.getInstance(),
@@ -372,19 +373,19 @@ public class BHWCAPplus implements java.io.Serializable {
         onCtrlChangeReload();
     }
     
-    private class WorkerAttrib {
-        private final String MyID;
-        private final Short  Avialable;
-
-        public WorkerAttrib(String id, Short avail) {
-            MyID = id; Avialable = avail;
-        }
-
-        public String getMyID() {return MyID;}
-
-        public Short getAvialable() {return Avialable;}
-        
-    }
+//    private class WorkerAttrib {
+//        private final String MyID;
+//        private final Short  Avialable;
+//
+//        public WorkerAttrib(String id, Short avail) {
+//            MyID = id; Avialable = avail;
+//        }
+//
+//        public String getMyID() {return MyID;}
+//
+//        public Short getAvialable() {return Avialable;}
+//        
+//    }
 
     public void updateOfficer(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
@@ -393,7 +394,7 @@ public class BHWCAPplus implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (java.sql.Connection jdbc = gov.dbase.PgSQLink.dbLink();
+        try (java.sql.Connection jdbc = pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.bhwwages");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
