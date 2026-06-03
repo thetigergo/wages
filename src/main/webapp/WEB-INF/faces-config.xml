@@ -281,6 +281,11 @@
             <property-class>gov.wages.OnlineUser</property-class>
             <property-name>onlineBean</property-name>
         </managed-property>
+        <managed-property>
+            <value>#{pgDBbind}</value>
+            <property-class>gov.dbase.PgDBbind</property-class>
+            <property-name>pgDBlink</property-name>
+        </managed-property>
     </managed-bean>
     <!-- ####################################################################### -->
     

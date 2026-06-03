@@ -2,7 +2,6 @@ gov\pay\report\ReportBean.class
 gov\dbase\PropertyHolder.class
 gov\bhw\InputBean.class
 gov\pay\entry\AddATMBean$WorkerAttrib.class
-gov\dbase\PgSQLink.class
 gov\pay\entry\WageATMBean$WorkerAttrib.class
 gov\dbase\SQLExecute$1.class
 gov\audit\ReprintBean.class
@@ -20,7 +19,6 @@ gov\wages\LogOutlet.class
 gov\endo\ModifyEndoBean.class
 gov\admin\EraseUserBean.class
 gov\bhw\SearchField.class
-gov\dbase\MsSQLCom.class
 gov\NewClass.class
 gov\pay\report\RptATM.class
 gov\pay\entry\WageCAPBean$WorkerAttrib.class
@@ -49,7 +47,6 @@ gov\dbase\PgDBbind.class
 gov\endo\EndoCAPBean.class
 gov\pay\report\ClaimField.class
 gov\bhw\BHWmodifyBean.class
-gov\dbase\MsSQLink.class
 gov\pay\entry\AddCAPBean$WorkerAttrib.class
 gov\bhw\BHWCAPplus.class
 gov\dbase\Gate.class

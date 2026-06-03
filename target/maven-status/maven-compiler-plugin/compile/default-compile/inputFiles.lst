@@ -3,7 +3,6 @@ D:\NetBeansApache\WebApps\wages\src\main\java\gov\pay\entry\EditBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\pay\report\ReportBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\bhw\InputBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\admin\EraseUserBean.java
-D:\NetBeansApache\WebApps\wages\src\main\java\gov\dbase\MsSQLCom.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\endo\EndoATMBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\audit\ForATMList.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\dbase\Gate.java
@@ -15,7 +14,6 @@ D:\NetBeansApache\WebApps\wages\src\main\java\gov\wages\OnlineUser.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\dbase\PgDBbind.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\bhw\BHWCAPplus.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\pay\report\PreviewBean.java
-D:\NetBeansApache\WebApps\wages\src\main\java\gov\dbase\MsSQLink.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\wages\jrctrl\JasperController.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\pay\entry\WageCAPBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\pay\WageField.java
@@ -36,7 +34,6 @@ D:\NetBeansApache\WebApps\wages\src\main\java\gov\audit\ReprintBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\audit\AuditBHWBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\endo\PlusATMBean.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\admin\ManageUser.java
-D:\NetBeansApache\WebApps\wages\src\main\java\gov\dbase\PgSQLink.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\enums\Index.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\pay\report\FileATM.java
 D:\NetBeansApache\WebApps\wages\src\main\java\gov\endo\EndoNames.java

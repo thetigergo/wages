@@ -7,7 +7,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="joborder"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="CtrlNo" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["2026~002212"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["2026~002682"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT

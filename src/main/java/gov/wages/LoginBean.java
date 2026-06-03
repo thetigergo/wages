@@ -92,11 +92,29 @@ public class LoginBean implements java.io.Serializable {
 
 
             javax.servlet.http.HttpServletRequest request = (javax.servlet.http.HttpServletRequest)javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            String local = request.getRemoteAddr(); 
-            java.net.InetAddress inetadds = java.net.InetAddress.getByName(local);
-            local = inetadds.getHostName();
-            int taas = local.length(); taas = (taas > 15 ? 15 : taas);
-            onlineUser.setClientIp(local.substring(0, taas));
+            
+            // Get the raw client IP
+            //String clientIp = request.getRemoteAddr();
+            
+            // Prefer X-Forwarded-For if behind proxy
+            String clientIp = request.getHeader("X-Forwarded-For");
+            if (clientIp == null || clientIp.isEmpty()) clientIp = request.getRemoteAddr();            
+            
+            // If you want the hostname (reverse DNS lookup)
+            String hostName;
+            try {
+                java.net.InetAddress inetAddr = java.net.InetAddress.getByName(clientIp);
+                hostName = inetAddr.getHostName();
+            } catch (java.net.UnknownHostException uhe) {
+                hostName = clientIp; // fallback to IP if lookup fails
+            }
+
+            // Truncate to max 15 chars
+            if (hostName.length() > 15) hostName = hostName.substring(0, 15);
+
+            // Save into your session bean
+            onlineUser.setClientIp(hostName);            
+            
             //javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("theUser", mUserID);
             javax.faces.application.ResourceHandler rh = javax.faces.context.FacesContext.getCurrentInstance().getApplication().getResourceHandler();
             onlineUser.setCSS(rh.createResource("primes.css", "pfo").getRequestPath());
