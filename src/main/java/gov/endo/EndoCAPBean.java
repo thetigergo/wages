@@ -14,13 +14,13 @@ public class EndoCAPBean implements java.io.Serializable {
 
 
     private final boolean NUMERIC = true; //, CONDITION = true;
-    //private final long ONE_DAY = 1000 * 3600 * 24;
+    private final long ONE_DAY = 1000 * 3600 * 24;
 
     private Boolean isUpdatable = true, isSenior = false;;
     private String Certify1, Rank1, Certify2, Rank2, Certify3, Rank3, Certification;
     private String WorkerID, Opesina, OpesinaID;
     private String Jobs, CtrlNo;
-    private Short Minutes = 0;
+    private Short Minutes = 0, DoDays = 22, MaxDay;
     private Float Rate, Days = 0F;
     private Double TotalGross = 0D, Others, TotalWage = 0D, TotalDeduct = 0D, Bunos = 0D, TotalBunos = 0D, PagIbig = 0D, TotalHDMF = 0D, SSSPrem = 0D, TotalSSS = 0D, TaxHeld = 0D, TotalTAX = 0D;
     private java.util.Date DateFr, DateTo, PayFr, PayTo;
@@ -28,8 +28,12 @@ public class EndoCAPBean implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
 
     
     
@@ -103,6 +107,9 @@ public class EndoCAPBean implements java.io.Serializable {
     public Double getBunos() {return Bunos;}
     public void setBunos(Double value) {Bunos = value;}
 
+    public Short getDoDays() {return DoDays;}
+    public void setDoDays(Short value) {DoDays = value;}
+
     public boolean isRender() {
         if (PayFr == null)
             return false;
@@ -112,6 +119,9 @@ public class EndoCAPBean implements java.io.Serializable {
             return almanac.get(java.util.Calendar.MONTH) == 11;
         }
     }
+
+    public Short getMaxDay() {return MaxDay;}
+    
     
     public Boolean getIsSenior() {return isSenior;}
     
@@ -140,7 +150,7 @@ public class EndoCAPBean implements java.io.Serializable {
     protected void init() {
         OpesinaID = onlineUser.getOpesina();
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -180,7 +190,7 @@ public class EndoCAPBean implements java.io.Serializable {
 
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT " +
@@ -215,28 +225,27 @@ public class EndoCAPBean implements java.io.Serializable {
     public void onPayToSelect(org.primefaces.event.SelectEvent<?> event) {
         PayTo = (java.util.Date)event.getObject();
     }    
-//    public void onDateFrSelect(org.primefaces.event.SelectEvent event) {
-//        if (DateTo == null)
-//            Days = 0F;
-//        else {
-//            DateFr = (java.util.Date)event.getObject();
-//            long diffdays = DateTo.getTime() - DateFr.getTime();
-//            Days = Float.valueOf(String.valueOf((diffdays / ONE_DAY) + 1));
-//        }
-//    }
-//    public void onDateToSelect(org.primefaces.event.SelectEvent event) {
-//        if (DateFr == null)
-//            Days = 0F;
-//        else {
-//            DateTo = (java.util.Date)event.getObject();
-//            long diffdays = DateTo.getTime() - DateFr.getTime();
-//            Days = Float.valueOf(String.valueOf((diffdays / ONE_DAY) + 1));
-//        }
-//    }
+    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+        if (DateTo != null) {
+            DateFr = (java.util.Date)event.getObject();
+            long diffdays = DateTo.getTime() - DateFr.getTime();
+            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+            if (temp < 22) MaxDay = 22;
+        } else 
+            MaxDay = 22;
+    }
+    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+        if (DateFr != null) {
+            DateTo = (java.util.Date)event.getObject();
+            long diffdays = DateTo.getTime() - DateFr.getTime();
+            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+        } else 
+            MaxDay = 22;
+    }
 
     private void ReLoad() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -300,7 +309,7 @@ public class EndoCAPBean implements java.io.Serializable {
     public void saveEntry(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
 
             java.util.Calendar calfr = java.util.Calendar.getInstance(),
@@ -344,6 +353,7 @@ public class EndoCAPBean implements java.io.Serializable {
             saver.FieldName("pag_ibig",   NUMERIC, gov.enums.Take.InsertOnly, PagIbig);
             saver.FieldName("sssprem",    NUMERIC, gov.enums.Take.InsertOnly, SSSPrem);
             saver.FieldName("withtax",    NUMERIC, gov.enums.Take.InsertOnly, TaxHeld);
+            saver.FieldName("dodays",     NUMERIC, gov.enums.Take.InsertOnly, DoDays);
             _smt.executeUpdate(saver.Perform(gov.enums.Fire.doInsert));
 
             updateOfficer(null);
@@ -380,7 +390,7 @@ public class EndoCAPBean implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.laborpaid");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);

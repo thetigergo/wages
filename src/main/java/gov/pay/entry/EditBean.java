@@ -25,8 +25,14 @@ public class EditBean implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+
 
     public java.util.List<javax.faces.model.SelectItem> getControls() {return arCtrls;}
     public java.util.List<gov.pay.WageField> getWages() {return arWages;}
@@ -150,7 +156,7 @@ public class EditBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -177,7 +183,7 @@ public class EditBean implements java.io.Serializable {
     public void retrieveJOs() {
     //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -291,7 +297,7 @@ public class EditBean implements java.io.Serializable {
     public String onEditJOs(String value) {
         WorkerID = value;
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -358,7 +364,7 @@ public class EditBean implements java.io.Serializable {
         javax.faces.application.FacesMessage msg = null;
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement smt = jdbc.createStatement();) {
 //            if (Available < Adlaw) throw new Exception("Working Days exceeded its limit.");
 //            if (Adlaw < Days) throw new Exception("Working Days exceeded its limit.");
@@ -403,7 +409,7 @@ public class EditBean implements java.io.Serializable {
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.timebook");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
@@ -427,7 +433,7 @@ public class EditBean implements java.io.Serializable {
     
     public String onEraseJOs(String value) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.timebook");
             saver.FieldName("ctrlno",  !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);

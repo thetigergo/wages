@@ -14,10 +14,15 @@ public class InputBean implements java.io.Serializable {
     private Boolean IsActive = true;
     private Short District, Barrangay, activeTabIndex = 0;
     
-    private gov.dbase.PgDBbind pgDBlink;
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    public void setDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
     
     
     
@@ -72,7 +77,7 @@ public class InputBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             
             try (java.sql.ResultSet tbl = _smt.executeQuery("SELECT distid, district FROM bhw.distrito ORDER BY district")) {
@@ -90,7 +95,7 @@ public class InputBean implements java.io.Serializable {
     
     public void onDistrictChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String query =
                 "SELECT " +
@@ -137,7 +142,7 @@ public class InputBean implements java.io.Serializable {
         boolean triggerDistrictChange = false; // Flag to defer the call
         
         // 1. Open and completely CLOSE the connection for loading the worker
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT " +
                             "suffix, " +        // 1
@@ -194,7 +199,7 @@ public class InputBean implements java.io.Serializable {
     
     public java.util.List<String> completeSurname(String query) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT DISTINCT " +
                             "lastname " +
@@ -222,7 +227,7 @@ public class InputBean implements java.io.Serializable {
     
     public java.util.List<String> completeNgalan(String query) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT DISTINCT " +
                             "firstname " +       
@@ -250,7 +255,7 @@ public class InputBean implements java.io.Serializable {
     
     public java.util.List<String> completeMiddle(String query) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT DISTINCT " +
                             "midname " +       
@@ -278,7 +283,7 @@ public class InputBean implements java.io.Serializable {
     
     public void postSaveForm() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "INSERT INTO " +
                             "bhw.workers( " +
@@ -335,7 +340,7 @@ public class InputBean implements java.io.Serializable {
     
     public void eraseInfo() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement("DELETE FROM bhw.workers WHERE (uniqkey = ?)")) {
             psmt.setString(1, uuidkey);
             psmt.executeUpdate();

@@ -31,9 +31,12 @@ public class BHWCAPBean implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
 
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
 
 
 
@@ -138,7 +141,7 @@ public class BHWCAPBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             try (java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -164,7 +167,7 @@ public class BHWCAPBean implements java.io.Serializable {
     
     public void onDistrictChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String query =
                 "SELECT " +
@@ -191,7 +194,7 @@ public class BHWCAPBean implements java.io.Serializable {
     
     public void onBarangayChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             String query =
                 "SELECT " +
@@ -222,7 +225,7 @@ public class BHWCAPBean implements java.io.Serializable {
     
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT " +
@@ -254,7 +257,7 @@ public class BHWCAPBean implements java.io.Serializable {
 
     private void ReLoad() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -326,7 +329,7 @@ public class BHWCAPBean implements java.io.Serializable {
     public void saveEntry(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
 
             java.util.Calendar calfr = java.util.Calendar.getInstance(),
@@ -382,7 +385,7 @@ public class BHWCAPBean implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.bhwwages");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);

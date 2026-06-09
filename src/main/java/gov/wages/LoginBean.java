@@ -11,10 +11,15 @@ public class LoginBean implements java.io.Serializable {
     private String mUserID, mGatePass;
     private Short  Pilion = 0;
 
-    private gov.dbase.PgDBbind pgDBlink;
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     private OnlineUser onlineUser;
     public void setOnlineBean(OnlineUser activeUser) {onlineUser = activeUser;}
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+    
 
     public void setUserID(String value) {mUserID = value;}
     public String getUserID() {return mUserID;}
@@ -34,7 +39,7 @@ public class LoginBean implements java.io.Serializable {
         javax.faces.application.FacesMessage msg = null;
         String retval = null;
         
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                         "SELECT " +
                             "accessctrl, " +

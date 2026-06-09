@@ -12,21 +12,28 @@ public class ModifyEndoBean implements java.io.Serializable {
     private final java.util.List<javax.faces.model.SelectItem> arCtrls = new java.util.ArrayList<>();
     
     private final boolean NUMERIC = true; //, CONDITION = true;
-//    private final long ONE_DAY = 1000 * 3600 * 24;
+    private final long ONE_DAY = 1000 * 3600 * 24;
 
     private Boolean isSenior = false, HasATM;
     private String Certify1, Rank1, Certify2, Rank2, Certify3, Rank3, Certification;
     private String Worker, WorkerID, Opesina, OpesinaID;
     private String JobDesc, CtrlNo;
-    private Short Minutes;
+    private Short Minutes, DoDays = 22, MaxDay;
     private Float Days;
     private Double Rate, Gross, Others, TotalWage = 0D, TotalGross = 0D, TotalDeduct = 0D, Bunos = 0D, TotalBunos = 0D, PagIbig, TotalHDMF = 0D, TotalSSS = 0D, SSSPrem = 0D, TotalTAX = 0D, TaxHeld = 0D;
     private java.util.Date DateFr, DateTo, PayFr, PayTo;
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+
+    
     
     public java.util.List<javax.faces.model.SelectItem> getControls() {return arCtrls;}
     public java.util.List<gov.pay.WageField> getWages() {return arFields;}
@@ -100,6 +107,9 @@ public class ModifyEndoBean implements java.io.Serializable {
 
     public Double getTaxHeld() {return TaxHeld;}
     public void setTaxHeld(Double value) {TaxHeld = value;}
+
+    public Short getDoDays() {return DoDays;}
+    public void setDoDays(Short value) {DoDays = value;}
  
 
     public boolean isRender() {
@@ -111,6 +121,8 @@ public class ModifyEndoBean implements java.io.Serializable {
             return almanac.get(java.util.Calendar.MONTH) == 11;
         }
     }
+
+    public Short getMaxDay() {return MaxDay;}
     
     public Boolean getIsSenior() {return isSenior;}
 
@@ -154,7 +166,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     protected void init() {
         OpesinaID = onlineUser.getOpesina();
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             try (java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -190,7 +202,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     
     public void retrieveJOs() {    //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -282,7 +294,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     public String onEditJOs(String value) {
         WorkerID = value;
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -341,7 +353,7 @@ public class ModifyEndoBean implements java.io.Serializable {
         javax.faces.application.FacesMessage msg = null;
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement smt = jdbc.createStatement()) {
             
             java.util.Calendar calfr = java.util.Calendar.getInstance(),
@@ -369,6 +381,7 @@ public class ModifyEndoBean implements java.io.Serializable {
             saver.FieldName("pag_ibig",   NUMERIC, gov.enums.Take.UpdateOnly,    PagIbig);
             saver.FieldName("sssprem",    NUMERIC, gov.enums.Take.UpdateOnly,    SSSPrem);
             saver.FieldName("withtax",    NUMERIC, gov.enums.Take.UpdateOnly,    TaxHeld);
+            saver.FieldName("dodays",     NUMERIC, gov.enums.Take.UpdateOnly,    DoDays);
             smt.executeUpdate(saver.Perform(gov.enums.Fire.doUpdate));
 
             msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_INFO, "INFO", "Updated successfully");
@@ -387,7 +400,7 @@ public class ModifyEndoBean implements java.io.Serializable {
 //        String buttonId = event.getComponent().getClientId();
 //        System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.laborpaid");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
@@ -411,7 +424,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     
     public String onEraseJOs(String value) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.laborpaid");
             saver.FieldName("ctrlno",  !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);
@@ -438,5 +451,23 @@ public class ModifyEndoBean implements java.io.Serializable {
             if (msg != null) javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         return null;
+    }
+    
+    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+        if (DateTo != null) {
+            DateFr = (java.util.Date)event.getObject();
+            long diffdays = DateTo.getTime() - DateFr.getTime();
+            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+            if (temp < 22) MaxDay = 22;
+        } else 
+            MaxDay = 22;
+    }
+    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+        if (DateFr != null) {
+            DateTo = (java.util.Date)event.getObject();
+            long diffdays = DateTo.getTime() - DateFr.getTime();
+            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+        } else 
+            MaxDay = 22;
     }
 }

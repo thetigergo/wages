@@ -16,7 +16,7 @@ public class AuditBHWBean implements java.io.Serializable {
     private final Double TotalTAX = 0D;
     private Short Counter = 0;
     private Boolean SwitchOff = false;
-    private java.util.Date PayFr, PayTo;
+//    private java.util.Date PayFr, PayTo;
     private Short /*Barangay,*/ District;
 
 
@@ -25,9 +25,16 @@ public class AuditBHWBean implements java.io.Serializable {
 
 
     private gov.wages.OnlineUser onlineUser;
-    private gov.dbase.PgDBbind pgDBlink;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}    
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+    @javax.annotation.Resource(lookup = "jdbc/AcctgPool")
+    private javax.sql.DataSource dsAcctg;    
     
     public String getCertify1() {return Certify1;}
     public String getCertify2() {return Certify2;}
@@ -66,8 +73,8 @@ public class AuditBHWBean implements java.io.Serializable {
     
     public void kuhaaALOBS(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
-                java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection gdbc = dsAcctg.getConnection(); // pgDBlink.dbLink("accounting");
+                java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _zmt = jdbc.createStatement();
                 java.sql.Statement _smt = gdbc.createStatement()) {
             String[] acctref = Reference.split("-"); String cboNo = "", alobsNo = "";
@@ -93,7 +100,7 @@ public class AuditBHWBean implements java.io.Serializable {
 
     public void accessWorker() {//javax.faces.event.ActionEvent event
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -160,8 +167,8 @@ public class AuditBHWBean implements java.io.Serializable {
 //                TotalHDMF   += payroll.getPagIbig();
 //                TotalSSS    += payroll.getSSSPrem();
 
-                PayFr    = rst.getDate(4);
-                PayTo    = rst.getDate(5);
+//                PayFr    = rst.getDate(4);
+//                PayTo    = rst.getDate(5);
                 
                 Certify1 = rst.getString(14);
                 Certify2 = rst.getString(15);
@@ -221,7 +228,7 @@ public class AuditBHWBean implements java.io.Serializable {
     public void approveRecord(javax.faces.event.ActionEvent ae) {
         javax.faces.application.FacesMessage msg = null;
         boolean already = false;
-        try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
+        try (java.sql.Connection gdbc = dsAcctg.getConnection(); // pgDBlink.dbLink("accounting");
                 java.sql.Statement smt = gdbc.createStatement()) {
 
             String anios = Reference.split("-")[0],
@@ -282,7 +289,7 @@ public class AuditBHWBean implements java.io.Serializable {
     IMO #: +63995-149-5674
 */
 /******************************* CODING PARA SA PAG POST SA CARDING *******************************/
-            try (java.sql.Connection jdbc = pgDBlink.dbLink();
+            try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                     java.sql.Statement jsmt = jdbc.createStatement()) {
                 for (gov.pay.WageField bhwwages : arFields) {
                     gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("bhw.carding");
@@ -327,7 +334,7 @@ public class AuditBHWBean implements java.io.Serializable {
     }
 
     public void returnRecord(javax.faces.event.ActionEvent ae) {
-        try (java.sql.Connection jdbc = pgDBlink.dbLink("accounting");
+        try (java.sql.Connection jdbc = dsAcctg.getConnection(); // pgDBlink.dbLink("accounting");
                 java.sql.Statement smt = jdbc.createStatement()) {
 
             String anios = Reference.split("-")[0],

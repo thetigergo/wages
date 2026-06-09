@@ -181,10 +181,18 @@
                                                 <p:outputLabel value="Date Cover"/>
                                                 <p:outputLabel value=" : "/>
                                                 <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
-                                                    <p:calendar value="#{endoCA.dateFr}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8" />
+                                                    <p:calendar value="#{endoCA.dateFr}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8">
+                                                        <p:ajax event="dateSelect" listener="#{endoCA.onDateFrSelect}" update="minMax" />
+                                                    </p:calendar>
                                                     <p:outputLabel value="&nbsp;:&nbsp;"/>
-                                                    <p:calendar value="#{endoCA.dateTo}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8" />
+                                                    <p:calendar value="#{endoCA.dateTo}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8">
+                                                        <p:ajax event="dateSelect" listener="#{endoCA.onDateToSelect}" update="minMax" />
+                                                    </p:calendar>
                                                 </h:panelGrid>
+
+                                                <p:outputLabel value="Days Count"/>
+                                                <p:outputLabel value=" : "/>
+                                                <p:spinner id="minMax" value="#{endoCA.doDays}" min="1" max="#{endoCA.maxDay}" maxlength="2" size="2"/>
 
                                                 <p:outputLabel value="Days Absent"/>
                                                 <p:outputLabel value=" : "/>

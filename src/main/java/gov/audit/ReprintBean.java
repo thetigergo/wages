@@ -15,10 +15,16 @@ public class ReprintBean implements java.io.Serializable {
     private java.lang.Short  WhichOf, Anios = (short)2000;
 
 
-    private gov.dbase.PgDBbind pgDBlink;
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+    
 
     public java.util.Date getDateATM() {return DateATM;}
     public void setDateATM(java.util.Date value) {DateATM = value;}
@@ -51,7 +57,7 @@ public class ReprintBean implements java.io.Serializable {
                     "(refdate >= (NOW()::DATE - 92)) " +
                 "ORDER BY " +
                     "refdate";
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm);
                 java.sql.PreparedStatement pzmt = jdbc.prepareStatement("SELECT DATE_PART('YEAR', NOW());")) {
                 
@@ -84,7 +90,7 @@ public class ReprintBean implements java.io.Serializable {
                     "pay.advicepay " +
                 "WHERE " +
                     "(refkey = ?)";
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm)) {
             
             psmt.setString(1, RefNo);
@@ -113,7 +119,7 @@ public class ReprintBean implements java.io.Serializable {
                     "(DATE_PART('YEAR', refdate) = ?) " +
                 "ORDER BY " +
                     "refdate";
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlComm)) {
                 
             psmt.setShort(1, Anios);

@@ -43,8 +43,8 @@ gov\enums\Fire.class
 gov\audit\AuditJOBean.class
 gov\pay\report\PreviewBean.class
 gov\audit\AuditEndoBean.class
-gov\dbase\PgDBbind.class
 gov\endo\EndoCAPBean.class
+gov\dbase\PgDBbind.class
 gov\pay\report\ClaimField.class
 gov\bhw\BHWmodifyBean.class
 gov\pay\entry\AddCAPBean$WorkerAttrib.class

@@ -9,6 +9,11 @@ public class RptATM extends javax.servlet.http.HttpServlet {
 
     private static final long serialVersionUID = 2156790607309287444L;
 
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -25,7 +30,7 @@ public class RptATM extends javax.servlet.http.HttpServlet {
         gov.dbase.PgDBbind pgDBlink = (gov.dbase.PgDBbind) request.getServletContext().getAttribute("pgDBbind");
         String refkey, realPath = request.getParameter("report");
         Short WhichOf;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink()) {
+        try (java.sql.Connection jdbc = dsJosCos.getConnection()) { // pgDBlink.dbLink()) {
             gov.wages.OnlineUser onlineUser = (gov.wages.OnlineUser) request.getSession().getAttribute("onlined");
             refkey = onlineUser.getTemporary();
             WhichOf = onlineUser.getWhichOf();

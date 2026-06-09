@@ -35,8 +35,14 @@ public class AddATMBean implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+
     
     public String getWorkerID() {return WorkerID;}
     public void setWorkerID(String values) {WorkerID = values;}
@@ -143,7 +149,7 @@ public class AddATMBean implements java.io.Serializable {
     protected void init() {
         OpesinaID = onlineUser.getOpesina();
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             
             try (java.sql.ResultSet rst = _smt.executeQuery(
@@ -188,7 +194,7 @@ public class AddATMBean implements java.io.Serializable {
 
     public void onWorkerChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -219,7 +225,7 @@ public class AddATMBean implements java.io.Serializable {
     
     private void onProjectChange() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             String dateFr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayFr),
                    dateTo   = new java.text.SimpleDateFormat("yyyy-MM-dd").format(PayTo);
@@ -281,7 +287,7 @@ public class AddATMBean implements java.io.Serializable {
                 "ORDER BY " +
                     "humane";
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(query)) {
             arWorkers.clear(); mapWorker.clear();
@@ -326,7 +332,7 @@ public class AddATMBean implements java.io.Serializable {
 
     public void onCtrlChangeReload() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -432,7 +438,7 @@ public class AddATMBean implements java.io.Serializable {
             if (arJobOrdNos.get(abc).getValue().equals(JobOrder))
                 allotment = arAllotment.get(abc);
         }
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             if (Adlaw < Days) throw new Exception("Working Days exceeded its limit.");
             if (avail < Days) throw new Exception("Insufficient available working days.");
@@ -492,7 +498,7 @@ public class AddATMBean implements java.io.Serializable {
 //            System.out.println(buttonId);
 //        }
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("pay.timebook");
             saver.FieldName("ctrlno",   !NUMERIC, gov.enums.Take.ConditionOnly, CtrlNo);

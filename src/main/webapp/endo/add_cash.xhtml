@@ -188,13 +188,18 @@
                                                 <p:outputLabel value=" : "/>
                                                 <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
                                                     <p:calendar value="#{plusCAPBean.dateFr}" pattern="MM/dd/yyyy" size="10" maxlength="10" id="range1" timeZone="GMT+8">
-                                                        <p:ajax event="dateSelect" listener="#{plusCAPBean.onDateFrSelect}" update="days pagibig" />
+                                                        <p:ajax event="dateSelect" listener="#{plusCAPBean.onDateFrSelect}" update="days pagibig minMax" />
                                                     </p:calendar>
                                                     <p:outputLabel value="&nbsp;:&nbsp;"/>
                                                     <p:calendar value="#{plusCAPBean.dateTo}" pattern="MM/dd/yyyy" size="10" maxlength="10" id="range2" timeZone="GMT+8">
-                                                        <p:ajax event="dateSelect" listener="#{plusCAPBean.onDateToSelect}" update="days pagibig" />
+                                                        <p:ajax event="dateSelect" listener="#{plusCAPBean.onDateToSelect}" update="days pagibig minMax" />
                                                     </p:calendar>
                                                 </h:panelGrid>
+
+                                                <p:outputLabel value="Days Count"/>
+                                                <p:outputLabel value=" : "/>
+                                                 <p:spinner id="minMax" value="#{plusCAPBean.doDays}" min="1" max="#{plusCAPBean.maxDay}" maxlength="2" size="2"/>
+
 
                                                 <p:outputLabel value="Days Absent"/>
                                                 <p:outputLabel value=" : "/>

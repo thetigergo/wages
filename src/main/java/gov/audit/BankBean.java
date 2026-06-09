@@ -14,8 +14,14 @@ public class BankBean implements java.io.Serializable {
     
     private final java.util.ArrayList<javax.faces.model.SelectItem> arWorker = new java.util.ArrayList<>();
     
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+    
     
     public java.util.List<javax.faces.model.SelectItem> getWorkers() {return arWorker;}
 
@@ -37,7 +43,7 @@ public class BankBean implements java.io.Serializable {
                         "(bank_acct IS NULL) " +
                     "ORDER BY " +
                         "lastname, firstname, midname";
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt = jdbc.prepareStatement(sqlCmd);
                 java.sql.ResultSet rst = psmt.executeQuery()) {
             while (rst.next())
@@ -55,7 +61,7 @@ public class BankBean implements java.io.Serializable {
         //tring buttonId = event.getComponent().getClientId();
         //System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement()) {
             
             gov.dbase.SQLExecute saver = new gov.dbase.SQLExecute("psnl.jobworker");

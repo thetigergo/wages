@@ -13,8 +13,17 @@ public class PreviewBean implements java.io.Serializable {
     private final java.util.List<gov.pay.WageField> arFields = new java.util.ArrayList<>();
     private final java.util.List<javax.faces.model.SelectItem> arCtrls = new java.util.ArrayList<>();
     
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+    @javax.annotation.Resource(lookup = "jdbc/AcctgPool")
+    private javax.sql.DataSource dsAcctg;
+
+
     
     
     private String ProjectID, ProjectTitle, Opesina, /*Certify1, Certify2, Certify3, Rank1, Rank2, Rank3, */CtrlNo, PayDate, Remark, Reference;
@@ -30,11 +39,7 @@ public class PreviewBean implements java.io.Serializable {
 
     
 
-    
-    
-    /**/
-
-    /**
+     /**
      *
      * @return
      */
@@ -100,7 +105,7 @@ public class PreviewBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -126,7 +131,7 @@ public class PreviewBean implements java.io.Serializable {
     public void onCtrlChange() {
     //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement _smt = jdbc.createStatement();
             java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -229,7 +234,7 @@ public class PreviewBean implements java.io.Serializable {
 
             if (acctg_ref != null && !acctg_ref.isEmpty()) {
                 String[] acctgNos = acctg_ref.split("-"); short pilian = 0;
-                try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
+                try (java.sql.Connection gdbc = dsAcctg.getConnection(); // pgDBlink.dbLink("accounting");
                         java.sql.Statement _zmt = gdbc.createStatement();
                         java.sql.ResultSet tbl = _zmt.executeQuery(
                         "SELECT aprob, petsa, amount, geuli, tempo FROM doc.statuses(" + acctgNos[0] + "::SMALLINT, " + acctgNos[1] + ", 'receiving') " +

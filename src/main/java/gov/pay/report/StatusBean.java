@@ -22,8 +22,17 @@ public class StatusBean implements java.io.Serializable {
 
     private gov.wages.OnlineUser onlineUser;
     public void setOnlineBean(gov.wages.OnlineUser activeUser) {onlineUser = activeUser;}
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+    @javax.annotation.Resource(lookup = "jdbc/AcctgPool")
+    private javax.sql.DataSource dsAcctg;
+    
+    
     
     public String getProjectID() {return ProjectID;}
     public String getProject() {return ProjectTitle;}
@@ -74,7 +83,7 @@ public class StatusBean implements java.io.Serializable {
     @javax.annotation.PostConstruct
     protected void init() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT DISTINCT " +
@@ -103,7 +112,7 @@ public class StatusBean implements java.io.Serializable {
     public void onCtrlChange() {
     //public void retrieveJOs(javax.faces.event.ActionEvent event) {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.Statement smt = jdbc.createStatement();
             java.sql.ResultSet rst = smt.executeQuery(
                     "SELECT " +
@@ -206,7 +215,7 @@ public class StatusBean implements java.io.Serializable {
 
             if (acctg_ref != null && !acctg_ref.isEmpty()) {
                 String[] acctgNos = acctg_ref.split("-"); short pilian = 0;
-                try (java.sql.Connection gdbc = pgDBlink.dbLink("accounting");
+                try (java.sql.Connection gdbc = dsAcctg.getConnection(); // pgDBlink.dbLink("accounting");
                         java.sql.Statement _smt = gdbc.createStatement();
                         java.sql.ResultSet tbl = _smt.executeQuery(
                         "SELECT aprob, petsa, amount, geuli, tempo FROM doc.statuses(" + acctgNos[0] + "::SMALLINT, " + acctgNos[1] + ", 'receiving') " +

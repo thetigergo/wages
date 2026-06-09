@@ -13,8 +13,12 @@ public class AddUserBean implements java.io.Serializable {
     
     private final boolean NUMERIC = true; //, CONDITION = true;
     
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
 
 //    private java.util.ArrayList<ManageUser> arUsers = new java.util.ArrayList<ManageUser>();
     private final java.util.ArrayList<javax.faces.model.SelectItem> arOffice = new java.util.ArrayList<>();
@@ -24,7 +28,7 @@ public class AddUserBean implements java.io.Serializable {
 
     @javax.annotation.PostConstruct
     protected void init() {
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement();
                 java.sql.ResultSet rst = _smt.executeQuery(
                     "SELECT " +
@@ -67,7 +71,7 @@ public class AddUserBean implements java.io.Serializable {
         //String buttonId = event.getComponent().getClientId();
         //System.out.println(buttonId);
 
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.Statement _smt = jdbc.createStatement()) {
             
             StringBuilder level = new StringBuilder();

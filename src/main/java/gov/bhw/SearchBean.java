@@ -16,8 +16,14 @@ public class SearchBean implements java.io.Serializable {
     
     private InputBean inputBean;
     public void setPassKey(InputBean searcher) {inputBean = searcher;}
-    private gov.dbase.PgDBbind pgDBlink;
-    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+//    private gov.dbase.PgDBbind pgDBlink;
+//    public void setPgDBlink(gov.dbase.PgDBbind value) {pgDBlink = value;}
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+
     
     public java.util.List<SearchField> getPeople() {return arFields;}
 
@@ -39,7 +45,7 @@ public class SearchBean implements java.io.Serializable {
     
     public void findNames() {
         javax.faces.application.FacesMessage msg = null;
-        try (java.sql.Connection jdbc = pgDBlink.dbLink();
+        try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
             java.sql.PreparedStatement psmt = jdbc.prepareStatement(
                 "SELECT " +
                     "uniqkey, " +

@@ -10,6 +10,14 @@ public class FileATM extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = -1119658447196428884L;
 
     private static final int BYTES_DOWNLOAD = 1024;
+    
+    
+    // Payara injects the managed connection pool here
+    @javax.annotation.Resource(lookup = "jdbc/JosCosPool")
+    private javax.sql.DataSource dsJosCos;
+
+
+    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -22,7 +30,7 @@ public class FileATM extends javax.servlet.http.HttpServlet {
      */
     protected void processRequest(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
 //        try (java.io.PrintWriter out = response.getWriter()) {
-            gov.dbase.PgDBbind pgDBlink = (gov.dbase.PgDBbind) request.getServletContext().getAttribute("pgDBbind");
+//            gov.dbase.PgDBbind pgDBlink = (gov.dbase.PgDBbind) request.getServletContext().getAttribute("pgDBbind");
             gov.wages.OnlineUser onlineUser = (gov.wages.OnlineUser) request.getSession().getAttribute("onlined");
             
             String dated = new java.text.SimpleDateFormat("MMdd").format(onlineUser.getMgaPetsa()),
@@ -48,7 +56,7 @@ public class FileATM extends javax.servlet.http.HttpServlet {
                             "pay.advicepay " +
                         "WHERE " +
                             "(refkey = ?)";
-            try (java.sql.Connection jdbc = pgDBlink.dbLink();
+            try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
                 java.sql.PreparedStatement psmt1 = jdbc.prepareStatement(sqlCmd1);
                 java.sql.PreparedStatement psmt2 = jdbc.prepareStatement(sqlCmd2)) {
 

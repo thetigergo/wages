@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="936" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="896" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="82c06a58-c4f1-42da-a2c8-cd9a245e27d6">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="joborders"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="joborder"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<scriptlet name="MY" class="jrscript.JRUserFunc"/>
 	<parameter name="CtrlNo" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["2025~001973"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["2026~003008"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
@@ -36,7 +36,7 @@
    laborpaid.designa3,
    laborpaid.certify,
    signatures.mayorvice,
-   ((laborpaid.rate / 10560.0) * ((laborpaid.udays * 480.0) + laborpaid.utime))::numeric(9, 2) AS deduction,
+   ((laborpaid.rate / (laborpaid.dodays * 480.0)) * ((laborpaid.udays * 480.0) + laborpaid.utime))::numeric(9, 2) AS deduction,
    CASE WHEN (laborpaid.frday < 16 AND laborpaid.today < 16) OR (laborpaid.frday = 16 AND laborpaid.today > 16) THEN (laborpaid.rate / 2.0)::REAL ELSE laborpaid.rate END AS gross,
    suholan.typed
 FROM  
