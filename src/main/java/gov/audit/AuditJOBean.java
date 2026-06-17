@@ -179,7 +179,8 @@ public class AuditJOBean implements java.io.Serializable {
                         rst.getDouble(28),      //SSS Prem
                         Counter,
                         rst.getDouble(25),       //bunos
-                        rst.getDouble(29)));      //withtax
+                        rst.getDouble(29),       //withtax
+                        (short)0));
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
                 TotalGross  += payroll.getGross();

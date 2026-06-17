@@ -8,8 +8,9 @@ public class ModifyEndoBean implements java.io.Serializable {
 
     private static final long serialVersionUID = 4018886714904788385L;
     
-    private final java.util.List<gov.pay.WageField>                arFields = new java.util.ArrayList<>();
-    private final java.util.List<javax.faces.model.SelectItem> arCtrls = new java.util.ArrayList<>();
+    private final java.util.List<gov.pay.WageField>            arFields = new java.util.ArrayList<>();
+    private final java.util.List<javax.faces.model.SelectItem> arCtrls = new java.util.ArrayList<>(),
+                                                               arDays  = new java.util.ArrayList<>();
     
     private final boolean NUMERIC = true; //, CONDITION = true;
     private final long ONE_DAY = 1000 * 3600 * 24;
@@ -36,6 +37,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     
     
     public java.util.List<javax.faces.model.SelectItem> getControls() {return arCtrls;}
+    public java.util.List<javax.faces.model.SelectItem> getMaxDay() {return arDays;}
     public java.util.List<gov.pay.WageField> getWages() {return arFields;}
     
     
@@ -122,7 +124,7 @@ public class ModifyEndoBean implements java.io.Serializable {
         }
     }
 
-    public Short getMaxDay() {return MaxDay;}
+//    public Short getMaxDay() {return MaxDay;}
     
     public Boolean getIsSenior() {return isSenior;}
 
@@ -228,7 +230,8 @@ public class ModifyEndoBean implements java.io.Serializable {
                     /*20*/"laborpaid.pag_ibig, " +
                     /*21*/"laborpaid.sssprem, " +
                     /*22*/"laborpaid.withtax, " +
-                    /*23*/"jobworker.bank_acct IS NOT NULL " +
+                    /*23*/"jobworker.bank_acct IS NOT NULL, " +
+                    /*24*/"laborpaid.dodays " +
                     "FROM " +
                         "psnl.jobworker JOIN pay.laborpaid " +
                         "ON jobworker.uniqkey = laborpaid.worker " +
@@ -254,7 +257,8 @@ public class ModifyEndoBean implements java.io.Serializable {
                         rst.getDouble(21),
                         (short)0,
                         rst.getDouble(19),
-                        rst.getDouble(22)));
+                        rst.getDouble(22),
+                        rst.getShort (24)));
                 HasATM = rst.getBoolean(23);
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
@@ -306,12 +310,15 @@ public class ModifyEndoBean implements java.io.Serializable {
                     /* 6*/"laborpaid.rate, " +
                     /* 7*/"CASE WHEN (laborpaid.frday < 16 AND laborpaid.today < 16) OR (laborpaid.frday = 16 AND laborpaid.today > 16) THEN (laborpaid.rate / 2.0)::REAL ELSE laborpaid.rate END, " +
                     /* 8*/"laborpaid.utime, " +
-                    /* 9*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+//                    /* 9*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+                    /* 9*/" ((laborpaid.rate / (laborpaid.dodays * 480.0)) * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
                     /*10*/"laborpaid.bunos, " +
                     /*11*/"laborpaid.pag_ibig, " +
                     /*12*/"laborpaid.sssprem, " +
                     /*13*/"laborpaid.withtax, " +
-                    /*14*/"DATE_PART('YEAR', AGE(NOW(), jobworker.birthday))::SMALLINT " +
+                    /*14*/"DATE_PART('YEAR', AGE(NOW(), jobworker.birthday))::SMALLINT, " +
+                    /*15*/"laborpaid.dodays, " +
+                    /*16*/"DATE_PART('DAY', (datefr + INTERVAL '1 MONTH - 1 DAY')) " +
                     "FROM " +
                         "pay.laborpaid JOIN psnl.jobworker " +
                         "ON laborpaid.worker = jobworker.uniqkey " +
@@ -337,6 +344,9 @@ public class ModifyEndoBean implements java.io.Serializable {
                     SSSPrem = 0D;
                     PagIbig = 0D;
                 }
+                DoDays = rst.getShort(15);
+                MaxDay = rst.getShort(16);
+                arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
             }
 
 
@@ -453,21 +463,21 @@ public class ModifyEndoBean implements java.io.Serializable {
         return null;
     }
     
-    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
-        if (DateTo != null) {
-            DateFr = (java.util.Date)event.getObject();
-            long diffdays = DateTo.getTime() - DateFr.getTime();
-            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-            if (temp < 22) MaxDay = 22;
-        } else 
-            MaxDay = 22;
-    }
-    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
-        if (DateFr != null) {
-            DateTo = (java.util.Date)event.getObject();
-            long diffdays = DateTo.getTime() - DateFr.getTime();
-            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-        } else 
-            MaxDay = 22;
-    }
+//    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+//        if (DateTo != null) {
+//            DateFr = (java.util.Date)event.getObject();
+//            long diffdays = DateTo.getTime() - DateFr.getTime();
+//            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+//            if (temp < 22) MaxDay = 22;
+//        } else 
+//            MaxDay = 22;
+//    }
+//    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+//        if (DateFr != null) {
+//            DateTo = (java.util.Date)event.getObject();
+//            long diffdays = DateTo.getTime() - DateFr.getTime();
+//            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+//        } else 
+//            MaxDay = 22;
+//    }
 }

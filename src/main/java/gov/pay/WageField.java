@@ -9,7 +9,7 @@ public class WageField implements java.io.Serializable {
     private static final long serialVersionUID = 5244314458043429397L;
 
     private final String Worker, Jobs, WorkID;
-    private final Short Undertime, Counter;
+    private final Short Undertime, Counter, DoDays;
     private final Float Days, Rate;
     private final Double Gross, Deduction, Bunos, PagIbig, SSSPrem, TaxHeld;
     private final java.util.Date DateFr, DateTo;
@@ -29,7 +29,8 @@ public class WageField implements java.io.Serializable {
             /*12*/Double sssprem,
             /*13*/Short counts,
             /*14*/Double bunos,
-            /*15*/Double wtax) {
+            /*15*/Double wtax,
+            /*16*/Short dodyz) {
         WorkID    = workid;
         Worker    = worker;
         Jobs      = jobs;
@@ -45,6 +46,7 @@ public class WageField implements java.io.Serializable {
         Bunos     = bunos;
         SSSPrem   = sssprem;
         TaxHeld   = wtax;
+        DoDays    = dodyz;
     }
 
     public Short getCounter() {return Counter;}
@@ -91,7 +93,8 @@ public class WageField implements java.io.Serializable {
      * Used by Contractual 004031
      * @return 
      */
-    public Double getUtDeduct() {return Math.round((Rate / 10560D * ((Days * 480F) + Undertime)) * 100D) * 0.01D;}
-
+    //public Double getUtDeduct() {return Math.round((Rate / 10560D * ((Days * 480F) + Undertime)) * 100D) * 0.01D;}
+    public Double getUtDeduct() {return Math.round(((Rate / (DoDays * 480D)) * ((Days * 480F) + Undertime)) * 100D) * 0.01D;}
+    //               ((laborpaid.rate / (laborpaid.dodays * 480.0))
 }
 

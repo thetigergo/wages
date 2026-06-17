@@ -119,7 +119,8 @@ public class ReportBean implements java.io.Serializable {
                         rst.getDouble(25),
                         Counter,
                         rst.getDouble(23),
-                        0D));                
+                        0D,
+                        (short)0));                
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
                 TotalGross  += payroll.getGross();

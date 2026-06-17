@@ -31,30 +31,26 @@
             <artifactId>overcast</artifactId>
             <version>1.0.11</version>
         </dependency>
-        <!--        <dependency>
+<!--        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.3</version>
             <classifier>all</classifier>
         </dependency>-->
-        <!--        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.27</version>
-        </dependency>        -->
+
         <!-- Source: https://mvnrepository.com/artifact/com.enterprisedb/edb-jdbc -->
         <dependency>
             <groupId>com.enterprisedb</groupId>
             <artifactId>edb-jdbc</artifactId>
-            <version>42.5.4.2</version>
+            <version>42.7.3.4</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>7.0.2</version>
         </dependency>-->
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <version>12.4.2.jre11</version>

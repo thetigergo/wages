@@ -8,8 +8,9 @@ public class EndoCAPBean implements java.io.Serializable {
 
     private static final long serialVersionUID = -1879136451885124678L;
     
-    private final java.util.List<javax.faces.model.SelectItem> arWorkers   = new java.util.ArrayList<>();
-    private final java.util.List<gov.pay.WageField> arFields                   = new java.util.ArrayList<>();
+    private final java.util.List<javax.faces.model.SelectItem> arWorkers = new java.util.ArrayList<>(),
+                                                               arDays    = new java.util.ArrayList<>();
+    private final java.util.List<gov.pay.WageField> arFields = new java.util.ArrayList<>();
 
 
 
@@ -120,7 +121,8 @@ public class EndoCAPBean implements java.io.Serializable {
         }
     }
 
-    public Short getMaxDay() {return MaxDay;}
+//    public Short getMaxDay() {return MaxDay;}
+    public java.util.List<javax.faces.model.SelectItem> getMaxDay() {return arDays;}
     
     
     public Boolean getIsSenior() {return isSenior;}
@@ -225,24 +227,52 @@ public class EndoCAPBean implements java.io.Serializable {
     public void onPayToSelect(org.primefaces.event.SelectEvent<?> event) {
         PayTo = (java.util.Date)event.getObject();
     }    
+//    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+//        if (DateTo != null) {
+//            DateFr = (java.util.Date)event.getObject();
+//            long diffdays = DateTo.getTime() - DateFr.getTime();
+//            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+//            if (temp < 22) MaxDay = 22;
+//        } else 
+//            MaxDay = 22;
+//    }
+//    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+//        if (DateFr != null) {
+//            DateTo = (java.util.Date)event.getObject();
+//            long diffdays = DateTo.getTime() - DateFr.getTime();
+//            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+//        } else 
+//            MaxDay = 22;
+//    }
     public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+        DateFr = (java.util.Date)event.getObject();
+        arDays.clear();
         if (DateTo != null) {
-            DateFr = (java.util.Date)event.getObject();
-            long diffdays = DateTo.getTime() - DateFr.getTime();
-            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-            if (temp < 22) MaxDay = 22;
-        } else 
-            MaxDay = 22;
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateTo);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        } else {
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateFr);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        }
+        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
     }
     public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+        DateTo = (java.util.Date)event.getObject(); 
+        arDays.clear();
         if (DateFr != null) {
-            DateTo = (java.util.Date)event.getObject();
-            long diffdays = DateTo.getTime() - DateFr.getTime();
-            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-        } else 
-            MaxDay = 22;
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateFr);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        } else {
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateTo);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        }
+        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
     }
-
+    
     private void ReLoad() {
         javax.faces.application.FacesMessage msg = null;
         try (java.sql.Connection jdbc = dsJosCos.getConnection(); // pgDBlink.dbLink();
@@ -258,11 +288,13 @@ public class EndoCAPBean implements java.io.Serializable {
                         /* 7*/"laborpaid.rate, " +
                         /* 8*/"CASE WHEN (laborpaid.frday < 16 AND laborpaid.today < 16) OR (laborpaid.frday = 16 AND laborpaid.today > 16) THEN (laborpaid.rate / 2.0)::REAL ELSE laborpaid.rate END, " +
                         /* 9*/"laborpaid.utime, " +
-                        /*10*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+//                        /*10*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+                        /*10*/"((laborpaid.rate / (laborpaid.dodays * 480.0)) * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
                         /*11*/"laborpaid.bunos, " +
                         /*12*/"laborpaid.pag_ibig, " +
                         /*13*/"laborpaid.sssprem, " +
-                        /*14*/"laborpaid.withtax " +
+                        /*14*/"laborpaid.withtax, " +
+                        /*15*/"laborpaid.dodays " +
                     "FROM " +
                         "psnl.jobworker JOIN pay.laborpaid " +
                         "ON jobworker.uniqkey = laborpaid.worker " +
@@ -287,7 +319,8 @@ public class EndoCAPBean implements java.io.Serializable {
                         rst.getDouble(13),
                         (short)0,
                         rst.getDouble(11),
-                        rst.getDouble(14)));
+                        rst.getDouble(14),
+                        rst.getShort (15)));
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
                 TotalGross  += payroll.getGross();

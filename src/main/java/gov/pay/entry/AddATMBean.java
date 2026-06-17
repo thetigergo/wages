@@ -389,7 +389,8 @@ public class AddATMBean implements java.io.Serializable {
                         rst.getDouble(23),
                         (short)0,
                         rst.getDouble(21),
-                        0D));
+                        0D,
+                        (short)0));
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
                 TotalGross  += payroll.getGross();

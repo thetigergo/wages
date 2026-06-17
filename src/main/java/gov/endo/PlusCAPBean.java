@@ -8,9 +8,10 @@ public class PlusCAPBean implements java.io.Serializable {
 
     private static final long serialVersionUID = -7188339424441005371L;
     
-    private final java.util.List<javax.faces.model.SelectItem> arWorkers   = new java.util.ArrayList<>();
-    private final java.util.List<gov.pay.WageField> arFields                   = new java.util.ArrayList<>();
-    private final java.util.List<javax.faces.model.SelectItem> arCtrls     = new java.util.ArrayList<>();
+    private final java.util.List<javax.faces.model.SelectItem> arWorkers = new java.util.ArrayList<>(),
+                                                               arCtrls   = new java.util.ArrayList<>(),
+                                                               arDays    = new java.util.ArrayList<>();
+    private final java.util.List<gov.pay.WageField> arFields = new java.util.ArrayList<>();
 
 
 
@@ -123,7 +124,8 @@ public class PlusCAPBean implements java.io.Serializable {
     public void setDoDays(Short value) {DoDays = value;}
 
     
-    public Short getMaxDay() {return MaxDay;}
+//    public Short getMaxDay() {return MaxDay;}
+    public java.util.List<javax.faces.model.SelectItem> getMaxDay() {return arDays;}
     
     public Boolean getIsSenior() {return isSenior;}
 
@@ -237,22 +239,50 @@ public class PlusCAPBean implements java.io.Serializable {
         }
     }
     
+//    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+//        if (DateTo != null) {
+//            DateFr = (java.util.Date)event.getObject();
+//            long diffdays = DateTo.getTime() - DateFr.getTime();
+//            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+//            if (temp < 22) MaxDay = 22;
+//        } else 
+//            MaxDay = 22;
+//    }
+//    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+//        if (DateFr != null) {
+//            DateTo = (java.util.Date)event.getObject();
+//            long diffdays = DateTo.getTime() - DateFr.getTime();
+//            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+//        } else 
+//            MaxDay = 22;
+//    }
     public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+        DateFr = (java.util.Date)event.getObject();
+        arDays.clear();
         if (DateTo != null) {
-            DateFr = (java.util.Date)event.getObject();
-            long diffdays = DateTo.getTime() - DateFr.getTime();
-            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-            if (temp < 22) MaxDay = 22;
-        } else 
-            MaxDay = 22;
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateTo);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        } else {
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateFr);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        }
+        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
     }
     public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+        DateTo = (java.util.Date)event.getObject(); 
+        arDays.clear();
         if (DateFr != null) {
-            DateTo = (java.util.Date)event.getObject();
-            long diffdays = DateTo.getTime() - DateFr.getTime();
-            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-        } else 
-            MaxDay = 22;
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateFr);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        } else {
+            java.util.Calendar cals = java.util.Calendar.getInstance();
+            cals.setTime(DateTo);
+            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+        }
+        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
     }
 
     public void onCtrlChangeReload() {
@@ -270,7 +300,8 @@ public class PlusCAPBean implements java.io.Serializable {
                     /* 7*/"laborpaid.rate, " +
                     /* 8*/"CASE WHEN (laborpaid.frday < 16 AND laborpaid.today < 16) OR (laborpaid.frday = 16 AND laborpaid.today > 16) THEN (laborpaid.rate / 2.0)::REAL ELSE laborpaid.rate END, " +
                     /* 9*/"laborpaid.utime, " +
-                    /*10*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+//                    /*10*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+                    /*10*/"((laborpaid.rate / (laborpaid.dodays * 480.0)) * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
                     /*11*/"laborpaid.payfr, " +
                     /*12*/"laborpaid.payto, " +
                     /*13*/"laborpaid.officer1, " +
@@ -282,7 +313,8 @@ public class PlusCAPBean implements java.io.Serializable {
                     /*19*/"laborpaid.bunos, " +
                     /*20*/"laborpaid.pag_ibig, " +
                     /*21*/"laborpaid.sssprem, " +
-                    /*22*/"laborpaid.withtax " +
+                    /*22*/"laborpaid.withtax, " +
+                    /*23*/"laborpaid.dodays " +
                     "FROM " +
                         "psnl.jobworker JOIN pay.laborpaid " +
                         "ON jobworker.uniqkey = laborpaid.worker " +
@@ -308,7 +340,8 @@ public class PlusCAPBean implements java.io.Serializable {
                         rst.getDouble(21),
                         (short)0,
                         rst.getDouble(19),
-                        rst.getDouble(22)));
+                        rst.getDouble(22),
+                        rst.getShort(23)));
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
                 TotalGross  += payroll.getGross();

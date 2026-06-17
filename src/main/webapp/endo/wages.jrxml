@@ -8,7 +8,7 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<scriptlet name="MY" class="jrscript.JRUserFunc"/>
 	<parameter name="CtrlNo" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["2026~003008"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["2026~003061"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
@@ -38,7 +38,8 @@
    signatures.mayorvice,
    ((laborpaid.rate / (laborpaid.dodays * 480.0)) * ((laborpaid.udays * 480.0) + laborpaid.utime))::numeric(9, 2) AS deduction,
    CASE WHEN (laborpaid.frday < 16 AND laborpaid.today < 16) OR (laborpaid.frday = 16 AND laborpaid.today > 16) THEN (laborpaid.rate / 2.0)::REAL ELSE laborpaid.rate END AS gross,
-   suholan.typed
+   suholan.typed,
+   laborpaid.dodays
 FROM  
    pay.suholan INNER JOIN pay.laborpaid 
    ON suholan.ctrlno = laborpaid.ctrlno
@@ -99,7 +100,7 @@ ORDER BY
 		<property name="com.jaspersoft.studio.field.label" value="rate"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="laborpaid"/>
 	</field>
-	<field name="utime" class="java.lang.Integer">
+	<field name="utime" class="java.lang.Short">
 		<property name="com.jaspersoft.studio.field.name" value="utime"/>
 		<property name="com.jaspersoft.studio.field.label" value="utime"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="laborpaid"/>
@@ -187,11 +188,16 @@ ORDER BY
 		<property name="com.jaspersoft.studio.field.label" value="typed"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="suholan"/>
 	</field>
+	<field name="dodays" class="java.lang.Short">
+		<property name="com.jaspersoft.studio.field.name" value="dodays"/>
+		<property name="com.jaspersoft.studio.field.label" value="dodays"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="laborpaid"/>
+	</field>
 	<variable name="Gross" class="java.lang.Float">
 		<variableExpression><![CDATA[(($F{frday} < 16 & $F{today} < 16) | ($F{frday} == 16 & $F{today} > 16)) ? $F{rate}.floatValue() / 2.0F : $F{rate}.floatValue()]]></variableExpression>
 	</variable>
 	<variable name="Deduction" class="java.lang.Double">
-		<variableExpression><![CDATA[Math.round( ( ( $F{rate} / 10560D) * ( ( $F{udays} * 480D ) + $F{utime} ) ) * 100D) * 0.01D]]></variableExpression>
+		<variableExpression><![CDATA[Math.round( ( ( $F{rate} / ($F{dodays} * 480D)) * ( ( $F{udays} * 480D ) + $F{utime} ) ) * 100D) * 0.01D]]></variableExpression>
 	</variable>
 	<variable name="NetAmount" class="java.lang.Double">
 		<variableExpression><![CDATA[$F{gross} - $F{deduction} - $F{pag_ibig} - $F{sssprem} - $F{withtax}]]></variableExpression>

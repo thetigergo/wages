@@ -152,7 +152,8 @@ public class AuditBHWBean implements java.io.Serializable {
                         rst.getDouble(13),  //SSS Prem
                         Counter,            //counter
                         rst.getDouble(11),  //bunos
-                        0D));               //withtax
+                        0D,                 //withtax
+                        (short)0));
                 
                 if (rst.getBoolean(20))
                     Counter++;

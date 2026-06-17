@@ -198,7 +198,10 @@
 
                                                 <p:outputLabel value="Days Count"/>
                                                 <p:outputLabel value=" : "/>
-                                                 <p:spinner id="minMax" value="#{plusCAPBean.doDays}" min="1" max="#{plusCAPBean.maxDay}" maxlength="2" size="2"/>
+                                                <p:selectOneMenu id="minMax" value="#{plusCAPBean.doDays}" >
+                                                    <f:selectItem itemValue="22" itemLabel="22"/>
+                                                    <f:selectItems value="#{plusCAPBean.maxDay}"/>
+                                                </p:selectOneMenu>
 
 
                                                 <p:outputLabel value="Days Absent"/>

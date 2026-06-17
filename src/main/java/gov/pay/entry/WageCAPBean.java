@@ -422,7 +422,8 @@ public class WageCAPBean implements java.io.Serializable {
                         rst.getDouble(13),
                         (short)0,
                         rst.getDouble(11),
-                        0D));
+                        0D,
+                        (short)0));
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
                 TotalGross  += payroll.getGross();

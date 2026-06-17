@@ -121,7 +121,8 @@ public class AuditEndoBean implements java.io.Serializable {
                     /* 7*/"laborpaid.rate, " +
                     /* 8*/"CASE WHEN (laborpaid.frday < 16 AND laborpaid.today < 16) OR (laborpaid.frday = 16 AND laborpaid.today > 16) THEN (laborpaid.rate / 2.0)::REAL ELSE laborpaid.rate END, " +
                     /* 9*/"laborpaid.utime, " +
-                    /*10*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+//                    /*10*/"(laborpaid.rate / 10560.0 * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
+                    /*10*/"((laborpaid.rate / (laborpaid.dodays * 480.0)) * ((laborpaid.udays * 480.0) + laborpaid.utime))::NUMERIC(18, 2), " +
                     /*11*/"laborpaid.payfr, " +
                     /*12*/"laborpaid.payto, " +
                     /*13*/"laborpaid.officer1, " +
@@ -136,7 +137,8 @@ public class AuditEndoBean implements java.io.Serializable {
                     /*22*/"laborpaid.sssprem, " +
                     /*23*/"offices.offcid, " +
                     /*24*/"offices.office, " +
-                    /*25*/"laborpaid.withtax " +
+                    /*25*/"laborpaid.withtax, " +
+                    /*26*/"laborpaid.dodays " +
                     "FROM " +
                         "psnl.jobworker INNER JOIN pay.laborpaid " +
                         "ON jobworker.uniqkey = laborpaid.worker " +
@@ -169,7 +171,8 @@ public class AuditEndoBean implements java.io.Serializable {
                         rst.getDouble(22),      //SSS Prem
                         Counter,
                         rst.getDouble(20),      //bunos
-                        rst.getDouble(25)));    //withtax
+                        rst.getDouble(25),      //withtax
+                        rst.getShort (26)));
                 gov.pay.WageField payroll = arFields.get(arFields.size() - 1);
                 TotalWage   += payroll.getNetAmount();
                 TotalGross  += payroll.getGross();
@@ -192,17 +195,11 @@ public class AuditEndoBean implements java.io.Serializable {
             }
             if (null != Counter)
                 switch (Counter) {
-                case -1:
-                    msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Not yet approved from the Budget.");
-                    break;
-                case -2:
-                    msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Already posted on Carding.");
-                    break;
-                case 0:
-                    msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Control Number does not Exist.");
-                    break;
-                default:
-                    break;
+                case -1 -> msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Not yet approved from the Budget.");
+                case -2 -> msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Already posted on Carding.");
+                case 0 -> msg = new javax.faces.application.FacesMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, "WARN", "Control Number does not Exist.");
+                default -> {
+                }
             }
 
             SwitchOff = false;

@@ -14,6 +14,7 @@ gov\pay\entry\AddATMBean.class
 gov\endo\PlusCAPBean.class
 gov\pay\entry\EditBean.class
 gov\endo\PlusATMBean.class
+gov\dbase\PgSQLbind.class
 gov\wages\OnlineUser.class
 gov\wages\LogOutlet.class
 gov\endo\ModifyEndoBean.class

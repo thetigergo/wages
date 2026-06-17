@@ -192,7 +192,10 @@
 
                                                 <p:outputLabel value="Days Count"/>
                                                 <p:outputLabel value=" : "/>
-                                                <p:spinner id="minMax" value="#{endoATM.doDays}" min="1" max="#{endoATM.maxDay}" maxlength="2" size="2"/>
+                                                <p:selectOneMenu id="minMax" value="#{endoATM.doDays}" >
+                                                    <f:selectItem itemValue="22" itemLabel="22"/>
+                                                    <f:selectItems value="#{endoATM.maxDay}"/>
+                                                </p:selectOneMenu>
 
                                                 <p:outputLabel value="Days Absent"/>
                                                 <p:outputLabel value=" : "/>
