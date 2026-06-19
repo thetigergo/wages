@@ -9,8 +9,8 @@ public class PlusATMBean implements java.io.Serializable {
     private static final long serialVersionUID = 3311849095838202395L;
     
     private final java.util.List<javax.faces.model.SelectItem> arWorkers = new java.util.ArrayList<>(),
-                                                               arCtrls   = new java.util.ArrayList<>(),
-                                                               arDays    = new java.util.ArrayList<>();
+                                                               arCtrls   = new java.util.ArrayList<>();
+                                                               //arDays    = new java.util.ArrayList<>();
     private final java.util.List<gov.pay.WageField>            arFields    = new java.util.ArrayList<>();
 
 
@@ -25,7 +25,7 @@ public class PlusATMBean implements java.io.Serializable {
     private String Certify1, Rank1, Certify2, Rank2, Certify3, Rank3, Certification;
     private String WorkerID, Opesina, OpesinaID;
     private String Jobs, CtrlNo;
-    private Short Minutes = 0, DoDays = 22, MaxDay;
+    private Short Minutes = 0, DoDays = 22; //, MaxDay;
     private Float Rate, Days;
     private Double TotalGross = 0D, Others, TotalWage = 0D, TotalDeduct = 0D, Bunos = 0D, TotalBunos = 0D, PagIbig = 0D, TotalHDMF = 0D, SSSPrem = 0D, TotalSSS = 0D, TaxHeld = 0D, TotalTAX = 0D;
     private java.util.Date DateFr, DateTo, PayFr, PayTo;
@@ -125,7 +125,7 @@ public class PlusATMBean implements java.io.Serializable {
     }
 
     //public Short getMaxDay() {return MaxDay;}
-    public java.util.List<javax.faces.model.SelectItem> getMaxDay() {return arDays;}
+//    public java.util.List<javax.faces.model.SelectItem> getMaxDay() {return arDays;}
     
     public Boolean getIsSenior() {return isSenior;}
     
@@ -436,40 +436,40 @@ public class PlusATMBean implements java.io.Serializable {
         }
     }
     
-    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
-        DateFr = (java.util.Date)event.getObject();
-        arDays.clear();
-        if (DateTo != null) {
-//            long diffdays = DateTo.getTime() - DateFr.getTime();
-//            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-//            if (temp < 22)
-//                MaxDay = 22;
-//            else
-//                MaxDay = temp;
-            java.util.Calendar cals = java.util.Calendar.getInstance();
-            cals.setTime(DateTo);
-            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-        } else {
-            java.util.Calendar cals = java.util.Calendar.getInstance();
-            cals.setTime(DateFr);
-            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-        }
-        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
-    }
-    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
-        DateTo = (java.util.Date)event.getObject(); 
-        arDays.clear();
-        if (DateFr != null) {
-//            long diffdays = DateTo.getTime() - DateFr.getTime();
-//            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
-            java.util.Calendar cals = java.util.Calendar.getInstance();
-            cals.setTime(DateFr);
-            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-        } else {
-            java.util.Calendar cals = java.util.Calendar.getInstance();
-            cals.setTime(DateTo);
-            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-        }
-        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
-    }
+//    public void onDateFrSelect(org.primefaces.event.SelectEvent<?> event) {
+//        DateFr = (java.util.Date)event.getObject();
+//        arDays.clear();
+//        if (DateTo != null) {
+////            long diffdays = DateTo.getTime() - DateFr.getTime();
+////            short temp = Short.parseShort(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+////            if (temp < 22)
+////                MaxDay = 22;
+////            else
+////                MaxDay = temp;
+//            java.util.Calendar cals = java.util.Calendar.getInstance();
+//            cals.setTime(DateTo);
+//            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+//        } else {
+//            java.util.Calendar cals = java.util.Calendar.getInstance();
+//            cals.setTime(DateFr);
+//            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+//        }
+//        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
+//    }
+//    public void onDateToSelect(org.primefaces.event.SelectEvent<?> event) {
+//        DateTo = (java.util.Date)event.getObject(); 
+//        arDays.clear();
+//        if (DateFr != null) {
+////            long diffdays = DateTo.getTime() - DateFr.getTime();
+////            MaxDay = Short.valueOf(String.valueOf((diffdays / ONE_DAY) + 1), 10);
+//            java.util.Calendar cals = java.util.Calendar.getInstance();
+//            cals.setTime(DateFr);
+//            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+//        } else {
+//            java.util.Calendar cals = java.util.Calendar.getInstance();
+//            cals.setTime(DateTo);
+//            MaxDay = (short)cals.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+//        }
+//        arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
+//    }
 }

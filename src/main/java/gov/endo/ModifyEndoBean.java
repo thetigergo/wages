@@ -9,8 +9,8 @@ public class ModifyEndoBean implements java.io.Serializable {
     private static final long serialVersionUID = 4018886714904788385L;
     
     private final java.util.List<gov.pay.WageField>            arFields = new java.util.ArrayList<>();
-    private final java.util.List<javax.faces.model.SelectItem> arCtrls = new java.util.ArrayList<>(),
-                                                               arDays  = new java.util.ArrayList<>();
+    private final java.util.List<javax.faces.model.SelectItem> arCtrls = new java.util.ArrayList<>();
+                                                               //arDays  = new java.util.ArrayList<>();
     
     private final boolean NUMERIC = true; //, CONDITION = true;
     private final long ONE_DAY = 1000 * 3600 * 24;
@@ -19,7 +19,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     private String Certify1, Rank1, Certify2, Rank2, Certify3, Rank3, Certification;
     private String Worker, WorkerID, Opesina, OpesinaID;
     private String JobDesc, CtrlNo;
-    private Short Minutes, DoDays = 22, MaxDay;
+    private Short Minutes, DoDays = 22; //, MaxDay;
     private Float Days;
     private Double Rate, Gross, Others, TotalWage = 0D, TotalGross = 0D, TotalDeduct = 0D, Bunos = 0D, TotalBunos = 0D, PagIbig, TotalHDMF = 0D, TotalSSS = 0D, SSSPrem = 0D, TotalTAX = 0D, TaxHeld = 0D;
     private java.util.Date DateFr, DateTo, PayFr, PayTo;
@@ -37,7 +37,7 @@ public class ModifyEndoBean implements java.io.Serializable {
     
     
     public java.util.List<javax.faces.model.SelectItem> getControls() {return arCtrls;}
-    public java.util.List<javax.faces.model.SelectItem> getMaxDay() {return arDays;}
+//    public java.util.List<javax.faces.model.SelectItem> getMaxDay() {return arDays;}
     public java.util.List<gov.pay.WageField> getWages() {return arFields;}
     
     
@@ -317,8 +317,7 @@ public class ModifyEndoBean implements java.io.Serializable {
                     /*12*/"laborpaid.sssprem, " +
                     /*13*/"laborpaid.withtax, " +
                     /*14*/"DATE_PART('YEAR', AGE(NOW(), jobworker.birthday))::SMALLINT, " +
-                    /*15*/"laborpaid.dodays, " +
-                    /*16*/"DATE_PART('DAY', (datefr + INTERVAL '1 MONTH - 1 DAY')) " +
+                    /*15*/"laborpaid.dodays " +
                     "FROM " +
                         "pay.laborpaid JOIN psnl.jobworker " +
                         "ON laborpaid.worker = jobworker.uniqkey " +
@@ -345,8 +344,8 @@ public class ModifyEndoBean implements java.io.Serializable {
                     PagIbig = 0D;
                 }
                 DoDays = rst.getShort(15);
-                MaxDay = rst.getShort(16);
-                arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
+                //MaxDay = rst.getShort(16);
+                //arDays.add(new javax.faces.model.SelectItem(MaxDay, MaxDay.toString()));
             }
 
 

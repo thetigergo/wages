@@ -182,11 +182,11 @@
                                                 <p:outputLabel value=" : "/>
                                                 <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
                                                     <p:calendar value="#{endoCA.dateFr}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8">
-                                                        <p:ajax event="dateSelect" listener="#{endoCA.onDateFrSelect}" update="minMax" />
+                                                        <!--<p:ajax event="dateSelect" listener="#endoCA.onDateFrSelect}" update="minMax" />-->
                                                     </p:calendar>
                                                     <p:outputLabel value="&nbsp;:&nbsp;"/>
                                                     <p:calendar value="#{endoCA.dateTo}" pattern="MM/dd/yyyy" size="10" maxlength="10" timeZone="GMT+8">
-                                                        <p:ajax event="dateSelect" listener="#{endoCA.onDateToSelect}" update="minMax" />
+                                                        <!--<p:ajax event="dateSelect" listener="#endoCA.onDateToSelect}" update="minMax" />-->
                                                     </p:calendar>
                                                 </h:panelGrid>
 
@@ -194,7 +194,7 @@
                                                 <p:outputLabel value=" : "/>
                                                 <p:selectOneMenu id="minMax" value="#{endoCA.doDays}" >
                                                     <f:selectItem itemValue="22" itemLabel="22"/>
-                                                    <f:selectItems value="#{endoCA.maxDay}"/>
+                                                    <f:selectItem itemValue="30" itemLabel="30"/>
                                                 </p:selectOneMenu>
 
                                                 <p:outputLabel value="Days Absent"/>
